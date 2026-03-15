@@ -37,7 +37,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../asset/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle" style="width: 35px; height: 35px;">
+              <img src="../asset/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle" style="width: 35px; height: 35px;">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
@@ -53,7 +53,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../asset/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3" style="width: 35px; height: 35px;">
+              <img src="../asset/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3" style="width: 35px; height: 35px;">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   John Pierce
@@ -69,7 +69,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../asset/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3" style="width: 35px; height: 35px;">
+              <img src="../asset/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3" style="width: 35px; height: 35px;">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Nora Silvester
@@ -115,7 +115,7 @@
       <!-- profile -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <img src="../asset/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image" style="width: 32px; height: 32px;">
+          <img src="../asset/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image" style="width: 32px; height: 32px;">
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <span class="dropdown-item dropdown-header">Alexander Pierce</span>

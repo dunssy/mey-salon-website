@@ -22,5 +22,11 @@
 
 <!-- PAGE SCRIPTS -->
 <script src="../asset/js/pages/dashboard2.js"></script>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="#">Mey Salon</a>.</strong> All rights reserved.
+</footer>
+
 </body>
 </html>
