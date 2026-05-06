@@ -3,6 +3,6 @@ $username = 'root';
 $password = '';
 $database = 'db_meysalon';
 
-if(!$con = mysqli_connect('localhost', $username, $password, $database)){
+if(!$koneksi = mysqli_connect('localhost', $username, $password, $database)){
     die("Failed to connect to database!");
 }
