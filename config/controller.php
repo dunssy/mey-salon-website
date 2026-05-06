@@ -13,6 +13,7 @@ function query($query){
     return $rows;
 }
 
+
 function tambah_user($data){
     
     global $con;
