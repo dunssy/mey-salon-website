@@ -1,78 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+require_once '../config/koneksi.php';
+$page_title = "Registrasi - Mey Salon";
+include '../includes/header.php';
+?>
 
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Mey Salon</title>
-  <!-- base:css -->
-  <link rel="stylesheet" href="../assets/template/spica/template/vendors/mdi/css/materialdesignicons.min.css">
-  <link rel="stylesheet" href="../assets/template/spica/template/vendors/css/vendor.bundle.base.css">
-  <!-- endinject -->
-  <!-- plugin css for this page -->
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
-  <link rel="stylesheet" href="../assets/template/spica/template/css/style.css">
-  <!-- endinject -->
-  <link rel="shortcut icon" href="../assets/template/spica/template/images/favicon.png" />
-</head>
+<div class="auth-page">
+    <div class="auth-card">
+        <h1>Mey Salon</h1>
+        <h2>Registrasi</h2>
 
-<body>
-  <div class="container-scroller d-flex">
-    <div class="container-fluid page-body-wrapper full-page-wrapper d-flex">
-      <div class="content-wrapper d-flex align-items-center auth px-0">
-        <div class="row w-100 mx-0">
-          <div class="col-lg-4 mx-auto">
-            <div class="auth-form-light text-left py-5 px-4 px-sm-5">
-              <div class="brand-logo">
-                <img src="../assets/template/spica/template/images/logo-dark.svg" alt="logo">
-              </div>
-              <h4>New here?</h4>
-              <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
-              <form class="pt-3" action="proses_registrasi.php" method="POST">
-                <div class="form-group">
-                  <input type="text" class="form-control form-control-lg" id="exampleInputUsername1" placeholder="Username">
-                </div>
-                <div class="form-group">
-                  <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Email">
-                </div>
-                <div class="form-group">
-                  <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="mb-4">
-                  <div class="form-check">
-                    <label class="form-check-label text-muted">
-                      <input type="checkbox" class="form-check-input">
-                      I agree to all Terms & Conditions
-                    </label>
-                  </div>
-                </div>
-                <div class="mt-3">
-                  <a class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="../assets/template/spica/template/index.html">SIGN UP</a>
-                </div>
-                <div class="text-center mt-4 font-weight-light">
-                  Already have an account? <a href="login.php" class="text-primary">Login</a>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- content-wrapper ends -->
+        <?php if (isset($_GET['error'])) : ?>
+            <div class="alert-error"><?= htmlspecialchars($_GET['error']); ?></div>
+        <?php endif; ?>
+
+        <form action="proses_register.php" method="POST">
+            <input type="text" name="nama" placeholder="Nama" required>
+            <input type="text" name="no_hp" placeholder="Nomor HP" required>
+            <textarea name="alamat" placeholder="Alamat" required></textarea>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="konfirmasi_password" placeholder="Konfirmasi Password" required>
+
+            <button type="submit" class="btn-primary full">Sign Up</button>
+        </form>
+
+        <p>Sudah memiliki akun? <a href="login.php">Login</a></p>
+        <a href="../index.php">Back</a>
     </div>
-    <!-- page-body-wrapper ends -->
-  </div>
-  <!-- container-scroller -->
-  <!-- base:js -->
-  <script src="../assets/template/spica/template/vendors/js/vendor.bundle.base.js"></script>
-  <!-- endinject -->
-  <script src="../assets/template/spica/template/js/jquery.cookie.js" type="text/javascript"></script>
-  <!-- inject:js -->
-  <script src="../assets/template/spica/template/js/off-canvas.js"></script>
-  <script src="../assets/template/spica/template/js/hoverable-collapse.js"></script>
-  <script src="../assets/template/spica/template/js/template.js"></script>
-  <!-- endinject -->
-</body>
+</div>
 
-</html>
+<?php include '../includes/footer.php'; ?>
