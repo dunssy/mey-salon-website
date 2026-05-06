@@ -37,7 +37,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../asset/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle" style="width: 35px; height: 35px;">
+              <img src="../../assets/template/eduleb/asset/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle" style="width: 35px; height: 35px;">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
