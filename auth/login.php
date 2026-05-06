@@ -3,7 +3,7 @@ require_once '../config/koneksi.php';
 $page_title = "Login - Mey Salon";
 include '../includes/header.php';
 ?>
-
+<!-- MINIMAL KASIH KOMEN NGENTOT KALAU STAGING RUNGKAD BANGET DH LOGIKA SISTEMNYA  -->
 <div class="auth-page">
     <div class="auth-card">
         <h1>Mey Salon</h1>
