@@ -1,8 +1,8 @@
 <?php
 require_once 'config/koneksi.php';
 $page_title = "Mey Salon";
-include 'includes/header.php';
-include 'includes/navbar.php';
+include 'layout/header.php';
+include 'layout/navbar.php';
 ?>
 
 <section class="hero">
@@ -43,4 +43,4 @@ include 'includes/navbar.php';
     <p>WhatsApp: 08xxxxxxxxxx</p>
 </section>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

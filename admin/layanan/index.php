@@ -4,7 +4,7 @@ require_once '../../includes/admin_check.php';
 $page_title = "Data Layanan";
 include '../../includes/header.php';
 
-$query = mysqli_query($conn, "SELECT * FROM layanan ORDER BY id_layanan DESC");
+$query = mysqli_query($koneksi, "SELECT * FROM layanan ORDER BY id_layanan DESC");
 ?>
 
 <div class="admin-wrapper">

@@ -4,7 +4,7 @@ require_once '../../includes/admin_check.php';
 $page_title = "Stok Barang";
 include '../../includes/header.php';
 
-$query = mysqli_query($conn, "SELECT * FROM stok_barang ORDER BY nama_barang ASC");
+$query = mysqli_query($koneksi, "SELECT * FROM stok_barang ORDER BY nama_barang ASC");
 ?>
 
 <div class="admin-wrapper">

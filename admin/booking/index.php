@@ -4,7 +4,7 @@ require_once '../../includes/admin_check.php';
 $page_title = "Data Booking";
 include '../../includes/header.php';
 
-$query = mysqli_query($conn, "
+$query = mysqli_query($koneksi, "
     SELECT booking.*, user.nama, user.no_hp
     FROM booking
     JOIN user ON booking.id_user = user.id_user

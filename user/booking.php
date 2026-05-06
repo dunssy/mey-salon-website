@@ -5,7 +5,7 @@ $page_title = "Booking - Mey Salon";
 include '../includes/header.php';
 include '../includes/navbar.php';
 
-$layanan = mysqli_query($conn, "SELECT * FROM layanan ORDER BY nama_layanan ASC");
+$layanan = mysqli_query($koneksi, "SELECT * FROM layanan ORDER BY nama_layanan ASC");
 ?>
 
 <div class="booking-page">

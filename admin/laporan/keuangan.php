@@ -7,7 +7,7 @@ include '../../includes/header.php';
 $dari = isset($_GET['dari']) ? $_GET['dari'] : date('Y-m-01');
 $sampai = isset($_GET['sampai']) ? $_GET['sampai'] : date('Y-m-d');
 
-$query = mysqli_query($conn, "
+$query = mysqli_query($koneksi, "
     SELECT
         pemasukan.total_pemasukan,
         pengeluaran.total_pengeluaran,

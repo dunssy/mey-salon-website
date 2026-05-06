@@ -4,10 +4,10 @@ require_once '../includes/admin_check.php';
 $page_title = "Dashboard Admin";
 include '../includes/header.php';
 
-$total_user = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM user"))['total'];
-$total_booking = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM booking"))['total'];
-$total_layanan = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM layanan"))['total'];
-$total_stok = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM stok_barang"))['total'];
+$total_user = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM user"))['total'];
+$total_booking = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM booking"))['total'];
+$total_layanan = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM layanan"))['total'];
+$total_stok = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM stok_barang"))['total'];
 ?>
 
 <div class="admin-wrapper">
