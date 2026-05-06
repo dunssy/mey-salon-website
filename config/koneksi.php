@@ -1,8 +1,8 @@
 <?php 
-$user = 'root';
+$username = 'root';
 $password = '';
-$database = 'db_salon';
+$database = 'db_meysalon';
 
-if(!$con = mysqli_connect('localhost', $user, $password, $database)){
+if(!$con = mysqli_connect('localhost', $username, $password, $database)){
     die("Failed to connect to database!");
 }
