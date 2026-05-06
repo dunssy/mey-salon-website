@@ -1,46 +1,245 @@
-<?php
-require_once 'config/koneksi.php';
-$page_title = "Mey Salon";
-include 'layout/header.php';
-include 'layout/navbar.php';
-?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mey Salon - Luxury Beauty Experience</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="layout/css/style.css">
+</head>
+<body class="light">
 
-<section class="hero">
-    <div class="hero-content">
-        <h1>MEY SALON</h1>
-        <p>Salon pria dan wanita dengan layanan perawatan rambut, kecantikan, dan booking online.</p>
-        <a href="user/booking.php" class="btn-primary">BOOKING NOW</a>
-    </div>
-</section>
+    <!-- Floating Theme Toggle Button -->
+    <button id="theme-toggle-floating" aria-label="Ganti Tema">
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    </button>
 
-<section id="about" class="section">
-    <h2>About Us</h2>
-    <p>
-        Mey Salon adalah layanan salon yang menyediakan potong rambut, smoothing, creambath,
-        hair mask, facial, nail art, dan layanan kecantikan lainnya.
-    </p>
-</section>
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 py-4 px-4 md:px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex-1">
+                <a href="#home" class="flex items-center space-x-2 md:space-x-3 group">
+                    <!-- INI LOGO MEY SALON -->
+                    <img src="layout/images/mey-salon.png" alt="Mey Salon Logo" class="w-14 md:w-16 group-hover:scale-110 transition-transform">
+                    <span class="text-lg md:text-xl font-bold tracking-widest text-dark-brown">
+                        MEY <span class="text-accent-pink">SALON</span>
+                    </span>
+                </a>
+            </div>
 
-<section id="product" class="section product-grid">
-    <h2>Product & Layanan</h2>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex flex-1 justify-center space-x-6 lg:space-x-10 text-sm font-semibold tracking-wide">
+                <a href="#home" class="hover:text-accent-pink transition">HOME</a>
+                <a href="#about" class="hover:text-accent-pink transition">ABOUT</a>
+                <a href="#product" class="hover:text-accent-pink transition">PRODUCT</a>
+                <a href="#contact" class="hover:text-accent-pink transition">CONTACT</a>
+            </div>
 
-    <?php
-    $layanan = mysqli_query($koneksi, "SELECT * FROM layanan ORDER BY id_layanan DESC LIMIT 6");
-    while ($row = mysqli_fetch_assoc($layanan)) :
-    ?>
-        <div class="product-card">
-            <div class="product-img">Foto</div>
-            <h3><?= htmlspecialchars($row['nama_layanan']); ?></h3>
-            <p>Rp<?= number_format($row['harga_layanan'], 0, ',', '.'); ?></p>
-            <p><?= $row['durasi_layanan']; ?> menit</p>
+            <!-- Auth Buttons -->
+            <div class="hidden md:flex flex-1 justify-end items-center space-x-6">
+                <a href="#" class="text-sm font-bold text-dark-brown hover:text-accent-pink transition uppercase tracking-widest">Login</a>
+                <button class="btn-pink px-6 py-2.5 lg:px-8 lg:py-3 rounded-full text-xs font-bold tracking-widest uppercase">
+                    Sign Up
+                </button>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-dark-brown p-2" aria-label="Open Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
         </div>
-    <?php endwhile; ?>
-</section>
+    </nav>
 
-<section id="contact" class="section">
-    <h2>Contact</h2>
-    <p>Jl. Kertawigwanda, Gg. Palabuan, Subang</p>
-    <p>WhatsApp: 08xxxxxxxxxx</p>
-</section>
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white dark:bg-[#121212] z-[60] hidden flex-col p-6 space-y-6">
+        <div class="flex justify-between items-center mb-4">
+            <span class="text-xl font-bold tracking-widest text-dark-brown">MEY <span class="text-accent-pink">SALON</span></span>
+            <button id="close-menu-btn" class="text-dark-brown p-2" aria-label="Close Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <a href="#home" class="mobile-nav-link text-xl font-serif border-b dark:border-gray-800 pb-4 text-dark-brown">Home</a>
+        <a href="#about" class="mobile-nav-link text-xl font-serif border-b dark:border-gray-800 pb-4 text-dark-brown">About</a>
+        <a href="#product" class="mobile-nav-link text-xl font-serif border-b dark:border-gray-800 pb-4 text-dark-brown">Product</a>
+        <a href="#contact" class="mobile-nav-link text-xl font-serif border-b dark:border-gray-800 pb-4 text-dark-brown">Contact</a>
+        <div class="pt-8 flex flex-col space-y-4">
+            <button class="w-full bg-button-pink text-white py-4 rounded-xl font-bold text-lg shadow-lg">Sign Up</button>
+            <button class="w-full border-2 border-dark-brown/10 dark:border-white/10 text-dark-brown py-4 rounded-xl font-bold text-lg">Login</button>
+        </div>
+    </div>
 
-<?php include 'layout/footer.php'; ?>
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-24 pb-12 md:pt-48 md:pb-32 px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
+            <div class="space-y-6 md:space-y-8 animate-fade text-center lg:text-left order-2 lg:order-1">
+                <h2 class="text-5xl md:text-6xl lg:text-8xl font-serif text-dark-brown leading-tight">
+                    MEY <br class="hidden lg:block" />
+                    <span class="text-accent-pink italic">SALON</span>
+                </h2>
+                <p class="text-soft-brown text-base md:text-lg max-w-md mx-auto lg:mx-0 leading-relaxed">
+                    Masuki tempat perlindungan yang elegan. Kami menawarkan perawatan kecantikan kelas dunia dan penataan rambut yang dirancang untuk membuat Anda merasa seperti bangsawan.
+                </p>
+                <div class="pt-4">
+                    <a href="#contact" class="btn-pink inline-block px-8 py-4 md:px-10 md:py-4 rounded-full font-bold tracking-widest text-xs md:text-sm shadow-lg uppercase">
+                        Booking Now
+                    </a>
+                </div>
+            </div>
+            <div class="relative animate-fade order-1 lg:order-2" style="animation-delay: 0.2s;">
+                <div class="rounded-[30px] md:rounded-[40px] overflow-hidden shadow-2xl border-[8px] md:border-[12px] border-white dark:border-[#1E1E1E] max-w-sm mx-auto lg:max-w-none">
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=1000" alt="Interior Salon" class="w-full aspect-[4/5] object-cover">
+                </div>
+                <div class="absolute -bottom-8 -left-8 w-32 h-32 md:w-48 md:h-48 bg-pastel-pink rounded-full -z-10 opacity-40 blur-3xl"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 md:py-24 bg-[#FAF7F2] dark:bg-[#1A1A1A]">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-serif text-center text-dark-brown mb-12 md:mb-16 uppercase tracking-widest">About us</h2>
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+                <div class="service-card p-4 rounded-[30px] shadow-sm group">
+                    <div class="rounded-[24px] overflow-hidden mb-6 md:mb-8 h-64 md:h-80">
+                        <img src="https://images.unsplash.com/photo-1595475241949-0f02b288d5b4?auto=format&fit=crop&q=80&w=800" alt="Layanan Kami" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="px-4 md:px-6 pb-6 md:pb-8">
+                        <h3 class="text-xl md:text-2xl font-serif text-dark-brown mb-3 md:mb-4">Seni dalam Setiap Sentuhan</h3>
+                        <p class="text-sm md:text-base text-soft-brown leading-relaxed">Penata rambut kami adalah seniman ahli yang memandang rambut sebagai kanvas untuk mahakarya Anda.</p>
+                    </div>
+                </div>
+                <div class="service-card p-4 rounded-[30px] shadow-sm group">
+                    <div class="rounded-[24px] overflow-hidden mb-6 md:mb-8 h-64 md:h-80">
+                        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=800" alt="Filosofi Kami" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="px-4 md:px-6 pb-6 md:pb-8">
+                        <h3 class="text-xl md:text-2xl font-serif text-dark-brown mb-3 md:mb-4">Filosofi Premium</h3>
+                        <p class="text-sm md:text-base text-soft-brown leading-relaxed">Kemewahan bukan hanya tentang produk; ini tentang pengalaman relaksasi total yang kami sajikan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Section -->
+    <section id="product" class="py-16 md:py-24 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-serif text-dark-brown mb-12 md:mb-16 inline-block relative uppercase tracking-widest">
+                Product
+                <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-16 md:w-20 h-1 bg-accent-pink"></span>
+            </h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 text-left">
+                <div class="service-card rounded-[24px] overflow-hidden shadow-md border border-gray-100 dark:border-gray-800 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&q=80&w=600" class="w-full h-56 md:h-64 object-cover" alt="Signature Haircut">
+                    <div class="p-6 md:p-8">
+                        <div class="flex justify-between items-center mb-3 md:mb-4">
+                            <h3 class="text-lg md:text-xl font-serif font-bold">Signature Haircut</h3>
+                            <span class="text-accent-pink font-bold text-sm md:text-base">Rp 250k</span>
+                        </div>
+                        <p class="text-xs md:text-sm text-soft-brown mb-6">Penataan khusus yang disesuaikan dengan profil wajah Anda.</p>
+                        <a href="#" class="text-[10px] md:text-xs font-bold text-accent-pink tracking-widest uppercase">Lihat Detail &rarr;</a>
+                    </div>
+                </div>
+                <div class="service-card rounded-[24px] overflow-hidden shadow-md border border-gray-100 dark:border-gray-800 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=600" class="w-full h-56 md:h-64 object-cover" alt="Luxe Color Glow">
+                    <div class="p-6 md:p-8">
+                        <div class="flex justify-between items-center mb-3 md:mb-4">
+                            <h3 class="text-lg md:text-xl font-serif font-bold">Luxe Color Glow</h3>
+                            <span class="text-accent-pink font-bold text-sm md:text-base">Rp 850k</span>
+                        </div>
+                        <p class="text-xs md:text-sm text-soft-brown mb-6">Pewarna organik premium untuk kilau rambut yang sehat.</p>
+                        <a href="#" class="text-[10px] md:text-xs font-bold text-accent-pink tracking-widest uppercase">Lihat Detail &rarr;</a>
+                    </div>
+                </div>
+                <div class="service-card rounded-[24px] overflow-hidden shadow-md border border-gray-100 dark:border-gray-800 flex flex-col sm:col-span-2 lg:col-span-1">
+                    <img src="https://images.unsplash.com/photo-1570172619245-d11f717d7c14?auto=format&fit=crop&q=80&w=600" class="w-full h-56 md:h-64 object-cover" alt="Facial Rejuvenation">
+                    <div class="p-6 md:p-8">
+                        <div class="flex justify-between items-center mb-3 md:mb-4">
+                            <h3 class="text-lg md:text-xl font-serif font-bold">Facial Rejuvenation</h3>
+                            <span class="text-accent-pink font-bold text-sm md:text-base">Rp 500k</span>
+                        </div>
+                        <p class="text-xs md:text-sm text-soft-brown mb-6">Terapi botani untuk wajah yang tampak lebih muda dan cerah.</p>
+                        <a href="#" class="text-[10px] md:text-xs font-bold text-accent-pink tracking-widest uppercase">Lihat Detail &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 md:py-32 bg-[#F3D9D9]/20 dark:bg-[#1E1212]/50 px-4 md:px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-serif text-center text-dark-brown mb-12 md:mb-20 uppercase tracking-widest">Contact Us</h2>
+            <div class="grid lg:grid-cols-2 gap-10 md:gap-20 items-start">
+                <!-- Map Container -->
+                <div class="map-responsive shadow-2xl rounded-[30px] md:rounded-[40px] overflow-hidden border-4 md:border-8 border-white dark:border-[#1E1E1E]">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15865.174823293026!2d106.82003885!3d-6.224424849999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e49466fd17%3A0x6d85963595509f02!2sKuningan%2C%20Setiabudi%2C%20South%20Jakarta%20City%2C%20Jakarta!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" 
+                        class="w-full h-full border-none" loading="lazy"></iframe>
+                </div>
+                <!-- Form Container -->
+                <div class="service-card p-8 md:p-12 lg:p-16 rounded-[30px] md:rounded-[40px] shadow-2xl">
+                    <div class="mb-8 md:mb-10">
+                        <h3 class="text-2xl md:text-3xl font-serif text-dark-brown mb-2">Pesan Jadwal</h3>
+                        <p class="text-sm md:text-base text-soft-brown">Silakan isi formulir di bawah ini untuk konsultasi.</p>
+                    </div>
+                    <form class="space-y-6 md:space-y-8">
+                        <div class="space-y-2">
+                            <label class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-soft-brown ml-1">Nama Lengkap</label>
+                            <input type="text" placeholder="Contoh: Budi Santoso" class="w-full px-5 py-4 md:px-6 md:py-5 bg-[#FAF7F2] rounded-xl md:rounded-2xl outline-none border border-transparent focus:border-accent-pink focus:ring-4 focus:ring-accent-pink/10 transition">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-soft-brown ml-1">Email</label>
+                            <input type="email" placeholder="budi@email.com" class="w-full px-5 py-4 md:px-6 md:py-5 bg-[#FAF7F2] rounded-xl md:rounded-2xl outline-none border border-transparent focus:border-accent-pink focus:ring-4 focus:ring-accent-pink/10 transition">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-soft-brown ml-1">Pesan</label>
+                            <textarea rows="3" md:rows="4" placeholder="Jelaskan perawatan yang Anda inginkan..." class="w-full px-5 py-4 md:px-6 md:py-5 bg-[#FAF7F2] rounded-xl md:rounded-2xl outline-none border border-transparent focus:border-accent-pink focus:ring-4 focus:ring-accent-pink/10 transition resize-none"></textarea>
+                        </div>
+                        <button type="submit" class="btn-pink w-full py-5 md:py-6 rounded-xl md:rounded-2xl font-bold tracking-[3px] md:tracking-[4px] text-xs md:text-sm uppercase shadow-xl">Kirim Pesan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#1A120B] text-white py-12 md:py-20 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10 md:gap-12">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-button-pink rounded-xl flex items-center justify-center text-white shadow-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-7 md:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-4.879-4.879L12 12m0 0L9.121 9.121m0 0L4 4m5.121 5.121L12 12m0 0l2.879 2.879M12 12L9.121 14.121m0 0L4 19m5.121-5.121L12 12m0 0l2.879-2.879M12 12l2.121-2.121M19 4l-4.879 4.879" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v2m0 16v2m10-10h-2M4 12H2" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-serif font-bold tracking-widest uppercase">Mey <span class="text-accent-pink italic">Salon</span></h2>
+            </div>
+            <div class="text-center md:text-right space-y-4">
+                <div class="flex space-x-6 justify-center md:justify-end text-xs md:text-sm tracking-widest text-gray-400">
+                    <a href="#" class="hover:text-accent-pink transition">INSTAGRAM</a>
+                    <a href="#" class="hover:text-accent-pink transition">WHATSAPP</a>
+                    <a href="#" class="hover:text-accent-pink transition">TIKTOK</a>
+                </div>
+                <div class="text-gray-500 text-[8px] md:text-[10px] tracking-[3px] md:tracking-[5px] font-bold uppercase">© 2024 MEY SALON. ALL RIGHTS RESERVED.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="layout/js/main.js"></script>
+    </script>
+</body>
+</html>

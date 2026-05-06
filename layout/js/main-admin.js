@@ -1,5 +1,4 @@
 
-    <script>
         // Sidebar Mobile Toggle
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -83,6 +82,4 @@
                 toast.classList.add('translate-y-32', 'opacity-0');
             }, 3000);
         }
-    </script>
-</body>
-</html>
+    
