@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db   = "mey_salon";
+$db   = "db_mey_salon";
 // UNTUK MENYAMBUNGKAN KE DATABASE
 $koneksi = mysqli_connect($host, $user, $pass, $db);
 

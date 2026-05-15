@@ -1,6 +1,12 @@
 <?php 
 $page_title = "Data Booking";
 include "../layout/header.php";
+include "../config/koneksi.php";
+
+global $koneksi;
+// MENGAMBIL DATA DARI DATABASE UNTUK DITAMPILKAN DI DATA BOOKING
+$query = "SELECT * FROM booking";
+$data = mysqli_query($koneksi, $query);
 ?>
 <body class="text-gray-800 overflow-x-hidden">
 
@@ -24,39 +30,28 @@ include "../layout/header.php";
                             <table class="w-full text-left min-w-[600px]">
                                 <thead class="bg-pink-50/30 text-gray-400 text-[10px] uppercase font-bold tracking-widest">
                                     <tr>
-                                        <th class="px-6 py-4">Waktu</th>
+                                        <th class="px-6 py-4">Jam Mulai</th>
+                                        <th class="px-6 py-4">Jam Selesai</th>
                                         <th class="px-6 py-4">Pelanggan</th>
                                         <th class="px-6 py-4">Layanan</th>
-                                        <th class="px-6 py-4">Informasi</th>
                                         <th class="px-6 py-4 text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-pink-50">
+                                <?php while ($booking = mysqli_fetch_assoc($data)) { ?>
                                     <tr class="hover:bg-pink-50/20">
-                                        <td class="px-6 py-4 font-bold text-pink-600">10:00</td>
-                                        <td class="px-6 py-4 font-semibold text-gray-700">Siska Amelia</td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">Hair Spa</td>
-                                          <td class="px-6 py-4">
-                                            <button class="bg-pink-600 text-white px-3 py-1 text-[10px] font-bold rounded-lg hover:shadow-lg">Booking Detail</button>
-                                        </td>
-                                        <td class="px-6 py-4 text-center">
-                                            <button class="bg-green-100 text-green-600 px-3 py-1 text-[10px] font-bold rounded-lg uppercase">Selesai</button>
-                                        </td>
-                                        <!-- <td class="px-6 py-4 text-center">
-                                            <button onclick="showMessage('Booking dikonfirmasi')" class="bg-pink-600 text-white px-3 py-1 text-[10px] font-bold rounded-lg hover:shadow-lg">Konfirmasi</button>
-                                        </td> -->
-                                    </tr>
-                                    <tr class="hover:bg-pink-50/20">
-                                        <td class="px-6 py-4 font-bold text-pink-600">11:30</td>
-                                        <td class="px-6 py-4 font-semibold text-gray-700">Dewi Kusuma</td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">Coloring</td>
+                                        <td class="px-6 py-4 font-bold text-pink-600"><?php echo $booking['jam_mulai']; ?></td>
+                                        <td class="px-6 py-4 font-bold text-pink-600"><?php echo $booking['jam_selesai']; ?></td>
+                                        <td class="px-6 py-4 font-semibold text-gray-700"><?php echo $booking['id_user']; ?></td>
                                         <td class="px-6 py-4">
                                             <button class="bg-pink-600 text-white px-3 py-1 text-[10px] font-bold rounded-lg hover:shadow-lg">Booking Detail</button>
                                         </td>
                                         <td class="px-6 py-4 text-center">
-                                            <button onclick="showMessage('Booking dikonfirmasi')" class="bg-pink-600 text-white px-3 py-1 text-[10px] font-bold rounded-lg hover:shadow-lg">Konfirmasi</button>
+                                            <button class="bg-yellow-100 text-black-600 px-3 py-1 text-[10px] font-bold rounded-lg uppercase"><?php echo $booking['status_booking']; ?></button>
                                         </td>
                                     </tr>
+                                <?php } ?>
+                                   
                                 </tbody>
                             </table>
                         </div>
