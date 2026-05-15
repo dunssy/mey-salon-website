@@ -93,7 +93,7 @@
                     Masuki tempat perlindungan yang elegan. Kami menawarkan perawatan kecantikan kelas dunia dan penataan rambut yang dirancang untuk membuat Anda merasa seperti bangsawan.
                 </p>
                 <div class="pt-4">
-                    <a href="#contact" class="btn-pink inline-block px-8 py-4 md:px-10 md:py-4 rounded-full font-bold tracking-widest text-xs md:text-sm shadow-lg uppercase">
+                    <a href="user/booking.php" class="btn-pink inline-block px-8 py-4 md:px-10 md:py-4 rounded-full font-bold tracking-widest text-xs md:text-sm shadow-lg uppercase">
                         Booking Now
                     </a>
                 </div>

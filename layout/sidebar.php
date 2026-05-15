@@ -27,7 +27,7 @@
                     <i class="fa-solid fa-users w-6 text-lg"></i>
                     <span>Pelanggan</span>
                 </a>
-                <a href="#" onclick="switchTab('laporan')" id="nav-laporan" class="flex items-center px-4 py-3 text-sm font-medium text-gray-600 hover:bg-pink-50 hover:text-pink-600 rounded-xl transition-all">
+                <a href="data-laporan.php" onclick="switchTab('laporan')" id="nav-laporan" class="flex items-center px-4 py-3 text-sm font-medium text-gray-600 hover:bg-pink-50 hover:text-pink-600 rounded-xl transition-all">
                     <i class="fa-solid fa-chart-line w-6 text-lg"></i>
                     <span>Laporan</span>
                 </a>

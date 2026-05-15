@@ -15,6 +15,9 @@ $user_data = mysqli_num_rows(mysqli_query($koneksi, $user_query));
 $hari_ini = date('Y-m-d');
 $booking_today_query = "SELECT * FROM booking WHERE tanggal_booking = '$hari_ini'";
 $booking_today_data = mysqli_num_rows(mysqli_query($koneksi, $booking_today_query));
+// MENGAMBIL DATA BOOKING BERDASARKAN STATUS BOOKING PENDING UNTUK DITAMPILKAN DI DASHBOARD
+$pending_query = "SELECT * FROM booking WHERE status_booking = 'Pending'";
+$pending_data = mysqli_num_rows(mysqli_query($koneksi, $pending_query));
 
 
 
@@ -46,7 +49,7 @@ $booking_today_data = mysqli_num_rows(mysqli_query($koneksi, $booking_today_quer
                             <div class="mt-2 text-[10px] text-pink-600 font-bold bg-pink-50 inline-block px-2 py-0.5 rounded">Butuh Respon</div>
                         </div>
                         <div class="glass-card p-4 md:p-6 rounded-2xl shadow-sm border border-white">
-                            <p class="text-[10px] md:text-sm font-medium text-gray-500">Revenue</p>
+                            <p class="text-[10px] md:text-sm font-medium text-gray-500">Pendapatan</p>
                             <h3 class="text-xl md:text-3xl font-bold text-gray-800 mt-1">2.4jt</h3>
                             <div class="mt-2 text-[10px] text-green-600 font-bold bg-green-50 inline-block px-2 py-0.5 rounded">IDR</div>
                         </div>
@@ -74,6 +77,7 @@ $booking_today_data = mysqli_num_rows(mysqli_query($koneksi, $booking_today_quer
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-pink-50">
+                                <!-- DATA BOOKING  -->
                                 <?php while ($booking = mysqli_fetch_assoc($data)) { ?>
                                     <tr class="hover:bg-pink-50/20">
                                         <td class="px-6 py-4 font-bold text-pink-600"><?php echo $booking['tanggal_booking']; ?></td>
@@ -107,44 +111,7 @@ $booking_today_data = mysqli_num_rows(mysqli_query($koneksi, $booking_today_quer
             </div>
 
             <!-- Footer Informatif -->
-            <footer class="bg-white border-t border-pink-100 px-4 md:px-8 py-8 mt-12">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="text-center md:text-left">
-                        <h5 class="text-pink-600 font-bold italic text-lg">Mey Salon System</h5>
-                        <p class="text-[11px] text-gray-400 mt-2 leading-relaxed">
-                            Aplikasi manajemen salon tercanggih untuk memudahkan reservasi, 
-                            pelaporan, dan peningkatan layanan kecantikan Anda.
-                        </p>
-                    </div>
-                    
-                    <div class="flex justify-center md:justify-start space-x-12">
-                        <div>
-                            <h6 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Links</h6>
-                            <ul class="text-[11px] space-y-2 text-gray-600 font-medium">
-                                <li><a href="#" class="hover:text-pink-600">Panduan</a></li>
-                                <li><a href="#" class="hover:text-pink-600">Dukungan</a></li>
-                                <li><a href="#" class="hover:text-pink-600">API Docs</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h6 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Kontak</h6>
-                            <ul class="text-[11px] space-y-2 text-gray-600 font-medium">
-                                <li><i class="fa-solid fa-envelope mr-1 opacity-50"></i> help@meysalon.com</li>
-                                <li><i class="fa-solid fa-phone mr-1 opacity-50"></i> +62 812-XXXX</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="text-center md:text-right border-t md:border-t-0 pt-6 md:pt-0 border-pink-50">
-                        <p class="text-[11px] text-gray-400">&copy; 2024 Mey Salon Dashboard.</p>
-                        <div class="flex justify-center md:justify-end gap-3 mt-3 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
-                            <i class="fa-brands fa-cc-visa text-xl"></i>
-                            <i class="fa-brands fa-cc-mastercard text-xl"></i>
-                            <i class="fa-solid fa-shield-halved text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+                <?php include "../layout/footer-component.php"; ?>
         </main>
     </div>
 
