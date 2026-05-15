@@ -1,5 +1,5 @@
 <?php 
-$page_title = "Dashboard";
+$page_title = "Data Booking";
 include "../layout/header.php";
 ?>
 <body class="text-gray-800 overflow-x-hidden">
@@ -14,30 +14,6 @@ include "../layout/header.php";
             <!-- Page Content -->
             <div class="p-4 md:p-8 flex-1">
                 <div id="section-dashboard" class="space-y-6 md:space-y-8">
-                    <!-- Stats Grid -->
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                        <div class="glass-card p-4 md:p-6 rounded-2xl shadow-sm border border-white">
-                            <p class="text-[10px] md:text-sm font-medium text-gray-500">Booking Today</p>
-                            <h3 class="text-xl md:text-3xl font-bold text-gray-800 mt-1">24</h3>
-                            <div class="mt-2 text-[10px] text-blue-600 font-bold bg-blue-50 inline-block px-2 py-0.5 rounded">Hari Ini</div>
-                        </div>
-                        <div class="glass-card p-4 md:p-6 rounded-2xl shadow-sm border border-white">
-                            <p class="text-[10px] md:text-sm font-medium text-gray-500">Pending</p>
-                            <h3 class="text-xl md:text-3xl font-bold text-pink-600 mt-1">5</h3>
-                            <div class="mt-2 text-[10px] text-pink-600 font-bold bg-pink-50 inline-block px-2 py-0.5 rounded">Butuh Respon</div>
-                        </div>
-                        <div class="glass-card p-4 md:p-6 rounded-2xl shadow-sm border border-white">
-                            <p class="text-[10px] md:text-sm font-medium text-gray-500">Revenue</p>
-                            <h3 class="text-xl md:text-3xl font-bold text-gray-800 mt-1">2.4jt</h3>
-                            <div class="mt-2 text-[10px] text-green-600 font-bold bg-green-50 inline-block px-2 py-0.5 rounded">IDR</div>
-                        </div>
-                        <div class="glass-card p-4 md:p-6 rounded-2xl shadow-sm border border-white">
-                            <p class="text-[10px] md:text-sm font-medium text-gray-500">Customers</p>
-                            <h3 class="text-xl md:text-3xl font-bold text-gray-800 mt-1">156</h3>
-                            <div class="mt-2 text-[10px] text-purple-600 font-bold bg-purple-50 inline-block px-2 py-0.5 rounded">Loyalty</div>
-                        </div>
-                    </div>
-
                     <!-- Table Area -->
                     <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100">
                         <div class="px-6 py-4 border-b border-pink-50 flex justify-between items-center">
@@ -51,6 +27,7 @@ include "../layout/header.php";
                                         <th class="px-6 py-4">Waktu</th>
                                         <th class="px-6 py-4">Pelanggan</th>
                                         <th class="px-6 py-4">Layanan</th>
+                                        <th class="px-6 py-4">Informasi</th>
                                         <th class="px-6 py-4 text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -59,14 +36,23 @@ include "../layout/header.php";
                                         <td class="px-6 py-4 font-bold text-pink-600">10:00</td>
                                         <td class="px-6 py-4 font-semibold text-gray-700">Siska Amelia</td>
                                         <td class="px-6 py-4 text-sm text-gray-500">Hair Spa</td>
+                                          <td class="px-6 py-4">
+                                            <button class="bg-pink-600 text-white px-3 py-1 text-[10px] font-bold rounded-lg hover:shadow-lg">Booking Detail</button>
+                                        </td>
                                         <td class="px-6 py-4 text-center">
                                             <button class="bg-green-100 text-green-600 px-3 py-1 text-[10px] font-bold rounded-lg uppercase">Selesai</button>
                                         </td>
+                                        <!-- <td class="px-6 py-4 text-center">
+                                            <button onclick="showMessage('Booking dikonfirmasi')" class="bg-pink-600 text-white px-3 py-1 text-[10px] font-bold rounded-lg hover:shadow-lg">Konfirmasi</button>
+                                        </td> -->
                                     </tr>
                                     <tr class="hover:bg-pink-50/20">
                                         <td class="px-6 py-4 font-bold text-pink-600">11:30</td>
                                         <td class="px-6 py-4 font-semibold text-gray-700">Dewi Kusuma</td>
                                         <td class="px-6 py-4 text-sm text-gray-500">Coloring</td>
+                                        <td class="px-6 py-4">
+                                            <button class="bg-pink-600 text-white px-3 py-1 text-[10px] font-bold rounded-lg hover:shadow-lg">Booking Detail</button>
+                                        </td>
                                         <td class="px-6 py-4 text-center">
                                             <button onclick="showMessage('Booking dikonfirmasi')" class="bg-pink-600 text-white px-3 py-1 text-[10px] font-bold rounded-lg hover:shadow-lg">Konfirmasi</button>
                                         </td>
@@ -74,18 +60,6 @@ include "../layout/header.php";
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </div>
-                
-           
-                <!-- Pelanggan Section -->
-                <div id="section-pelanggan" class="hidden">
-                    <h3 class="text-lg font-bold mb-6 text-gray-700">Database Pelanggan</h3>
-                    <div class="bg-white rounded-2xl border border-pink-100 p-12 text-center">
-                        <div class="w-16 h-16 bg-pink-50 text-pink-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fa-solid fa-users text-2xl"></i>
-                        </div>
-                        <p class="text-gray-400 italic text-sm">Menghubungkan ke database pelanggan...</p>
                     </div>
                 </div>
             </div>
@@ -132,6 +106,7 @@ include "../layout/header.php";
         </main>
     </div>
 
+   
 <?php
 include "../layout/footer.php";
 ?>
