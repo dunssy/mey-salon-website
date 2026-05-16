@@ -65,7 +65,7 @@ $total_halaman = hitung_total_halaman_layanan($jumlah_per_halaman);
                                         <td class="p-4">Rp <?= number_format($data_layanan['harga_layanan'], 0, ',', '.'); ?></td>
                                         <td class="p-4"><?= htmlspecialchars($data_layanan['durasi_layanan']); ?> Menit</td>
                                         <td class="p-4">
-                                            <a href="edit-layanan.php?id=<?= $data_layanan['id_layanan']; ?>" class="px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
+                                            <a href="edit-layanan.php?=<?= $data_layanan['id_layanan']; ?>" class="px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
                                             <a href="hapus-layanan.php?id=<?= $data_layanan['id_layanan']; ?>" class="px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" onclick="return confirm('Apakah Anda yakin ingin menghapus layanan ini?')">Hapus</a>
                                         </td>
                                     </tr>
@@ -82,8 +82,8 @@ $total_halaman = hitung_total_halaman_layanan($jumlah_per_halaman);
                             <!-- BAGIAN TFOOT UNTUK PAGINATION DI POJOK KANAN BAWAH -->
                             <tfoot class="bg-gray-50/50 border-t border-pink-100">
                                 <tr>
-                                    <td colspan="4" class="p-4">
-                                        <div class="flex justify-end items-center gap-2">
+                                    <td colspan="5" class="p-4">
+                                        <div class="flex justify-end md-4 gap-2">
                                             
                                             <!-- Tombol Prev -->
                                             <?php if ($halaman_aktif > 1) : ?>
