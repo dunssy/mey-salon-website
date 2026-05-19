@@ -3,11 +3,9 @@
             <footer class="bg-white border-t border-pink-100 px-4 md:px-8 py-8 mt-12">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="text-center md:text-left">
-                        <h5 class="text-pink-600 font-bold italic text-lg">Mey Salon System</h5>
+                        <h5 class="text-pink-600 font-bold italic text-lg">Mey Salon</h5>
                         <p class="text-[11px] text-gray-400 mt-2 leading-relaxed">
-                            Aplikasi manajemen salon tercanggih untuk memudahkan reservasi, 
-                            pelaporan, dan peningkatan layanan kecantikan Anda.
-                        </p>
+                            Mey Salon adalah platform pemesanan layanan salon yang memudahkan pelanggan untuk menemukan dan memesan layanan kecantikan.                        </p>
                     </div>
                     
                     <div class="flex justify-center md:justify-start space-x-12">

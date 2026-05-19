@@ -47,8 +47,6 @@ $total_halaman = hitung_total_halaman_layanan($jumlah_per_halaman);
             <!-- Page Content -->
             <div class="p-4 md:p-8 flex-1">
                 <!-- Section Service -->
-                    <!-- SUB JUDUL -->
-                    <h3 class="text-lg font-bold mb-6"><?php echo $sub_title; ?></h3>
                     <!-- tambah layanan -->
                     <a href="tambah-layanan.php" class="mb-4 inline-block px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">
                         <i class="fa-solid fa-plus"></i>Tambah Layanan

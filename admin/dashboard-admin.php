@@ -8,7 +8,7 @@ global $koneksi;
 $query = "SELECT b.*, u.nama FROM booking b JOIN user u ON b.id_user = u.id_user";
 $data = mysqli_query($koneksi, $query);
 // MENGAMBIL DATA PELANGGAN BERDASARKAN ROLE UNTUK DITAMPILKAN DI DASHBOARD 
-$user_query = "SELECT * FROM user WHERE role='User'";
+$user_query = "SELECT * FROM user WHERE role='Customer'";
 // MENJUMLAH DATA USER BERDASARKAN ROLE USER SAJA UNTUK DITAMPILKAN DI DASHBOARD
 $user_data = mysqli_num_rows(mysqli_query($koneksi, $user_query));
 // MENGAMBIL DATA BOOKING BERDASARKAN TANGGAL BOOKING HARI INI UNTUK DITAMPILKAN DI DASHBOARD
@@ -18,10 +18,6 @@ $booking_today_data = mysqli_num_rows(mysqli_query($koneksi, $booking_today_quer
 // MENGAMBIL DATA BOOKING BERDASARKAN STATUS BOOKING PENDING UNTUK DITAMPILKAN DI DASHBOARD
 $pending_query = "SELECT * FROM booking WHERE status_booking = 'Pending'";
 $pending_data = mysqli_num_rows(mysqli_query($koneksi, $pending_query));
-
-
-
-
 
 ?>
 <body class="text-gray-800 overflow-x-hidden">
