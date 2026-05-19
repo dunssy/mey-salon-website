@@ -4,6 +4,20 @@ $sub_title = "Data Layanan";
 include "../layout/header.php";
 include "../config/app.php";
 
+// Memanggil variabel $layanan dari app.php untuk menampilkan data layanan di tabel
+global $koneksi;
+// MENGHAPUS LAYANAN
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['hapus'])) {
+    $id_layanan = $_POST['hapus'];
+    $result = mysqli_query($koneksi, "DELETE FROM layanan WHERE id_layanan = $id_layanan");
+    
+    if ($result) {
+        header("Location: data-layanan.php?status=success");
+        exit;
+    } else {
+        $error_message = "Gagal menghapus layanan.";
+    }
+}
 // MENGAMBIL DATA LAYANAN DARI TABLE LAYANAN 
 $layanan = select("SELECT * FROM layanan");
 // nomor urut untuk tabel layanan
@@ -37,6 +51,15 @@ $total_halaman = hitung_total_halaman_layanan($jumlah_per_halaman);
                     <a href="tambah-layanan.php" class="mb-4 inline-block px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">
                         <i class="fa-solid fa-plus"></i>Tambah Layanan
                     </a>
+                    <!-- pencarian layanan -->
+                    <form action="" method="GET" class="mb-6">
+                        <div class="flex items-center">
+                            <input type="text" name="search" placeholder="Cari layanan..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200">
+                            <button type="submit" class="ml-2 px-4 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 transition-colors">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </form>
                     <!-- TABLE LAYANAN -->
                      <!-- Tabel Data -->
                     <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
@@ -63,8 +86,10 @@ $total_halaman = hitung_total_halaman_layanan($jumlah_per_halaman);
                                         <td class="p-4">Rp <?= number_format($data_layanan['harga_layanan'], 0, ',', '.'); ?></td>
                                         <td class="p-4"><?= htmlspecialchars($data_layanan['durasi_layanan']); ?> Menit</td>
                                         <td class="p-4">
-                                            <a href="edit-layanan.php?=<?= $data_layanan['id_layanan']; ?>" class="px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
-                                            <a href="hapus-layanan.php?id=<?= $data_layanan['id_layanan']; ?>" class="px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" onclick="return confirm('Apakah Anda yakin ingin menghapus layanan ini?')">Hapus</a>
+                                            <a href="edit-layanan.php?id_layanan=<?= $data_layanan['id_layanan']; ?>" class="px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
+                                            <form method="POST" style="display:inline;">
+                                                <button type="submit" name="hapus" value="<?= $data_layanan['id_layanan']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus layanan ini?')" class="px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">Hapus</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 <?php 

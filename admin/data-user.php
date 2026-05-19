@@ -1,7 +1,8 @@
-  <?php 
+<?php 
 $page_title = "Data User";
 include "../layout/header.php";
 include "../config/app.php";
+global $koneksi;
 
 // MENGAMBIL DATA user DARI TABLE user   
 $user = select("SELECT * FROM user");
@@ -9,19 +10,15 @@ $user = select("SELECT * FROM user");
 $nomor = 1;
 
 // PROSES HAPUS user
-if (isset($_POST['hapus_user'])) {
-    $id_user = (int) $_POST['id_user'];
-
-    if (hapus_user($id_user) > 0) {
-        echo "<script>
-                alert('User berhasil dihapus!');
-                window.location.href = 'data-user.php';
-              </script>";
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['hapus'])) {
+    $id_user = $_POST['hapus'];
+    $result = mysqli_query($koneksi, "DELETE FROM user WHERE id_user = $id_user");
+    
+    if ($result) {
+        header("Location: data-user.php?status=success");
+        exit;
     } else {
-        echo "<script>
-                alert('User gagal dihapus!');
-                window.location.href = 'data-user.php';
-              </script>";
+        $error_message = "Gagal menghapus user.";
     }
 }
 
@@ -32,10 +29,10 @@ if ($halaman_aktif < 1) {
     $halaman_aktif = 1;
 }
 
-// 2. AMBIL DATA & TOTAL HALAMAN
 $user = tampil_user_per_halaman($halaman_aktif, $jumlah_per_halaman);
 $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
-?></1></1>
+?>
+
 <body class="text-gray-800 overflow-x-hidden">
 
     <div class="flex h-screen overflow-hidden">
@@ -71,7 +68,7 @@ $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
                             <tbody class="divide-y divide-pink-50">
                                 <?php 
                                 $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1; 
-                                
+
                                 if (!empty($user)) {
                                     foreach ($user as $data_user) : 
                                 ?>
@@ -141,11 +138,10 @@ $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
                     </div>
             </div
             <!-- Footer Informatif -->
-             <?php include "../layout/footer-component.php"; ?>
+                <?php include "../layout/footer-component.php"; ?>
         </main>
     </div>
 
 <?php
 include "../layout/footer.php";
 ?>
-  

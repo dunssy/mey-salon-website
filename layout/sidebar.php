@@ -19,6 +19,12 @@
                     <i class="fa-solid fa-calendar-check w-6 text-lg"></i>
                     <span>Booking</span>
                 </a>
+                <!-- data stok barang -->
+                <a href="data-stok.php" onclick="switchTab('stok')" id="nav-stok" class="flex items-center px-4 py-3 text-sm font-medium text-gray-600 hover:bg-pink-50 hover:text-pink-600 rounded-xl transition-all">
+                    <i class="fa-solid fa-boxes-stacked w-6 text-lg"></i>
+                    <span>Stok Barang</span>
+                </a>
+                
                 <a href="data-layanan.php" onclick="switchTab('layanan.php')" id="nav-layanan" class="flex items-center px-4 py-3 text-sm font-medium text-gray-600 hover:bg-pink-50 hover:text-pink-600 rounded-xl transition-all">
                     <i class="fa-solid fa-scissors w-6 text-lg"></i>
                     <span>Layanan</span>
@@ -58,7 +64,7 @@
         
         // Switch Tabs Logic
         function switchTab(tabName) {
-            const sections = ['dashboard', 'layanan.php'];
+            const sections = ['dashboard', 'layanan'];
             sections.forEach(s => {
                 const el = document.getElementById(`section-${s}`);
                 if (el) el.classList.add('hidden');

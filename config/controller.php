@@ -1,6 +1,6 @@
 <?php
 
-// FUNGSI TAMPILKAN SEMUA DATABASE
+// FUNGSI UNTUK MENGAMBIL SEMUA DATA DARI DATABASE
 function select($query){
     global $koneksi;
     $result = mysqli_query($koneksi, $query);
@@ -26,7 +26,7 @@ function tambah_booking(){
     }
 }
 
-// PAGINATION LAYANAN
+// PROSES CRUD LAYANAN
 // Fungsi untuk mengambil data layanan dengan LIMIT dan OFFSET
 function tampil_layanan_per_halaman($halaman_aktif, $jumlah_per_halaman) {
     global $koneksi; // sesuaikan dengan nama variabel koneksi database Anda
@@ -56,6 +56,34 @@ function hitung_total_halaman_layanan($jumlah_per_halaman) {
     // Bulatkan ke atas hasil pembagiannya
     return ceil($total_data / $jumlah_per_halaman);
 }
+
+// PROSES CRUD LAYANAN
+function tambah_layanan($post){
+    global $koneksi;
+    $nama_layanan = strip_tags($post['nama_layanan']);
+    $harga = strip_tags($post['harga_layanan']);
+    $durasi = strip_tags($post['durasi_layanan']);
+    
+    $query = "INSERT INTO layanan (id_layanan, nama_layanan, harga_layanan, durasi_layanan) VALUES ('', '$nama_layanan', '$harga', '$durasi')";
+    mysqli_query($koneksi , $query);
+    
+    return mysqli_affected_rows($koneksi);
+}
+
+// EDIT LAYANAN
+function edit_layanan($post){
+    global $koneksi;
+    $id_layanan = strip_tags($post['id_layanan']);
+    $nama_layanan = strip_tags($post['nama_layanan']);
+    $harga = strip_tags($post['harga_layanan']);
+    $durasi = strip_tags($post['durasi_layanan']);
+
+    $query = "UPDATE layanan SET nama_layanan = '$nama_layanan', harga_layanan = '$harga', durasi_layanan = '$durasi' WHERE id_layanan = '$id_layanan'";
+    mysqli_query($koneksi , $query);
+
+    return mysqli_affected_rows($koneksi);
+}
+
 // PAGINATION user
 // Fungsi untuk mengambil data user dengan LIMIT dan OFFSET
 function tampil_user_per_halaman($halaman_aktif, $jumlah_per_halaman) {
@@ -85,19 +113,6 @@ function hitung_total_halaman_user($jumlah_per_halaman) {
     
     // Bulatkan ke atas hasil pembagiannya
     return ceil($total_data / $jumlah_per_halaman);
-}
-
-// PROSES CRUD LAYANAN
-function tambah_layanan($post){
-    global $koneksi;
-    $nama_layanan = strip_tags($post['nama_layanan']);
-    $harga = strip_tags($post['harga_layanan']);
-    $durasi = strip_tags($post['durasi_layanan']);
-
-    $query = "INSERT INTO layanan (id_layanan, nama_layanan, harga_layanan, durasi_layanan) VALUES ('', '$nama_layanan', '$harga', '$durasi')";
-    mysqli_query($koneksi , $query);
-    
-    return mysqli_affected_rows($koneksi);
 }
 
 // Fungsi untuk menambah user berdasarkan id_user
@@ -170,13 +185,4 @@ function edit_user($post){
     mysqli_query($koneksi, $query);
 
     return mysqli_affected_rows($koneksi);
-}   
-
-// Fungsi untuk menghapus user berdasarkan id_user
-function hapus_user($id_user){
-    global $koneksi;
-    $id_user = (int) $id_user;
-    mysqli_query($koneksi, "DELETE FROM user WHERE id_user = $id_user");
-    return mysqli_affected_rows($koneksi);
-}
-// PRORSES CRUD PELANGGAN
+}  
