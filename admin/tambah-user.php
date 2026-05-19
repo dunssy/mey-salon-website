@@ -108,7 +108,7 @@ if(isset($_POST['submit'])){
                         submitButton.disabled = true;
                         submitButton.classList.add('opacity-50', 'cursor-not-allowed');
                     } else {
-                        usernameMessage.textContent = 'Username tersedia';
+                        usernameMessage.textContent = 'Username Belum digunakan';
                         usernameMessage.className = 'text-sm font-medium text-green-600';
 
                         usernameInput.classList.remove('border-red-500');
