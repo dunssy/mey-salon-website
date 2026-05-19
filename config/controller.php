@@ -12,10 +12,6 @@ function select($query){
     return $rows;
 }
 
-
-
-
-
 // PROSES CRUD BOOKING
 function tambah_booking(){
     global $koneksi;
@@ -29,10 +25,6 @@ function tambah_booking(){
         mysqli_query($koneksi , $query);
     }
 }
-
-
-
-
 
 // PAGINATION LAYANAN
 // Fungsi untuk mengambil data layanan dengan LIMIT dan OFFSET
@@ -96,7 +88,6 @@ function hitung_total_halaman_user($jumlah_per_halaman) {
 }
 
 // PROSES CRUD LAYANAN
-
 function tambah_layanan($post){
     global $koneksi;
     $nama_layanan = strip_tags($post['nama_layanan']);
@@ -124,4 +115,64 @@ function tambah_user($post){
     return mysqli_affected_rows($koneksi);
 }
 
+function edit_user($post){ 
+    global $koneksi;
+
+    $id_user = (int) $post['id_user'];
+    $nama = strip_tags($post['nama']);
+    $no_hp = strip_tags($post['no_hp']);
+    $alamat = strip_tags($post['alamat']);
+    $username = strip_tags($post['username']);
+    $role = strip_tags($post['role']);
+    $password = strip_tags($post['password']);
+
+    $nama = mysqli_real_escape_string($koneksi, $nama);
+    $no_hp = mysqli_real_escape_string($koneksi, $no_hp);
+    $alamat = mysqli_real_escape_string($koneksi, $alamat);
+    $username = mysqli_real_escape_string($koneksi, $username);
+    $role = mysqli_real_escape_string($koneksi, $role);
+    $password = mysqli_real_escape_string($koneksi, $password);
+
+    // Cek username, tapi abaikan user yang sedang diedit
+    $cek_username = mysqli_query(
+        $koneksi, 
+        "SELECT username FROM user 
+         WHERE username = '$username' 
+         AND id_user != $id_user"
+    );
+
+    if (mysqli_num_rows($cek_username) > 0) {
+        return -1;
+    }
+
+    // Jika password kosong, password lama tidak diubah
+    if ($password == '') {
+        $query = "UPDATE user SET 
+                    nama = '$nama',
+                    no_hp = '$no_hp',
+                    alamat = '$alamat',
+                    username = '$username',
+                    role = '$role'
+                  WHERE id_user = $id_user";
+    } else {
+        $query = "UPDATE user SET 
+                    nama = '$nama',
+                    no_hp = '$no_hp',
+                    alamat = '$alamat',
+                    username = '$username',
+                    role = '$role',
+                    password = '$password'
+                  WHERE id_user = $id_user";
+    }
+
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
+}   
+
+function hapus_user($id_user){
+    global $koneksi;
+    mysqli_query($koneksi, "DELETE FROM user WHERE id_user = $id_user");
+    return mysqli_affected_rows($koneksi);
+}
 // PRORSES CRUD PELANGGAN

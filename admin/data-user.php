@@ -67,8 +67,8 @@ $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
                                         <td class="p-4"><?= htmlspecialchars($data_user['username']); ?></td>
                                         <td class="p-4"><?= htmlspecialchars($data_user['role']); ?></td>
                                         <td class="p-4">
-                                            <a href="edit-user.php?id=<?= $data_user['id_user']; ?>" class="px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
-                                            <a href="hapus-user.php?id=<?= $data_user['id_user']; ?>" class="px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')">Hapus</a>
+                                            <a href="edit-user.php?id_user=<?= $data_user['id_user']; ?>" class="px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
+                                            <a href="hapus-user.php?id_user=<?= $data_user['id_user']; ?>" class="px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')">Hapus</a>
                                         </td>
                                     </tr>
                                 <?php 
