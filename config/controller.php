@@ -26,16 +26,41 @@ function tambah_booking(){
     }
 }
 
-<<<<<<< HEAD
+
+// PROSES CRUD LAYANAN
+function tambah_layanan($post){
+    global $koneksi;
+    $nama_layanan = strip_tags($post['nama_layanan']);
+    $harga = strip_tags($post['harga_layanan']);
+    $durasi = strip_tags($post['durasi_layanan']);
+
+    $query = "INSERT INTO layanan (id_layanan, nama_layanan, harga_layanan, durasi_layanan) VALUES ('', '$nama_layanan', '$harga', '$durasi')";
+    mysqli_query($koneksi , $query);
+    
+    return mysqli_affected_rows($koneksi);
+}
+
+function edit_layanan($post){ 
+    global $koneksi;
+
+    $id_layanan = (int) $post['id_layanan'];
+    $nama_layanan = strip_tags($post['nama_layanan']);
+    $harga = strip_tags($post['harga_layanan']);
+    $durasi = strip_tags($post['durasi_layanan']);
+
+    $nama_layanan = mysqli_real_escape_string($koneksi, $nama_layanan);
+    $harga = mysqli_real_escape_string($koneksi, $harga);
+    $durasi = mysqli_real_escape_string($koneksi, $durasi);
 
 
+    $query = "UPDATE layanan SET nama_layanan = '$nama_layanan', harga_layanan = '$harga', durasi_layanan = '$durasi' WHERE id_layanan = $id_layanan";
+    mysqli_query($koneksi, $query);
 
-    // Fungsi untuk menghitung total halaman layanan
-    function hitung_total_halaman_layanan($jumlah_per_halaman) {
-        global $koneksi;
-=======
+    return mysqli_affected_rows($koneksi);
+}
+
+
 // PAGINATION LAYANAN
-// Fungsi untuk mengambil data layanan dengan LIMIT dan OFFSET
 function tampil_layanan_per_halaman($halaman_aktif, $jumlah_per_halaman) {
     global $koneksi; // sesuaikan dengan nama variabel koneksi database Anda
     
@@ -55,7 +80,6 @@ function tampil_layanan_per_halaman($halaman_aktif, $jumlah_per_halaman) {
 // Fungsi untuk menghitung total halaman layanan
 function hitung_total_halaman_layanan($jumlah_per_halaman) {
     global $koneksi;
->>>>>>> 6f8472b9a5386dd8fdc03ced9aa3470230163533
     
     $query = "SELECT COUNT(*) AS total FROM layanan";
     $result = mysqli_query($koneksi, $query);
@@ -64,101 +88,14 @@ function hitung_total_halaman_layanan($jumlah_per_halaman) {
     
     // Bulatkan ke atas hasil pembagiannya
     return ceil($total_data / $jumlah_per_halaman);
-<<<<<<< HEAD
-    }
-    
-// PROSES CRUD LAYANAN
-        function tambah_layanan($post){
-        global $koneksi;
-        $nama_layanan = strip_tags($post['nama_layanan']);
-        $harga = strip_tags($post['harga_layanan']);
-        $durasi = strip_tags($post['durasi_layanan']);
-        
-        $query = "INSERT INTO layanan (id_layanan, nama_layanan, harga_layanan, durasi_layanan) VALUES ('', '$nama_layanan', '$harga', '$durasi')";
-        mysqli_query($koneksi , $query);
-        
-        return mysqli_affected_rows($koneksi);
-        }
-        
-        // PAGINATION LAYANAN
-        // Fungsi untuk mengambil data layanan dengan LIMIT dan OFFSET
-        function tampil_layanan_per_halaman($halaman_aktif, $jumlah_per_halaman) {
-            global $koneksi; // sesuaikan dengan nama variabel koneksi database Anda
-            
-            // Hitung offset data
-            $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
-            
-            $query = "SELECT * FROM layanan ORDER BY id_layanan DESC LIMIT $offset, $jumlah_per_halaman";
-            $result = mysqli_query($koneksi, $query);
-            
-            $rows = [];
-            while ($row = mysqli_fetch_assoc($result)) {
-                $rows[] = $row;
-                }
-                return $rows;
-                
-                }
-        
-        
-        // EDIT LAYANAN
-        function edit_layanan($post){
-            global $koneksi;
-            $id_layanan = strip_tags($post['id_layanan']);
-            $nama_layanan = strip_tags($post['nama_layanan']);
-            $harga = strip_tags($post['harga_layanan']);
-            $durasi = strip_tags($post['durasi_layanan']);
-            
-            $query = "UPDATE layanan SET nama_layanan = '$nama_layanan', harga_layanan = '$harga', durasi_layanan = '$durasi' WHERE id_layanan = '$id_layanan'";
-            mysqli_query($koneksi , $query);
-            
-            return mysqli_affected_rows($koneksi);
-        }
+}
+
 // END CRUD LAYANAN
-=======
-}
-// PAGINATION user
-// Fungsi untuk mengambil data user dengan LIMIT dan OFFSET
-function tampil_user_per_halaman($halaman_aktif, $jumlah_per_halaman) {
-    global $koneksi; // sesuaikan dengan nama variabel koneksi database Anda
-    
-    // Hitung offset data
-    $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
-    
-    $query = "SELECT * FROM user ORDER BY id_user DESC LIMIT $offset, $jumlah_per_halaman";
-    $result = mysqli_query($koneksi, $query);
-    
-    $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $rows[] = $row;
-    }
-    return $rows;
-}
 
-// Fungsi untuk menghitung total halaman user
-function hitung_total_halaman_user($jumlah_per_halaman) {
-    global $koneksi;
-    
-    $query = "SELECT COUNT(*) AS total FROM user";
-    $result = mysqli_query($koneksi, $query);
-    $data = mysqli_fetch_assoc($result);
-    $total_data = $data['total'];
-    
-    // Bulatkan ke atas hasil pembagiannya
-    return ceil($total_data / $jumlah_per_halaman);
-}
 
-// PROSES CRUD LAYANAN
-function tambah_layanan($post){
-    global $koneksi;
-    $nama_layanan = strip_tags($post['nama_layanan']);
-    $harga = strip_tags($post['harga_layanan']);
-    $durasi = strip_tags($post['durasi_layanan']);
 
-    $query = "INSERT INTO layanan (id_layanan, nama_layanan, harga_layanan, durasi_layanan) VALUES ('', '$nama_layanan', '$harga', '$durasi')";
-    mysqli_query($koneksi , $query);
-    
-    return mysqli_affected_rows($koneksi);
-}
+
+//PROSES CRUD USER
 
 function tambah_user($post){
     global $koneksi;
@@ -207,22 +144,9 @@ function edit_user($post){
 
     // Jika password kosong, password lama tidak diubah
     if ($password == '') {
-        $query = "UPDATE user SET 
-                    nama = '$nama',
-                    no_hp = '$no_hp',
-                    alamat = '$alamat',
-                    username = '$username',
-                    role = '$role'
-                  WHERE id_user = $id_user";
+        $query = "UPDATE user SET nama = '$nama',no_hp = '$no_hp',alamat = '$alamat',username = '$username',role = '$role' WHERE id_user = $id_user";
     } else {
-        $query = "UPDATE user SET 
-                    nama = '$nama',
-                    no_hp = '$no_hp',
-                    alamat = '$alamat',
-                    username = '$username',
-                    role = '$role',
-                    password = '$password'
-                  WHERE id_user = $id_user";
+        $query = "UPDATE user SET nama = '$nama',no_hp = '$no_hp', alamat = '$alamat',username = '$username',role = '$role',password = '$password' WHERE id_user = $id_user";
     }
 
     mysqli_query($koneksi, $query);
@@ -235,5 +159,104 @@ function hapus_user($id_user){
     mysqli_query($koneksi, "DELETE FROM user WHERE id_user = $id_user");
     return mysqli_affected_rows($koneksi);
 }
-// PRORSES CRUD PELANGGAN
->>>>>>> 6f8472b9a5386dd8fdc03ced9aa3470230163533
+
+// / PAGINATION user
+// Fungsi untuk mengambil data user dengan LIMIT dan OFFSET
+function tampil_user_per_halaman($halaman_aktif, $jumlah_per_halaman) {
+    global $koneksi; // sesuaikan dengan nama variabel koneksi database Anda
+    
+    // Hitung offset data
+    $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
+    
+    $query = "SELECT * FROM user ORDER BY id_user DESC LIMIT $offset, $jumlah_per_halaman";
+    $result = mysqli_query($koneksi, $query);
+    
+    $rows = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+    return $rows;
+}
+
+// Fungsi untuk menghitung total halaman user
+function hitung_total_halaman_user($jumlah_per_halaman) {
+    global $koneksi;
+    
+    $query = "SELECT COUNT(*) AS total FROM user";
+    $result = mysqli_query($koneksi, $query);
+    $data = mysqli_fetch_assoc($result);
+    $total_data = $data['total'];
+    
+    // Bulatkan ke atas hasil pembagiannya
+    return ceil($total_data / $jumlah_per_halaman);
+}
+
+// END CRUD USER
+
+
+// PRORSES CRUD DATA BARANG
+function tambah_barang($post){
+    global $koneksi;
+    $nama_barang = strip_tags($post['nama_barang']);
+    $jenis_barang = strip_tags($post['jenis_barang']);
+    $jumlah_barang = strip_tags($post['jumlah_barang']);
+    $satuan_barang = strip_tags($post['satuan_barang']);
+    $minimal_stok = strip_tags($post['minimal_stok']);
+    $harga_beli = strip_tags($post['harga_beli']);
+
+    $query = "INSERT INTO stok_barang (id_barang, nama_barang, jenis_barang, jumlah_barang, satuan_barang, minimal_stok, harga_beli) VALUES ('', '$nama_barang', '$jenis_barang', '$jumlah_barang', '$satuan_barang', '$minimal_stok', '$harga_beli')";
+    mysqli_query($koneksi , $query);
+    
+    return mysqli_affected_rows($koneksi);
+}
+
+function edit_barang($post){ 
+    global $koneksi;
+
+    $id_barang = (int)$post['id_barang'];
+    $nama_barang = strip_tags($post['nama_barang']);
+    $jenis_barang = strip_tags($post['jenis_barang']);
+    $jumlah_barang = strip_tags($post['jumlah_barang']);
+    $satuan_barang = strip_tags($post['satuan_barang']);
+    $minimal_stok = strip_tags($post['minimal_stok']);
+    $harga_beli = strip_tags($post['harga_beli']);
+
+    $nama_barang = mysqli_real_escape_string($koneksi, $nama_barang);
+    $jenis_barang = mysqli_real_escape_string($koneksi, $jenis_barang);
+    $satuan_barang = mysqli_real_escape_string($koneksi, $satuan_barang);
+
+    $query = "UPDATE stok_barang SET nama_barang = '$nama_barang', jenis_barang = '$jenis_barang', jumlah_barang = '$jumlah_barang', satuan_barang = '$satuan_barang', minimal_stok = '$minimal_stok', harga_beli = '$harga_beli' WHERE id_barang = $id_barang";
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
+}
+
+// PAGINATION BARANG
+function tampil_barang_per_halaman($halaman_aktif, $jumlah_per_halaman) {
+    global $koneksi; // sesuaikan dengan nama variabel koneksi database Anda
+    
+    // Hitung offset data
+    $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
+    
+    $query = "SELECT * FROM stok_barang ORDER BY id_barang DESC LIMIT $offset, $jumlah_per_halaman";
+    $result = mysqli_query($koneksi, $query);
+    
+    $rows = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+    return $rows;
+}
+
+// Fungsi untuk menghitung total halaman barang
+function hitung_total_halaman_barang($jumlah_per_halaman) {
+    global $koneksi;
+    
+    $query = "SELECT COUNT(*) AS total FROM stok_barang";
+    $result = mysqli_query($koneksi, $query);
+    $data = mysqli_fetch_assoc($result);
+    $total_data = $data['total'];
+    
+    // Bulatkan ke atas hasil pembagiannya
+    return ceil($total_data / $jumlah_per_halaman);
+}
