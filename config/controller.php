@@ -100,6 +100,7 @@ function tambah_layanan($post){
     return mysqli_affected_rows($koneksi);
 }
 
+// Fungsi untuk menambah user berdasarkan id_user
 function tambah_user($post){
     global $koneksi;
     $nama = strip_tags($post['nama']);
@@ -115,6 +116,7 @@ function tambah_user($post){
     return mysqli_affected_rows($koneksi);
 }
 
+// Fungsi untuk mengedit user berdasarkan id_user
 function edit_user($post){ 
     global $koneksi;
 
@@ -170,8 +172,10 @@ function edit_user($post){
     return mysqli_affected_rows($koneksi);
 }   
 
+// Fungsi untuk menghapus user berdasarkan id_user
 function hapus_user($id_user){
     global $koneksi;
+    $id_user = (int) $id_user;
     mysqli_query($koneksi, "DELETE FROM user WHERE id_user = $id_user");
     return mysqli_affected_rows($koneksi);
 }

@@ -8,6 +8,22 @@ $user = select("SELECT * FROM user");
 // nomor urut untuk tabel user
 $nomor = 1;
 
+// PROSES HAPUS user
+if (isset($_POST['hapus_user'])) {
+    $id_user = (int) $_POST['id_user'];
+
+    if (hapus_user($id_user) > 0) {
+        echo "<script>
+                alert('User berhasil dihapus!');
+                window.location.href = 'data-user.php';
+              </script>";
+    } else {
+        echo "<script>
+                alert('User gagal dihapus!');
+                window.location.href = 'data-user.php';
+              </script>";
+    }
+}
 
 //PAGINATION
 $jumlah_per_halaman = 5; // Ubah angka ini untuk menentukan jumlah baris per halaman
@@ -68,7 +84,16 @@ $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
                                         <td class="p-4"><?= htmlspecialchars($data_user['role']); ?></td>
                                         <td class="p-4">
                                             <a href="edit-user.php?id_user=<?= $data_user['id_user']; ?>" class="px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
-                                            <a href="hapus-user.php?id_user=<?= $data_user['id_user']; ?>" class="px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')">Hapus</a>
+                                            <form action="" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                                <input type="hidden" name="id_user" value="<?= $data_user['id_user']; ?>">
+                                                <button 
+                                                    type="submit" 
+                                                    name="hapus_user"
+                                                    class="px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                                                >
+                                                    Hapus
+                                                </button>
+                                            </form>                                        
                                         </td>
                                     </tr>
                                 <?php 
