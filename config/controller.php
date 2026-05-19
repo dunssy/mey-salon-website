@@ -64,6 +64,36 @@ function hitung_total_halaman_layanan($jumlah_per_halaman) {
     // Bulatkan ke atas hasil pembagiannya
     return ceil($total_data / $jumlah_per_halaman);
 }
+// PAGINATION user
+// Fungsi untuk mengambil data user dengan LIMIT dan OFFSET
+function tampil_user_per_halaman($halaman_aktif, $jumlah_per_halaman) {
+    global $koneksi; // sesuaikan dengan nama variabel koneksi database Anda
+    
+    // Hitung offset data
+    $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
+    
+    $query = "SELECT * FROM user ORDER BY id_user DESC LIMIT $offset, $jumlah_per_halaman";
+    $result = mysqli_query($koneksi, $query);
+    
+    $rows = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+    return $rows;
+}
+
+// Fungsi untuk menghitung total halaman user
+function hitung_total_halaman_user($jumlah_per_halaman) {
+    global $koneksi;
+    
+    $query = "SELECT COUNT(*) AS total FROM user";
+    $result = mysqli_query($koneksi, $query);
+    $data = mysqli_fetch_assoc($result);
+    $total_data = $data['total'];
+    
+    // Bulatkan ke atas hasil pembagiannya
+    return ceil($total_data / $jumlah_per_halaman);
+}
 
 // PROSES CRUD LAYANAN
 
@@ -79,5 +109,19 @@ function tambah_layanan($post){
     return mysqli_affected_rows($koneksi);
 }
 
+function tambah_user($post){
+    global $koneksi;
+    $nama = strip_tags($post['nama']);
+    $no_hp = strip_tags($post['no_hp']);
+    $alamat = strip_tags($post['alamat']);
+    $username = strip_tags($post['username']);
+    $role = strip_tags($post['role']);
+    $password = strip_tags($post['password']);
+
+    $query = "INSERT INTO user (id_user, nama, no_hp, alamat, username, role, password) VALUES ('', '$nama', '$no_hp', '$alamat', '$username', '$role', '$password')";
+    mysqli_query($koneksi , $query);
+    
+    return mysqli_affected_rows($koneksi);
+}
 
 // PRORSES CRUD PELANGGAN
