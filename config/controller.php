@@ -46,9 +46,8 @@ function tambah_booking(){
     return ceil($total_data / $jumlah_per_halaman);
     }
     
-    // PROSES CRUD LAYANAN
-    
-    function tambah_layanan($post){
+// PROSES CRUD LAYANAN
+        function tambah_layanan($post){
         global $koneksi;
         $nama_layanan = strip_tags($post['nama_layanan']);
         $harga = strip_tags($post['harga_layanan']);
@@ -80,16 +79,17 @@ function tambah_booking(){
                 }
         
         
-        // PRORSES CRUD PELANGGAN
-    function edit_layanan($post){
-        global $koneksi;
-        $id_layanan = strip_tags($post['id_layanan']);
-        $nama_layanan = strip_tags($post['nama_layanan']);
-        $harga = strip_tags($post['harga_layanan']);
-        $durasi = strip_tags($post['durasi_layanan']);
-        
-        $query = "UPDATE layanan SET nama_layanan = '$nama_layanan', harga_layanan = '$harga', durasi_layanan = '$durasi' WHERE id_layanan = '$id_layanan'";
-        mysqli_query($koneksi , $query);
-        
-        return mysqli_affected_rows($koneksi);
+        // EDIT LAYANAN
+        function edit_layanan($post){
+            global $koneksi;
+            $id_layanan = strip_tags($post['id_layanan']);
+            $nama_layanan = strip_tags($post['nama_layanan']);
+            $harga = strip_tags($post['harga_layanan']);
+            $durasi = strip_tags($post['durasi_layanan']);
+            
+            $query = "UPDATE layanan SET nama_layanan = '$nama_layanan', harga_layanan = '$harga', durasi_layanan = '$durasi' WHERE id_layanan = '$id_layanan'";
+            mysqli_query($koneksi , $query);
+            
+            return mysqli_affected_rows($koneksi);
         }
+// END CRUD LAYANAN

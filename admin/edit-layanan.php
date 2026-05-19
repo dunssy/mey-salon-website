@@ -20,7 +20,7 @@ if(isset($_POST['submit'])){
     }
 }
 
-$query = select("SELECT* FROM layanan WHERE id_layanan = " . $_GET['id_layanan']);
+$query = select("SELECT * FROM layanan WHERE id_layanan = " . $_GET['id_layanan']);
 $layanan = $query[0];
 
 ?>
