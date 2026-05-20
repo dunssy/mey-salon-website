@@ -10,12 +10,12 @@ if(isset($_POST['submit'])){
     if(edit_layanan($_POST) > 0){
         echo "<script>
                 alert('Layanan berhasil diubah!');
-                window.location.href = 'data-layanan.php';
+                window.location.href = '';
               </script>";
     } else {
         echo "<script>
                 alert('Layanan gagal diubah!');
-                window.location.href = 'data-layanan.php';
+                window.location.href = '';
               </script>";
     }
 }

@@ -240,3 +240,18 @@ function hitung_total_halaman_barang($jumlah_per_halaman) {
     // Bulatkan ke atas hasil pembagiannya
     return ceil($total_data / $jumlah_per_halaman);
 }
+
+function tambah_stok($post){
+    global $koneksi;
+    $nama_barang = strip_tags($post['nama_barang']);
+    $jenis_barang = strip_tags($post['jenis_barang']);
+    $jumlah_barang = strip_tags($post['jumlah_barang']);
+    $satuan_barang = strip_tags($post['satuan_barang']);
+    $minimal_stok = strip_tags($post['minimal_stok']);
+    $harga_beli = strip_tags($post['harga_beli']);
+
+    $query = "INSERT INTO stok_barang (id_barang, nama_barang, jenis_barang, jumlah_barang, satuan_barang, minimal_stok, harga_beli) VALUES ('', '$nama_barang', '$jenis_barang', '$jumlah_barang', '$satuan_barang', '$minimal_stok', '$harga_beli')";
+    mysqli_query($koneksi , $query);
+    
+    return mysqli_affected_rows($koneksi);
+}
