@@ -1,5 +1,5 @@
 <?php 
-$page_title = "Layanan";
+$page_title = "Data Layanan";
 $sub_title = "Data Layanan";
 include "../layout/header.php";
 include "../config/app.php";
