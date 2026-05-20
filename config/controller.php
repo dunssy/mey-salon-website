@@ -1,5 +1,10 @@
 <?php
 
+if (defined('CONTROLLER_INCLUDED')) {
+    return;
+}
+define('CONTROLLER_INCLUDED', true);
+
 // FUNGSI TAMPILKAN SEMUA DATABASE
 function select($query){
     global $koneksi;

@@ -9,7 +9,7 @@ include "../layout/header.php";
          <?php include "../layout/sidebar.php"; ?>
         <!-- Main Content -->
         <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
-           <!-- PEMANGGILAN NAVBAR -->
+           <!-- PEMANGGILAN NAVBAR -->  
             <?php include "../layout/navbar.php"; ?>
             <!-- Page Content -->
             <div class="p-4 md:p-8 flex-1">
