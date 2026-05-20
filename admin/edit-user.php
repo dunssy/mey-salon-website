@@ -5,10 +5,7 @@ include "../layout/header.php";
 include "../config/app.php";
 global $koneksi;
 
-// ===============================
-// AMBIL ID USER DARI URL
-// contoh URL: edit-user.php?id_user=1
-// ===============================
+// MENGAMBIL ID USER DARI URL
 $id_user = isset($_GET['id_user']) ? (int) $_GET['id_user'] : 0;
 
 if ($id_user <= 0) {
@@ -19,9 +16,7 @@ if ($id_user <= 0) {
     exit;
 }
 
-// ===============================
 // AMBIL DATA USER BERDASARKAN ID
-// ===============================
 $query_user = mysqli_query($koneksi, "SELECT * FROM user WHERE id_user = $id_user");
 $user = mysqli_fetch_assoc($query_user);
 
@@ -33,10 +28,8 @@ if (!$user) {
     exit;
 }
 
-// ===============================
-// CEK USERNAME REALTIME AJAX
+// CEK USERNAME
 // mengabaikan username user saat ini
-// ===============================
 if (isset($_POST['cek_username'])) {
     $username = mysqli_real_escape_string($koneksi, $_POST['username']);
     $id_user_ajax = (int) $_POST['id_user'];
@@ -57,9 +50,7 @@ if (isset($_POST['cek_username'])) {
     exit;
 }
 
-// ===============================
 // PROSES EDIT USER
-// ===============================
 if(isset($_POST['submit'])){
     if(edit_user($_POST) > 0){
         echo "<script>
@@ -81,31 +72,21 @@ if(isset($_POST['submit'])){
 ?>
 
 <body class="text-gray-800 overflow-x-hidden">
-
     <div class="flex h-screen overflow-hidden">
-
         <!-- PEMANGGILAN SIDEBAR -->
         <?php include "../layout/sidebar.php"; ?>
-
         <!-- Main Content -->
         <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
-
             <!-- PEMANGGILAN NAVBAR -->
             <?php include "../layout/navbar.php"; ?>
-
             <!-- Page Content -->
             <div class="p-4 md:p-8 flex-1">
-
                 <h3 class="text-lg font-bold mb-6"><?php echo $sub_title; ?></h3>
-
                 <a href="data-user.php" class="inline-block px-4 py-2 text-sm font-bold text-gray-400 bg-gray-50 rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-colors">
                     <i class="fa-solid fa-arrow-left"></i> Kembali
                 </a>    
-
                 <form action="" method="POST" class="mb-6 mt-4 p-6 bg-white rounded-2xl shadow-sm border border-pink-100">
-
                     <input type="hidden" name="id_user" id="id_user" value="<?php echo $user['id_user']; ?>">
-
                     <div class="mb-4">
                         <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">Nama User</label>
                         <input 

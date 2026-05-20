@@ -44,12 +44,20 @@ $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
             <?php include "../layout/navbar.php"; ?>
             <!-- Page Content -->
             <div class="p-4 md:p-8 flex-1">
-                <!-- Section Service -->
                 <!-- user Section -->
-                 <!-- tambah user -->
-                    <a href="tambah-user.php" class="mb-4 inline-block px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">
-                        <i class="fa-solid fa-plus"></i>Tambah User
-                    </a>
+                <!-- tambah user -->
+                   <a href="tambah-user.php" class="mb-4 inline-block px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">
+                       <i class="fa-solid fa-plus"></i>Tambah User
+                   </a>
+                <!-- pencarian user -->
+                    <form action="" method="GET" class="mb-6">
+                        <div class="flex items-center">
+                            <input type="text" name="search" placeholder="Cari user..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200">
+                            <button type="submit" class="ml-2 px-4 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 transition-colors">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </form>
                 <!-- TABLE user -->
                      <!-- Tabel Data -->
                     <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
@@ -106,7 +114,7 @@ $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
                             <!-- BAGIAN TFOOT UNTUK PAGINATION DI POJOK KANAN BAWAH -->
                             <tfoot class="bg-gray-50/50 border-t border-pink-100">
                                 <tr>
-                                    <td colspan="5" class="p-4">
+                                    <td colspan="7" class="p-4">
                                         <div class="flex justify-end md-4 gap-2">
                                             
                                             <!-- Tombol Prev -->
@@ -136,7 +144,7 @@ $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
                             </tfoot>
                         </table>
                     </div>
-            </div
+            </div>
             <!-- Footer Informatif -->
                 <?php include "../layout/footer-component.php"; ?>
         </main>
