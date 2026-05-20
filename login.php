@@ -6,32 +6,23 @@ session_start();
 include "config/app.php";
 global $koneksi;
 
-// Jika tombol login ditekan
+// Mengecek tombol login
 if (isset($_POST['login'])) {
-    // Mengamankan input username
-    $username = mysqli_real_escape_string($koneksi, $_POST['username']);
-
-    // Mengambil input password
+    $email = mysqli_real_escape_string($koneksi, $_POST['email']);
     $password = $_POST['password'];
 
-    // Mengecek username di database
-    $query = mysqli_query($koneksi, "SELECT * FROM user WHERE username = '$username'");
+    $query = mysqli_query($koneksi, "SELECT * FROM user WHERE email = '$email'");
 
-    // Jika username ditemukan
     if (mysqli_num_rows($query) > 0) {
-        // Mengambil data user
         $user = mysqli_fetch_assoc($query);
 
-        // Mengecek password biasa atau password hash
         if ($password == $user['password'] || password_verify($password, $user['password'])) {
-            // Menyimpan data user ke session
             $_SESSION['login'] = true;
             $_SESSION['id_user'] = $user['id_user'];
             $_SESSION['nama'] = $user['nama'];
-            $_SESSION['username'] = $user['username'];
+            $_SESSION['email'] = $user['email'];
             $_SESSION['role'] = $user['role'];
 
-            // Mengarahkan user berdasarkan role
             if ($user['role'] == 'Administrator') {
                 echo "<script>
                         alert('Login berhasil sebagai Administrator!');
@@ -44,12 +35,10 @@ if (isset($_POST['login'])) {
                       </script>";
             }
         } else {
-            // Menampilkan pesan jika password salah
             echo "<script>alert('Password salah!');</script>";
         }
     } else {
-        // Menampilkan pesan jika username tidak ditemukan
-        echo "<script>alert('Username tidak ditemukan!');</script>";
+        echo "<script>alert('Email tidak ditemukan!');</script>";
     }
 }
 ?>
@@ -133,22 +122,14 @@ if (isset($_POST['login'])) {
             <!-- Form login user -->
             <form action="" method="POST" class="space-y-5">
 
-                <!-- Input username -->
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider ml-1">Username</label>
-                    <div class="relative group">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
-                            <i class="far fa-user"></i>
-                        </span>
-                        <input 
-                            type="text" 
-                            name="username"
-                            required 
-                            class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" 
-                            placeholder="Masukkan username"
-                        >
-                    </div>
-                </div>
+                <!-- Input email -->
+                <input 
+                    type="email" 
+                    name="email"
+                    required 
+                    class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" 
+                    placeholder="Masukkan email"
+                >
 
                 <!-- Input password -->
                 <div class="space-y-1">

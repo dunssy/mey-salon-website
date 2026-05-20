@@ -7,7 +7,7 @@ global $koneksi;
 if (isset($_POST['registrasi'])) {
     // Mengamankan input dari form
     $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
-    $username = mysqli_real_escape_string($koneksi, $_POST['username']);
+    $email = mysqli_real_escape_string($koneksi, $_POST['email']);
     $no_hp = mysqli_real_escape_string($koneksi, $_POST['no_hp']);
     $alamat = mysqli_real_escape_string($koneksi, $_POST['alamat']);
     $password = $_POST['password'];
@@ -17,21 +17,14 @@ if (isset($_POST['registrasi'])) {
     if ($password != $konfirmasi_password) {
         echo "<script>alert('Password dan konfirmasi password tidak sama!');</script>";
     } else {
-        // Mengecek apakah username sudah digunakan
-        $cek_username = mysqli_query($koneksi, "SELECT username FROM user WHERE username = '$username'");
-
-        // Jika username sudah ada
-        if (mysqli_num_rows($cek_username) > 0) {
-            echo "<script>alert('Username sudah digunakan!');</script>";
-        } else {
             // Mengubah password menjadi hash agar lebih aman
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
             // Menyimpan user baru dengan role Customer
             $query = "INSERT INTO user 
-                      (nama, no_hp, alamat, username, role, password) 
+                      (nama, no_hp, alamat, email, role, password) 
                       VALUES 
-                      ('$nama', '$no_hp', '$alamat', '$username', 'Customer', '$password_hash')";
+                      ('$nama', '$no_hp', '$alamat', '$email', 'Customer', '$password_hash')";
 
             // Menjalankan query registrasi
             mysqli_query($koneksi, $query);
@@ -47,7 +40,6 @@ if (isset($_POST['registrasi'])) {
             }
         }
     }
-}
 ?>
 
 <!DOCTYPE html>
@@ -129,7 +121,7 @@ if (isset($_POST['registrasi'])) {
             <!-- Form registrasi user -->
             <form action="" method="POST" class="space-y-4">
 
-                <!-- Input nama dan username -->
+                <!-- Input nama dan email -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Nama Lengkap</label>
@@ -143,13 +135,13 @@ if (isset($_POST['registrasi'])) {
                     </div>
 
                     <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Username</label>
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">email</label>
                         <input 
                             type="text" 
-                            name="username"
+                            name="email"
                             required 
                             class="block w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all text-sm" 
-                            placeholder="Username unik"
+                            placeholder="email unik"
                         >
                     </div>
                 </div>
@@ -219,6 +211,13 @@ if (isset($_POST['registrasi'])) {
                     Sudah punya akun?
                     <a href="login.php" class="text-rose-600 font-bold hover:underline ml-1">Masuk Sekarang</a>
                 </p>
+            </div>
+
+            <!-- Tombol kembali ke halaman utama -->
+            <div class="absolute bottom-6 left-8">
+                <a href="index.html" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="fas fa-arrow-left mr-2"></i>Kembali ke Beranda
+                </a>
             </div>
 
             <!-- Dekorasi icon gunting -->

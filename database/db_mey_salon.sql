@@ -1,4 +1,4 @@
--- phpMyAdmin SQL Dump
+email-- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
@@ -237,7 +237,7 @@ CREATE TABLE `user` (
   `nama` varchar(50) NOT NULL,
   `no_hp` varchar(14) NOT NULL,
   `alamat` text NOT NULL,
-  `username` varchar(40) NOT NULL,
+  `email` varchar(40) NOT NULL,
   `role` varchar(15) NOT NULL,
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -246,7 +246,7 @@ CREATE TABLE `user` (
 -- Dumping data untuk tabel `user`
 --
 
-INSERT INTO `user` (`id_user`, `nama`, `no_hp`, `alamat`, `username`, `role`, `password`) VALUES
+INSERT INTO `user` (`id_user`, `nama`, `no_hp`, `alamat`, `email`, `role`, `password`) VALUES
 (1, 'Mas Diman', '0895358711991', 'Subang, Jawa Barat', 'diman_mey', 'Admin', 'diman_mey123'),
 (2, 'Moch Alif H', '082310326703', 'Cianjur, Jawa Barat', 'mochalipp', 'User', 'mochalipp2411');
 
@@ -331,7 +331,7 @@ ALTER TABLE `transaksi_detail`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id_user`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT untuk tabel yang dibuang

@@ -1,257 +1,335 @@
 <?php
 
+// Mencegah controller dipanggil lebih dari satu kali
 if (defined('CONTROLLER_INCLUDED')) {
     return;
 }
+
 define('CONTROLLER_INCLUDED', true);
 
-// FUNGSI TAMPILKAN SEMUA DATABASE
-function select($query){
+
+// ======================================================
+// HELPER UMUM
+// ======================================================
+
+// Menjalankan query SELECT dan mengembalikan array data
+function select($query)
+{
     global $koneksi;
+
     $result = mysqli_query($koneksi, $query);
     $rows = [];
-    while($row = mysqli_fetch_assoc($result)){
+
+    if (!$result) {
+        return $rows;
+    }
+
+    while ($row = mysqli_fetch_assoc($result)) {
         $rows[] = $row;
     }
 
     return $rows;
 }
 
-// PROSES CRUD BOOKING
-function tambah_booking(){
+// Membersihkan input string
+function clean_input($value)
+{
     global $koneksi;
-    if(isset($_POST['submit'])){
-        $nama_pelanggan = $_POST['nama_pelanggan'];
-        $layanan = $_POST['layanan'];
-        $waktu = $_POST['waktu'];
 
-        $query = "INSERT INTO booking (nama_pelanggan, layanan, waktu) VALUES ('$nama_pelanggan', '$layanan', '$waktu')";
-        mysqli_query($koneksi , $query);
+    return mysqli_real_escape_string($koneksi, strip_tags(trim($value)));
+}
+
+// Mengambil angka dari input
+function clean_number($value)
+{
+    return (int) preg_replace('/[^0-9]/', '', $value);
+}
+
+
+// ======================================================
+// CRUD BOOKING
+// ======================================================
+
+// Menambah data booking sederhana
+function tambah_booking()
+{
+    global $koneksi;
+
+    if (isset($_POST['submit'])) {
+        $nama_pelanggan = clean_input($_POST['nama_pelanggan']);
+        $layanan = clean_input($_POST['layanan']);
+        $waktu = clean_input($_POST['waktu']);
+
+        $query = "INSERT INTO booking 
+                    (nama_pelanggan, layanan, waktu) 
+                  VALUES 
+                    ('$nama_pelanggan', '$layanan', '$waktu')";
+
+        mysqli_query($koneksi, $query);
     }
 }
 
-// PROSES CRUD LAYANAN
-function tambah_layanan($post){
-    global $koneksi;
-    $nama_layanan = strip_tags($post['nama_layanan']);
-    $harga = strip_tags($post['harga_layanan']);
-    $durasi = strip_tags($post['durasi_layanan']);
-    $query = "INSERT INTO layanan (id_layanan, nama_layanan, harga_layanan, durasi_layanan) VALUES ('', '$nama_layanan', '$harga', '$durasi')";
-    mysqli_query($koneksi , $query);
-    return mysqli_affected_rows($koneksi);
-}
 
-function edit_layanan($post){ 
-    global $koneksi;
-    $id_layanan = (int) $post['id_layanan'];
-    $nama_layanan = strip_tags($post['nama_layanan']);
-    $harga = strip_tags($post['harga_layanan']);
-    $durasi = strip_tags($post['durasi_layanan']);
-    $nama_layanan = mysqli_real_escape_string($koneksi, $nama_layanan);
-    $harga = mysqli_real_escape_string($koneksi, $harga);
-    $durasi = mysqli_real_escape_string($koneksi, $durasi);
+// ======================================================
+// CRUD LAYANAN
+// ======================================================
 
-    $query = "UPDATE layanan SET nama_layanan = '$nama_layanan', harga_layanan = '$harga', durasi_layanan = '$durasi' WHERE id_layanan = $id_layanan";
+// Menambah data layanan
+function tambah_layanan($post)
+{
+    global $koneksi;
+
+    $nama_layanan = clean_input($post['nama_layanan']);
+    $harga = clean_number($post['harga_layanan']);
+    $durasi = clean_number($post['durasi_layanan']);
+
+    $query = "INSERT INTO layanan 
+                (nama_layanan, harga_layanan, durasi_layanan) 
+              VALUES 
+                ('$nama_layanan', '$harga', '$durasi')";
+
     mysqli_query($koneksi, $query);
 
     return mysqli_affected_rows($koneksi);
 }
 
-function tampil_layanan_per_halaman($halaman_aktif, $jumlah_per_halaman) {
-    global $koneksi; // sesuaikan dengan nama variabel koneksi database Anda
-    
-    // Hitung offset data
-    $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
-    
-    $query = "SELECT * FROM layanan ORDER BY id_layanan DESC LIMIT $offset, $jumlah_per_halaman";
-    $result = mysqli_query($koneksi, $query);
-    
-    $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $rows[] = $row;
-    }
-    return $rows;
+// Mengubah data layanan
+function edit_layanan($post)
+{
+    global $koneksi;
+
+    $id_layanan = (int) $post['id_layanan'];
+    $nama_layanan = clean_input($post['nama_layanan']);
+    $harga = clean_number($post['harga_layanan']);
+    $durasi = clean_number($post['durasi_layanan']);
+
+    $query = "UPDATE layanan SET 
+                nama_layanan = '$nama_layanan',
+                harga_layanan = '$harga',
+                durasi_layanan = '$durasi'
+              WHERE id_layanan = $id_layanan";
+
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
 }
 
-// Fungsi untuk menghitung total halaman layanan
-function hitung_total_halaman_layanan($jumlah_per_halaman) {
+// Menampilkan data layanan per halaman
+function tampil_layanan_per_halaman($halaman_aktif, $jumlah_per_halaman)
+{
     global $koneksi;
-    
+
+    $halaman_aktif = (int) $halaman_aktif;
+    $jumlah_per_halaman = (int) $jumlah_per_halaman;
+    $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
+
+    $query = "SELECT * FROM layanan 
+              ORDER BY id_layanan DESC 
+              LIMIT $offset, $jumlah_per_halaman";
+
+    return select($query);
+}
+
+// Menghitung total halaman layanan
+function hitung_total_halaman_layanan($jumlah_per_halaman)
+{
+    global $koneksi;
+
+    $jumlah_per_halaman = (int) $jumlah_per_halaman;
     $query = "SELECT COUNT(*) AS total FROM layanan";
     $result = mysqli_query($koneksi, $query);
     $data = mysqli_fetch_assoc($result);
-    $total_data = $data['total'];
-    
-    // Bulatkan ke atas hasil pembagiannya
-    return ceil($total_data / $jumlah_per_halaman);
+
+    return ceil($data['total'] / $jumlah_per_halaman);
 }
 
-//PROSES CRUD USER
-function tambah_user($post){
-    global $koneksi;
-    $nama = strip_tags($post['nama']);
-    $no_hp = strip_tags($post['no_hp']);
-    $alamat = strip_tags($post['alamat']);
-    $username = strip_tags($post['username']);
-    $role = strip_tags($post['role']);
-    $password = strip_tags($post['password']);
 
-    $query = "INSERT INTO user (id_user, nama, no_hp, alamat, username, role, password) VALUES ('', '$nama', '$no_hp', '$alamat', '$username', '$role', '$password')";
-    mysqli_query($koneksi , $query);
-    
+// ======================================================
+// CRUD USER
+// ======================================================
+
+// Menambah data user
+function tambah_user($post)
+{
+    global $koneksi;
+
+    $nama = clean_input($post['nama']);
+    $no_hp = clean_input($post['no_hp']);
+    $alamat = clean_input($post['alamat']);
+    $email = clean_input($post['email']);
+    $role = clean_input($post['role']);
+    $password = clean_input($post['password']);
+
+    $query = "INSERT INTO user 
+                (nama, no_hp, alamat, email, role, password) 
+              VALUES 
+                ('$nama', '$no_hp', '$alamat', '$email', '$role', '$password')";
+
+    mysqli_query($koneksi, $query);
+
     return mysqli_affected_rows($koneksi);
 }
 
-// Fungsi untuk mengedit user berdasarkan id_user
-function edit_user($post){ 
+// Mengubah data user
+function edit_user($post)
+{
     global $koneksi;
+
     $id_user = (int) $post['id_user'];
-    $nama = strip_tags($post['nama']);
-    $no_hp = strip_tags($post['no_hp']);
-    $alamat = strip_tags($post['alamat']);
-    $username = strip_tags($post['username']);
-    $role = strip_tags($post['role']);
-    $password = strip_tags($post['password']);
+    $nama = clean_input($post['nama']);
+    $no_hp = clean_input($post['no_hp']);
+    $alamat = clean_input($post['alamat']);
+    $email = clean_input($post['email']);
+    $role = clean_input($post['role']);
+    $password = clean_input($post['password']);
 
-    $nama = mysqli_real_escape_string($koneksi, $nama);
-    $no_hp = mysqli_real_escape_string($koneksi, $no_hp);
-    $alamat = mysqli_real_escape_string($koneksi, $alamat);
-    $username = mysqli_real_escape_string($koneksi, $username);
-    $role = mysqli_real_escape_string($koneksi, $role);
-    $password = mysqli_real_escape_string($koneksi, $password);
-
-    // Cek username, tapi abaikan user yang sedang diedit
-    $cek_username = mysqli_query(
-        $koneksi, 
-        "SELECT username FROM user 
-         WHERE username = '$username' 
-         AND id_user != $id_user"
-    );
-
-    if (mysqli_num_rows($cek_username) > 0) {
-        return -1;
-    }
-
-    // Jika password kosong, password lama tidak diubah
     if ($password == '') {
-        $query = "UPDATE user SET nama = '$nama',no_hp = '$no_hp',alamat = '$alamat',username = '$username',role = '$role' WHERE id_user = $id_user";
+        $query = "UPDATE user SET 
+                    nama = '$nama',
+                    no_hp = '$no_hp',
+                    alamat = '$alamat',
+                    email = '$email',
+                    role = '$role'
+                  WHERE id_user = $id_user";
     } else {
-        $query = "UPDATE user SET nama = '$nama',no_hp = '$no_hp', alamat = '$alamat',username = '$username',role = '$role',password = '$password' WHERE id_user = $id_user";
+        $query = "UPDATE user SET 
+                    nama = '$nama',
+                    no_hp = '$no_hp',
+                    alamat = '$alamat',
+                    email = '$email',
+                    role = '$role',
+                    password = '$password'
+                  WHERE id_user = $id_user";
     }
 
     mysqli_query($koneksi, $query);
 
     return mysqli_affected_rows($koneksi);
-}   
-
-// Fungsi untuk mengambil data user dengan LIMIT dan OFFSET
-function tampil_user_per_halaman($halaman_aktif, $jumlah_per_halaman) {
-    global $koneksi; // sesuaikan dengan nama variabel koneksi database Anda
-    
-    // Hitung offset data
-    $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
-    
-    $query = "SELECT * FROM user ORDER BY id_user DESC LIMIT $offset, $jumlah_per_halaman";
-    $result = mysqli_query($koneksi, $query);
-    
-    $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $rows[] = $row;
-    }
-    return $rows;
 }
 
-// Fungsi untuk menghitung total halaman user
-function hitung_total_halaman_user($jumlah_per_halaman) {
+// Menampilkan data user per halaman
+function tampil_user_per_halaman($halaman_aktif, $jumlah_per_halaman)
+{
+    $halaman_aktif = (int) $halaman_aktif;
+    $jumlah_per_halaman = (int) $jumlah_per_halaman;
+    $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
+
+    $query = "SELECT * FROM user 
+              ORDER BY id_user DESC 
+              LIMIT $offset, $jumlah_per_halaman";
+
+    return select($query);
+}
+
+// Menghitung total halaman user
+function hitung_total_halaman_user($jumlah_per_halaman)
+{
     global $koneksi;
-    
+
+    $jumlah_per_halaman = (int) $jumlah_per_halaman;
     $query = "SELECT COUNT(*) AS total FROM user";
     $result = mysqli_query($koneksi, $query);
     $data = mysqli_fetch_assoc($result);
-    $total_data = $data['total'];
-    
-    // Bulatkan ke atas hasil pembagiannya
-    return ceil($total_data / $jumlah_per_halaman);
+
+    return ceil($data['total'] / $jumlah_per_halaman);
 }
 
-// PRORSES CRUD DATA BARANG
-function tambah_barang($post){
-    global $koneksi;
-    $nama_barang = strip_tags($post['nama_barang']);
-    $jenis_barang = strip_tags($post['jenis_barang']);
-    $jumlah_barang = strip_tags($post['jumlah_barang']);
-    $satuan_barang = strip_tags($post['satuan_barang']);
-    $minimal_stok = strip_tags($post['minimal_stok']);
-    $harga_beli = strip_tags($post['harga_beli']);
 
-    $query = "INSERT INTO stok_barang (id_barang, nama_barang, jenis_barang, jumlah_barang, satuan_barang, minimal_stok, harga_beli) VALUES ('', '$nama_barang', '$jenis_barang', '$jumlah_barang', '$satuan_barang', '$minimal_stok', '$harga_beli')";
-    mysqli_query($koneksi , $query);
-    
-    return mysqli_affected_rows($koneksi);
-}
+// ======================================================
+// CRUD STOK BARANG
+// ======================================================
 
-function edit_barang($post){ 
+// Menambah data barang
+function tambah_barang($post)
+{
     global $koneksi;
 
-    $id_barang = (int)$post['id_barang'];
-    $nama_barang = strip_tags($post['nama_barang']);
-    $jenis_barang = strip_tags($post['jenis_barang']);
-    $jumlah_barang = strip_tags($post['jumlah_barang']);
-    $satuan_barang = strip_tags($post['satuan_barang']);
-    $minimal_stok = strip_tags($post['minimal_stok']);
-    $harga_beli = strip_tags($post['harga_beli']);
+    $nama_barang = clean_input($post['nama_barang']);
+    $jenis_barang = clean_input($post['jenis_barang']);
+    $jumlah_barang = clean_number($post['jumlah_barang']);
+    $satuan_barang = clean_input($post['satuan_barang']);
+    $minimal_stok = clean_number($post['minimal_stok']);
+    $harga_beli = clean_number($post['harga_beli']);
 
-    $nama_barang = mysqli_real_escape_string($koneksi, $nama_barang);
-    $jenis_barang = mysqli_real_escape_string($koneksi, $jenis_barang);
-    $satuan_barang = mysqli_real_escape_string($koneksi, $satuan_barang);
+    $query = "INSERT INTO stok_barang 
+                (nama_barang, jenis_barang, jumlah_barang, satuan_barang, minimal_stok, harga_beli) 
+              VALUES 
+                ('$nama_barang', '$jenis_barang', '$jumlah_barang', '$satuan_barang', '$minimal_stok', '$harga_beli')";
 
-    $query = "UPDATE stok_barang SET nama_barang = '$nama_barang', jenis_barang = '$jenis_barang', jumlah_barang = '$jumlah_barang', satuan_barang = '$satuan_barang', minimal_stok = '$minimal_stok', harga_beli = '$harga_beli' WHERE id_barang = $id_barang";
     mysqli_query($koneksi, $query);
 
     return mysqli_affected_rows($koneksi);
 }
 
-// PAGINATION BARANG
-function tampil_barang_per_halaman($halaman_aktif, $jumlah_per_halaman) {
-    global $koneksi; // sesuaikan dengan nama variabel koneksi database Anda
-    
-    // Hitung offset data
-    $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
-    
-    $query = "SELECT * FROM stok_barang ORDER BY id_barang DESC LIMIT $offset, $jumlah_per_halaman";
-    $result = mysqli_query($koneksi, $query);
-    
-    $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $rows[] = $row;
-    }
-    return $rows;
+// Mengubah data barang
+function edit_barang($post)
+{
+    global $koneksi;
+
+    $id_barang = (int) $post['id_barang'];
+    $nama_barang = clean_input($post['nama_barang']);
+    $jenis_barang = clean_input($post['jenis_barang']);
+    $jumlah_barang = clean_number($post['jumlah_barang']);
+    $satuan_barang = clean_input($post['satuan_barang']);
+    $minimal_stok = clean_number($post['minimal_stok']);
+    $harga_beli = clean_number($post['harga_beli']);
+
+    $query = "UPDATE stok_barang SET 
+                nama_barang = '$nama_barang',
+                jenis_barang = '$jenis_barang',
+                jumlah_barang = '$jumlah_barang',
+                satuan_barang = '$satuan_barang',
+                minimal_stok = '$minimal_stok',
+                harga_beli = '$harga_beli'
+              WHERE id_barang = $id_barang";
+
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
 }
 
-// Fungsi untuk menghitung total halaman barang
-function hitung_total_halaman_barang($jumlah_per_halaman) {
+// Menghapus data barang
+function hapus_barang($id_barang)
+{
     global $koneksi;
-    
+
+    $id_barang = (int) $id_barang;
+
+    mysqli_query($koneksi, "DELETE FROM stok_barang WHERE id_barang = $id_barang");
+
+    return mysqli_affected_rows($koneksi);
+}
+
+// Menampilkan data barang per halaman
+function tampil_barang_per_halaman($halaman_aktif, $jumlah_per_halaman)
+{
+    $halaman_aktif = (int) $halaman_aktif;
+    $jumlah_per_halaman = (int) $jumlah_per_halaman;
+    $offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
+
+    $query = "SELECT * FROM stok_barang 
+              ORDER BY id_barang DESC 
+              LIMIT $offset, $jumlah_per_halaman";
+
+    return select($query);
+}
+
+// Menghitung total halaman barang
+function hitung_total_halaman_barang($jumlah_per_halaman)
+{
+    global $koneksi;
+
+    $jumlah_per_halaman = (int) $jumlah_per_halaman;
     $query = "SELECT COUNT(*) AS total FROM stok_barang";
     $result = mysqli_query($koneksi, $query);
     $data = mysqli_fetch_assoc($result);
-    $total_data = $data['total'];
-    
-    // Bulatkan ke atas hasil pembagiannya
-    return ceil($total_data / $jumlah_per_halaman);
+
+    return ceil($data['total'] / $jumlah_per_halaman);
 }
 
-function tambah_stok($post){
-    global $koneksi;
-    $nama_barang = strip_tags($post['nama_barang']);
-    $jenis_barang = strip_tags($post['jenis_barang']);
-    $jumlah_barang = strip_tags($post['jumlah_barang']);
-    $satuan_barang = strip_tags($post['satuan_barang']);
-    $minimal_stok = strip_tags($post['minimal_stok']);
-    $harga_beli = strip_tags($post['harga_beli']);
-
-    $query = "INSERT INTO stok_barang (id_barang, nama_barang, jenis_barang, jumlah_barang, satuan_barang, minimal_stok, harga_beli) VALUES ('', '$nama_barang', '$jenis_barang', '$jumlah_barang', '$satuan_barang', '$minimal_stok', '$harga_beli')";
-    mysqli_query($koneksi , $query);
-    
-    return mysqli_affected_rows($koneksi);
+// Menambah stok barang tambahan
+function tambah_stok($post)
+{
+    return tambah_barang($post);
 }
+?>
