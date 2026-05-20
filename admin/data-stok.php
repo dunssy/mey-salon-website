@@ -1,26 +1,28 @@
 <?php 
-$page_title = "Data User";
+$page_title = "Data Barang";
+$sub_title = "Data barang";
 include "../layout/header.php";
 include "../config/app.php";
+
+// Memanggil variabel $barang dari app.php untuk menampilkan data barang di tabel
 global $koneksi;
-
-// MENGAMBIL DATA user DARI TABLE user   
-$user = select("SELECT * FROM user");
-// nomor urut untuk tabel user
-$nomor = 1;
-
-// PROSES HAPUS user
+// MENGHAPUS barang
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['hapus'])) {
-    $id_user = $_POST['hapus'];
-    $result = mysqli_query($koneksi, "DELETE FROM user WHERE id_user = $id_user");
+    $id_barang = $_POST['hapus'];
+    $result = mysqli_query($koneksi, "DELETE FROM stok_barang WHERE id_barang = $id_barang");
     
     if ($result) {
-        header("Location: data-user.php?status=success");
+        header("Location: data-stok.php?status=success");
         exit;
     } else {
-        $error_message = "Gagal menghapus user.";
+        $error_message = "Gagal menghapus barang.";
     }
 }
+// MENGAMBIL DATA barang DARI TABLE stok_barang 
+$barang = select("SELECT * FROM stok_barang");
+// nomor urut untuk tabel barang
+$nomor = 1;
+
 
 //PAGINATION
 $jumlah_per_halaman = 5; // Ubah angka ini untuk menentukan jumlah baris per halaman
@@ -29,10 +31,10 @@ if ($halaman_aktif < 1) {
     $halaman_aktif = 1;
 }
 
-$user = tampil_user_per_halaman($halaman_aktif, $jumlah_per_halaman);
-$total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
+// 2. AMBIL DATA & TOTAL HALAMAN
+$barang = tampil_barang_per_halaman($halaman_aktif, $jumlah_per_halaman);
+$total_halaman = hitung_total_halaman_barang($jumlah_per_halaman);
 ?>
-
 <body class="text-gray-800 overflow-x-hidden">
 
     <div class="flex h-screen overflow-hidden">
@@ -44,52 +46,55 @@ $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
             <?php include "../layout/navbar.php"; ?>
             <!-- Page Content -->
             <div class="p-4 md:p-8 flex-1">
-                <!-- user Section -->
-                <!-- tambah user -->
-                   <a href="tambah-user.php" class="mb-4 inline-block px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">
-                       <i class="fa-solid fa-plus"></i>Tambah User
-                   </a>
-                <!-- pencarian user -->
+                <!-- Section Service -->
+                    <!-- tambah barang -->
+                    <a href="tambah-stok.php" class="mb-4 inline-block px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">
+                        <i class="fa-solid fa-plus"></i>Tambah barang
+                    </a>
+                    <!-- pencarian barang -->
                     <form action="" method="GET" class="mb-6">
                         <div class="flex items-center">
-                            <input type="text" name="search" placeholder="Cari user..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200">
+                            <input type="text" name="search" placeholder="Cari barang..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200">
                             <button type="submit" class="ml-2 px-4 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 transition-colors">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
                         </div>
                     </form>
-                <!-- TABLE user -->
+                    <!-- TABLE barang -->
                      <!-- Tabel Data -->
                     <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-pink-50/50 border-b border-pink-100 text-gray-700 font-semibold">
                                     <th class="p-4 w-16">No</th>
-                                    <th class="p-4">Nama</th>
-                                    <th class="p-4">No Handphone</th>
-                                    <th class="p-4">Alamat</th>
-                                    <th class="p-4">Username</th>
+                                    <th class="p-4">Nama barang</th>
+                                    <th class="p-4">Jenis Barang</th>
+                                    <th class="p-4">Jumlah Barang</th>
+                                    <th class="p-4">Satuan Barang</th>
+                                    <th class="p-4">Minimal Stok</th>
+                                    <th class="p-4">Harga Beli</th>
                                     <th class="p-4">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-pink-50">
                                 <?php 
                                 $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1; 
-
-                                if (!empty($user)) {
-                                    foreach ($user as $data_user) : 
+                                
+                                if (!empty($barang)) {
+                                    foreach ($barang as $data_barang) : 
                                 ?>
                                     <tr class="hover:bg-pink-50/20 transition-colors">
                                         <td class="p-4"><?= $no++; ?></td>
-                                        <td class="p-4 font-medium"><?= htmlspecialchars($data_user['nama']); ?></td>
-                                        <td class="p-4"><?= number_format($data_user['no_hp']); ?></td>
-                                        <td class="p-4"><?= htmlspecialchars($data_user['alamat']); ?></td>
-                                        <td class="p-4"><?= htmlspecialchars($data_user['username']); ?></td>
+                                        <td class="p-4 font-medium"><?= htmlspecialchars($data_barang['nama_barang']); ?></td>
+                                        <td class="p-4"><?= htmlspecialchars($data_barang['jenis_barang']); ?></td>
+                                        <td class="p-4"><?= htmlspecialchars($data_barang['jumlah_barang']); ?></td>
+                                        <td class="p-4"><?= htmlspecialchars($data_barang['satuan_barang']); ?></td>
+                                        <td class="p-4"><?= htmlspecialchars($data_barang['minimal_stok']); ?></td>
+                                        <td class="p-4">Rp <?= number_format($data_barang['harga_beli'], 0, ',', '.'); ?></td>
                                         <td class="p-4">
-                                            <a href="edit-user.php?=<?= $data_user['id_user']; ?>" class="px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
-                                            <form action="" method="POST" class="inline-block">
-                                                <input type="hidden" name="hapus" value="<?= $data_user['id_user']; ?>">
-                                                <button type="submit" class="px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?');">Hapus</button>
+                                            <a href="edit-stok.php?id_barang=<?= $data_barang['id_barang']; ?>" class="px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
+                                            <form method="POST" style="display:inline;">
+                                                <button type="submit" name="hapus" value="<?= $data_barang['id_barang']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus barang ini?')" class="px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">Hapus</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -98,7 +103,7 @@ $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
                                 }else{
                                 ?>
                                     <tr>
-                                        <td colspan="8" class="p-8 text-center text-gray-400">Belum ada data user.</td>
+                                        <td colspan="8" class="p-8 text-center text-gray-400">Belum ada data barang.</td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -106,7 +111,7 @@ $total_halaman = hitung_total_halaman_user($jumlah_per_halaman);
                             <!-- BAGIAN TFOOT UNTUK PAGINATION DI POJOK KANAN BAWAH -->
                             <tfoot class="bg-gray-50/50 border-t border-pink-100">
                                 <tr>
-                                    <td colspan="7" class="p-4">
+                                    <td colspan="8" class="p-4">
                                         <div class="flex justify-end md-4 gap-2">
                                             
                                             <!-- Tombol Prev -->

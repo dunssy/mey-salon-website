@@ -67,20 +67,12 @@
                                 <p class="text-[10px] text-gray-400 uppercase">Owner</p>
                             </div>
                             <div class="py-2">
-                                <a href="#" onclick="showMessage('Membuka Pengaturan Profil')" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors">
+                                <a href="pengaturan-profil.php" onclick="showMessage('Membuka Pengaturan Profil')" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors">
                                     <i class="fa-solid fa-user-gear w-5"></i>
                                     <span>Pengaturan Profil</span>
                                 </a>
-                                <a href="#" onclick="showMessage('Membuka Pengaturan Salon')" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors">
-                                    <i class="fa-solid fa-gears w-5"></i>
-                                    <span>Pengaturan Salon</span>
-                                </a>
-                                <a href="#" onclick="showMessage('Membuka Bantuan')" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors">
-                                    <i class="fa-solid fa-circle-question w-5"></i>
-                                    <span>Pusat Bantuan</span>
-                                </a>
                                 <div class="border-t border-pink-50 mt-2">
-                                    <a href="#" class="flex items-center space-x-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors font-semibold">
+                                    <a href="logout.php" class="flex items-center space-x-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors font-semibold">
                                         <i class="fa-solid fa-right-from-bracket w-5"></i>
                                         <span>Keluar</span>
                                     </a>
