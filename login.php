@@ -108,12 +108,11 @@ if (isset($_POST['login'])) {
             <div class="absolute inset-0 bg-gradient-to-tr from-rose-950/80 via-rose-900/20 to-transparent flex flex-col justify-end p-12 text-white">
                 <div class="space-y-4">
                     <span class="px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-widest uppercase border border-white/30">
-                        Premium Studio
+                        Mey salon
                     </span>
-                    <h2 class="text-5xl font-bold serif-font leading-tight">Elevate Your<br>Natural Beauty</h2>
+                    <h2 class="text-5xl font-bold serif-font leading-tight">Your Hair Is<br>Your Expression</h2>
                     <p class="text-rose-100/90 max-w-sm text-lg font-light leading-relaxed">
-                        Nikmati pengalaman kecantikan kelas dunia dengan sentuhan personal dari para ahli kami.
-                    </p>
+                        Ekspresikan dirimu dengan gaya rambut yang memukau.
                 </div>
             </div>
         </div>

@@ -104,9 +104,9 @@ if (isset($_POST['registrasi'])) {
             <div class="absolute inset-0 bg-gradient-to-tr from-rose-950/80 via-rose-900/20 to-transparent flex flex-col justify-end p-12 text-white">
                 <div class="space-y-4">
                     <span class="px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-widest uppercase border border-white/30">
-                        Premium Studio
+                        Mey Salon
                     </span>
-                    <h2 class="text-5xl font-bold serif-font leading-tight">Join Mey Salon</h2>
+                    <h2 class="text-5xl font-bold serif-font leading-tight">Be Part of Us</h2>
                     <p class="text-rose-100/90 max-w-sm text-lg font-light leading-relaxed">
                         Daftar sebagai member untuk menikmati layanan kecantikan terbaik dari Mey Salon.
                     </p>
