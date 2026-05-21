@@ -68,7 +68,7 @@
 
             <!-- Copyright -->
             <p class="text-[11px] text-gray-400">
-                &copy; 2024 Mey Salon Dashboard.
+                &copy; <?php echo date("Y"); ?> Mey Salon Dashboard.
             </p>
 
             <!-- Ikon pembayaran dan keamanan -->

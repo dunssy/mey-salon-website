@@ -1,11 +1,11 @@
-email-- phpMyAdmin SQL Dump
--- version 5.2.1
+-- phpMyAdmin SQL Dump
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Waktu pembuatan: 06 Bulan Mei 2026 pada 08.05
--- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: May 21, 2026 at 04:45 AM
+-- Server version: 8.4.3
+-- PHP Version: 8.3.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,66 +18,51 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `mey_salon`
+-- Database: `db_mey_salon`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `booking`
+-- Table structure for table `booking`
 --
 
 CREATE TABLE `booking` (
-  `id_booking` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
+  `id_booking` int NOT NULL,
+  `id_user` int NOT NULL,
   `tanggal_booking` date NOT NULL,
   `jam_mulai` time NOT NULL,
   `jam_selesai` time NOT NULL,
-  `status_booking` enum('Pending','Selesai') NOT NULL
+  `status_booking` enum('Pending','Selesai') COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `booking`
---
-
-INSERT INTO `booking` (`id_booking`, `id_user`, `tanggal_booking`, `jam_mulai`, `jam_selesai`, `status_booking`) VALUES
-(1, 2, '2026-03-13', '16:00:00', '17:00:00', 'Pending');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `booking_detail`
+-- Table structure for table `booking_detail`
 --
 
 CREATE TABLE `booking_detail` (
-  `id_detail_booking` int(11) NOT NULL,
-  `id_booking` int(11) NOT NULL,
-  `id_layanan` int(11) NOT NULL
+  `id_detail_booking` int NOT NULL,
+  `id_booking` int NOT NULL,
+  `id_layanan` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `booking_detail`
---
-
-INSERT INTO `booking_detail` (`id_detail_booking`, `id_booking`, `id_layanan`) VALUES
-(1, 1, 1),
-(2, 1, 5);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `layanan`
+-- Table structure for table `layanan`
 --
 
 CREATE TABLE `layanan` (
-  `id_layanan` int(11) NOT NULL,
-  `nama_layanan` varchar(50) NOT NULL,
-  `harga_layanan` int(11) NOT NULL,
-  `durasi_layanan` int(11) NOT NULL
+  `id_layanan` int NOT NULL,
+  `nama_layanan` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `harga_layanan` int NOT NULL,
+  `durasi_layanan` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `layanan`
+-- Dumping data for table `layanan`
 --
 
 INSERT INTO `layanan` (`id_layanan`, `nama_layanan`, `harga_layanan`, `durasi_layanan`) VALUES
@@ -96,18 +81,18 @@ INSERT INTO `layanan` (`id_layanan`, `nama_layanan`, `harga_layanan`, `durasi_la
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `paket_stok`
+-- Table structure for table `paket_stok`
 --
 
 CREATE TABLE `paket_stok` (
-  `id_paket` int(11) NOT NULL,
-  `id_layanan` int(11) NOT NULL,
-  `id_barang` int(11) NOT NULL,
-  `jumlah_stok` decimal(11,0) NOT NULL
+  `id_paket` int NOT NULL,
+  `id_layanan` int NOT NULL,
+  `id_barang` int NOT NULL,
+  `jumlah_stok` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `paket_stok`
+-- Dumping data for table `paket_stok`
 --
 
 INSERT INTO `paket_stok` (`id_paket`, `id_layanan`, `id_barang`, `jumlah_stok`) VALUES
@@ -123,63 +108,63 @@ INSERT INTO `paket_stok` (`id_paket`, `id_layanan`, `id_barang`, `jumlah_stok`) 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pemakaian_stok`
+-- Table structure for table `pemakaian_stok`
 --
 
 CREATE TABLE `pemakaian_stok` (
-  `id_pemakaian` int(11) NOT NULL,
-  `id_barang` int(11) NOT NULL,
-  `id_transaksi` int(11) NOT NULL,
-  `jumlah_pemakaian` decimal(11,0) NOT NULL
+  `id_pemakaian` int NOT NULL,
+  `id_barang` int NOT NULL,
+  `id_transaksi` int NOT NULL,
+  `jumlah_pemakaian` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pengeluaran`
+-- Table structure for table `pengeluaran`
 --
 
 CREATE TABLE `pengeluaran` (
-  `id_pengeluaran` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `jenis_pengeluaran` varchar(100) NOT NULL,
-  `jumlah_pengeluaran` int(11) NOT NULL,
-  `tanggal_pengeluaran` timestamp NOT NULL DEFAULT current_timestamp(),
-  `keterangan_pengeluaran` text NOT NULL
+  `id_pengeluaran` int NOT NULL,
+  `id_user` int NOT NULL,
+  `jenis_pengeluaran` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `jumlah_pengeluaran` int NOT NULL,
+  `tanggal_pengeluaran` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `keterangan_pengeluaran` text COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `restok`
+-- Table structure for table `restok`
 --
 
 CREATE TABLE `restok` (
-  `id_restok` int(11) NOT NULL,
-  `id_barang` int(11) NOT NULL,
-  `tanggal_restock` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `jumlah_tambah` decimal(11,0) NOT NULL,
-  `total_harga_restock` int(100) NOT NULL
+  `id_restok` int NOT NULL,
+  `id_barang` int NOT NULL,
+  `tanggal_restok` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `jumlah_tambah` int NOT NULL,
+  `total_harga_restok` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `stok_barang`
+-- Table structure for table `stok_barang`
 --
 
 CREATE TABLE `stok_barang` (
-  `id_barang` int(11) NOT NULL,
-  `nama_barang` varchar(100) NOT NULL,
-  `jenis_barang` varchar(100) NOT NULL,
-  `jumlah_barang` decimal(11,0) NOT NULL,
-  `satuan_barang` varchar(10) DEFAULT NULL,
-  `minimal_stok` decimal(11,0) NOT NULL,
-  `harga_beli` int(11) NOT NULL
+  `id_barang` int NOT NULL,
+  `nama_barang` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `jenis_barang` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `jumlah_barang` int NOT NULL,
+  `satuan_barang` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `minimal_stok` int NOT NULL,
+  `harga_beli` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `stok_barang`
+-- Dumping data for table `stok_barang`
 --
 
 INSERT INTO `stok_barang` (`id_barang`, `nama_barang`, `jenis_barang`, `jumlah_barang`, `satuan_barang`, `minimal_stok`, `harga_beli`) VALUES
@@ -193,76 +178,61 @@ INSERT INTO `stok_barang` (`id_barang`, `nama_barang`, `jenis_barang`, `jumlah_b
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `transaksi`
+-- Table structure for table `transaksi`
 --
 
 CREATE TABLE `transaksi` (
-  `id_transaksi` int(11) NOT NULL,
-  `id_booking` int(11) DEFAULT NULL,
-  `tanggal_transaksi` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `total_bayar` int(11) NOT NULL,
-  `jenis_pelanggan` enum('booking','datang') NOT NULL
+  `id_transaksi` int NOT NULL,
+  `id_booking` int DEFAULT NULL,
+  `tanggal_transaksi` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `total_bayar` int NOT NULL,
+  `jenis_pelanggan` enum('booking','datang') COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `transaksi`
---
-
-INSERT INTO `transaksi` (`id_transaksi`, `id_booking`, `tanggal_transaksi`, `total_bayar`, `jenis_pelanggan`) VALUES
-(4, NULL, '2026-03-12 02:49:18', 100000, 'datang');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `transaksi_detail`
+-- Table structure for table `transaksi_detail`
 --
 
 CREATE TABLE `transaksi_detail` (
-  `id_transaksi_detail` int(11) NOT NULL,
-  `id_transaksi` int(11) NOT NULL,
-  `id_layanan` int(11) NOT NULL,
-  `harga_satuan` int(11) NOT NULL,
-  `jumlah_layanan` int(11) NOT NULL,
-  `subtotal` int(11) NOT NULL
+  `id_transaksi_detail` int NOT NULL,
+  `id_transaksi` int NOT NULL,
+  `id_layanan` int NOT NULL,
+  `harga_satuan` int NOT NULL,
+  `jumlah_layanan` int NOT NULL,
+  `subtotal` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
-  `id_user` int(11) NOT NULL,
-  `nama` varchar(50) NOT NULL,
-  `no_hp` varchar(14) NOT NULL,
-  `alamat` text NOT NULL,
-  `email` varchar(40) NOT NULL,
-  `role` varchar(15) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `id_user` int NOT NULL,
+  `nama` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `no_hp` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `alamat` text COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `role` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `user`
---
-
-INSERT INTO `user` (`id_user`, `nama`, `no_hp`, `alamat`, `email`, `role`, `password`) VALUES
-(1, 'Mas Diman', '0895358711991', 'Subang, Jawa Barat', 'diman_mey', 'Admin', 'diman_mey123'),
-(2, 'Moch Alif H', '082310326703', 'Cianjur, Jawa Barat', 'mochalipp', 'User', 'mochalipp2411');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `booking`
+-- Indexes for table `booking`
 --
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`id_booking`),
   ADD KEY `id_user` (`id_user`);
 
 --
--- Indeks untuk tabel `booking_detail`
+-- Indexes for table `booking_detail`
 --
 ALTER TABLE `booking_detail`
   ADD PRIMARY KEY (`id_detail_booking`),
@@ -270,13 +240,13 @@ ALTER TABLE `booking_detail`
   ADD KEY `id_layanan` (`id_layanan`);
 
 --
--- Indeks untuk tabel `layanan`
+-- Indexes for table `layanan`
 --
 ALTER TABLE `layanan`
   ADD PRIMARY KEY (`id_layanan`);
 
 --
--- Indeks untuk tabel `paket_stok`
+-- Indexes for table `paket_stok`
 --
 ALTER TABLE `paket_stok`
   ADD PRIMARY KEY (`id_paket`),
@@ -284,7 +254,7 @@ ALTER TABLE `paket_stok`
   ADD KEY `id_barang` (`id_barang`);
 
 --
--- Indeks untuk tabel `pemakaian_stok`
+-- Indexes for table `pemakaian_stok`
 --
 ALTER TABLE `pemakaian_stok`
   ADD PRIMARY KEY (`id_pemakaian`),
@@ -292,34 +262,35 @@ ALTER TABLE `pemakaian_stok`
   ADD KEY `id_tranksaksi` (`id_transaksi`);
 
 --
--- Indeks untuk tabel `pengeluaran`
+-- Indexes for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
   ADD PRIMARY KEY (`id_pengeluaran`),
   ADD UNIQUE KEY `user` (`id_user`);
 
 --
--- Indeks untuk tabel `restok`
+-- Indexes for table `restok`
 --
 ALTER TABLE `restok`
   ADD PRIMARY KEY (`id_restok`),
-  ADD KEY `id_barang` (`id_barang`);
+  ADD KEY `id_barang` (`id_barang`),
+  ADD KEY `id_barang_2` (`id_barang`);
 
 --
--- Indeks untuk tabel `stok_barang`
+-- Indexes for table `stok_barang`
 --
 ALTER TABLE `stok_barang`
   ADD PRIMARY KEY (`id_barang`);
 
 --
--- Indeks untuk tabel `transaksi`
+-- Indexes for table `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`id_transaksi`),
   ADD UNIQUE KEY `id_booking` (`id_booking`);
 
 --
--- Indeks untuk tabel `transaksi_detail`
+-- Indexes for table `transaksi_detail`
 --
 ALTER TABLE `transaksi_detail`
   ADD PRIMARY KEY (`id_transaksi_detail`),
@@ -327,133 +298,132 @@ ALTER TABLE `transaksi_detail`
   ADD UNIQUE KEY `layanan` (`id_layanan`);
 
 --
--- Indeks untuk tabel `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id_user`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `booking`
+-- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id_booking` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_booking` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `booking_detail`
+-- AUTO_INCREMENT for table `booking_detail`
 --
 ALTER TABLE `booking_detail`
-  MODIFY `id_detail_booking` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_detail_booking` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `layanan`
+-- AUTO_INCREMENT for table `layanan`
 --
 ALTER TABLE `layanan`
-  MODIFY `id_layanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_layanan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT untuk tabel `paket_stok`
+-- AUTO_INCREMENT for table `paket_stok`
 --
 ALTER TABLE `paket_stok`
-  MODIFY `id_paket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_paket` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT untuk tabel `pemakaian_stok`
+-- AUTO_INCREMENT for table `pemakaian_stok`
 --
 ALTER TABLE `pemakaian_stok`
-  MODIFY `id_pemakaian` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pemakaian` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `pengeluaran`
+-- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `id_pengeluaran` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pengeluaran` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `restok`
+-- AUTO_INCREMENT for table `restok`
 --
 ALTER TABLE `restok`
-  MODIFY `id_restok` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_restok` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `stok_barang`
+-- AUTO_INCREMENT for table `stok_barang`
 --
 ALTER TABLE `stok_barang`
-  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_barang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT untuk tabel `transaksi`
+-- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_transaksi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `transaksi_detail`
+-- AUTO_INCREMENT for table `transaksi_detail`
 --
 ALTER TABLE `transaksi_detail`
-  MODIFY `id_transaksi_detail` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_transaksi_detail` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `booking`
+-- Constraints for table `booking`
 --
 ALTER TABLE `booking`
   ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `booking_detail`
+-- Constraints for table `booking_detail`
 --
 ALTER TABLE `booking_detail`
   ADD CONSTRAINT `booking_detail_ibfk_1` FOREIGN KEY (`id_booking`) REFERENCES `booking` (`id_booking`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `booking_detail_ibfk_2` FOREIGN KEY (`id_layanan`) REFERENCES `layanan` (`id_layanan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `paket_stok`
+-- Constraints for table `paket_stok`
 --
 ALTER TABLE `paket_stok`
   ADD CONSTRAINT `paket_stok_ibfk_1` FOREIGN KEY (`id_layanan`) REFERENCES `layanan` (`id_layanan`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `paket_stok_ibfk_2` FOREIGN KEY (`id_barang`) REFERENCES `stok_barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `pemakaian_stok`
+-- Constraints for table `pemakaian_stok`
 --
 ALTER TABLE `pemakaian_stok`
   ADD CONSTRAINT `pemakaian_stok_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `stok_barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `pemakaian_stok_ibfk_2` FOREIGN KEY (`id_transaksi`) REFERENCES `transaksi` (`id_transaksi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `pengeluaran`
+-- Constraints for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
   ADD CONSTRAINT `pengeluaran_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `restok`
+-- Constraints for table `restok`
 --
 ALTER TABLE `restok`
   ADD CONSTRAINT `restok_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `stok_barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `transaksi`
+-- Constraints for table `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_booking`) REFERENCES `booking` (`id_booking`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `transaksi_detail`
+-- Constraints for table `transaksi_detail`
 --
 ALTER TABLE `transaksi_detail`
   ADD CONSTRAINT `transaksi_detail_ibfk_1` FOREIGN KEY (`id_layanan`) REFERENCES `layanan` (`id_layanan`) ON DELETE CASCADE ON UPDATE CASCADE,

@@ -70,7 +70,7 @@
             <i class="fa-solid fa-users w-6 text-lg text-center"></i>
             <span class="sidebar-text">Pelanggan</span>
         </a>
-
+   
         <!-- Menu laporan -->
         <a 
             href="data-laporan.php" 
