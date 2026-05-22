@@ -39,7 +39,15 @@ include "../layout/header.php";
                                 Pantau perkembangan data dan keuangan Mey Salon.
                             </p>
                         </div>
-
+                        <div>
+                         <a 
+                            href="pengeluaran.php" 
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Tambah Pengeluaran</span>
+                        </a>
+                        </div>
                         <!-- Filter dan tombol cetak -->
                         <div class="flex items-center gap-2">
 

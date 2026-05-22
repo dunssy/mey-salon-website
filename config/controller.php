@@ -326,7 +326,32 @@ function hitung_total_halaman_barang($jumlah_per_halaman)
 
     return ceil($data['total'] / $jumlah_per_halaman);
 }
+function tambah_pengeluaran($data) {
+    global $koneksi; 
 
+    // Memaksa id_user menjadi angka murni (jika kosong otomatis jadi 0 atau mencegah error FK)
+    $id_user                = (int) $data['id_user']; 
+    $jenis_pengeluaran      = clean_input($data['jenis_pengeluaran']);
+    $jumlah_pengeluaran     = clean_number($data['jumlah_pengeluaran']); 
+    $tanggal_pengeluaran    = clean_input($data['tanggal_pengeluaran']);
+    $keterangan_pengeluaran = clean_input($data['keterangan_pengeluaran']);
+
+    // Pastikan query-nya seperti ini
+    $query = "INSERT INTO pengeluaran 
+                (id_user, jenis_pengeluaran, jumlah_pengeluaran, tanggal_pengeluaran, keterangan_pengeluaran) 
+              VALUES 
+                ($id_user, '$jenis_pengeluaran', '$jumlah_pengeluaran', '$tanggal_pengeluaran', '$keterangan_pengeluaran')";
+                // Catatan: $id_user tidak perlu dibungkus tanda petik tunggal jika tipenya INT
+
+    $hasil = mysqli_query($koneksi, $query);
+
+    // BANTUAN DEBUG: Jika gagal, ini akan memunculkan error asli dari MySQL/Foreign Key di layar browser kamu
+    if (!$hasil) {
+        die("Gagal menyimpan ke database! Error MySQL: " . mysqli_error($koneksi));
+    }
+
+    return mysqli_affected_rows($koneksi);
+}
 // Menambah stok barang tambahan
 function tambah_stok($post)
 {
