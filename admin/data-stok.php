@@ -68,7 +68,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                 <section id="section-barang" class="space-y-6">
 
                     <!-- Header halaman -->
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex flex-col md:flex-row md:items-center gap-4">
 
                         <!-- Judul halaman -->
                         <div>
@@ -88,7 +88,15 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                         >
                             <i class="fa-solid fa-plus"></i>
                             <span>Tambah Barang</span>
+
                         </a>
+                         <a  href="restok.php" class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-colors">
+
+                        <i class="fa-solid fa-boxes-stacked"></i>
+
+                                <span>Restok</span>
+
+                            </a>
                     </div>
 
                     <!-- Form pencarian barang -->
