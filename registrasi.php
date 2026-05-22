@@ -135,13 +135,13 @@ if (isset($_POST['registrasi'])) {
                     </div>
 
                     <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">email</label>
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Email</label>
                         <input 
-                            type="text" 
+                            type="email" 
                             name="email"
                             required 
                             class="block w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all text-sm" 
-                            placeholder="email unik"
+                            placeholder="Contoh@gmail.com"
                         >
                     </div>
                 </div>

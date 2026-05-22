@@ -122,13 +122,21 @@ if (isset($_POST['login'])) {
             <form action="" method="POST" class="space-y-5">
 
                 <!-- Input email -->
-                <input 
-                    type="email" 
-                    name="email"
-                    required 
-                    class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" 
-                    placeholder="Masukkan email"
-                >
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider ml-1">Email</label>
+                    <div class="relative group">
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
+                            <i class="fas fa-envelope text-sm"></i>
+                        </span>
+                        <input 
+                            type="email" 
+                            name="email"
+                            required 
+                            class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" 
+                            placeholder="Masukkan email"
+                        >
+                    </div>
+                </div>
 
                 <!-- Input password -->
                 <div class="space-y-1">
