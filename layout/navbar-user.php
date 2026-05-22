@@ -21,6 +21,10 @@
 
                 <!-- Menu desktop -->
                 <div class="hidden md:flex items-center gap-6">
+                    <a href="../index.php" class="text-sm font-semibold hover:text-pink-600 transition-colors">
+                        Home
+                    </a>
+
                     <button onclick="showSection('layanan')" class="text-sm font-semibold hover:text-pink-600 transition-colors">
                         Layanan
                     </button>

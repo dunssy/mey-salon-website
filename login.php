@@ -73,66 +73,56 @@ if (isset($_POST['login'])) {
         }
 
         .glass-effect {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 
-<body class="flex items-center justify-center p-4 md:p-6 lg:p-12">
+<body class="min-h-screen overflow-hidden flex items-center justify-center p-4">
 
     <!-- Container utama halaman login -->
-    <div class="w-full max-w-6xl glass-effect rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[650px]">
+    <div class="w-full max-w-md glass-effect rounded-[2rem] shadow-2xl overflow-hidden relative">
 
-        <!-- Bagian kiri untuk gambar branding -->
-        <div class="relative w-full md:w-1/2 lg:w-3/5 hidden md:block overflow-hidden">
-            <img 
-                src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=1200" 
-                alt="Mey Salon Experience" 
-                class="absolute inset-0 w-full h-full object-cover"
-            >
-
-            <!-- Overlay teks pada gambar -->
-            <div class="absolute inset-0 bg-gradient-to-tr from-rose-950/80 via-rose-900/20 to-transparent flex flex-col justify-end p-12 text-white">
-                <div class="space-y-4">
-                    <span class="px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-widest uppercase border border-white/30">
-                        Mey salon
-                    </span>
-                    <h2 class="text-5xl font-bold serif-font leading-tight">Your Hair Is<br>Your Expression</h2>
-                    <p class="text-rose-100/90 max-w-sm text-lg font-light leading-relaxed">
-                        Ekspresikan dirimu dengan gaya rambut yang memukau.
-                </div>
-            </div>
-        </div>
-
-        <!-- Bagian kanan untuk form login -->
-        <div class="w-full md:w-1/2 lg:w-2/5 p-8 sm:p-12 lg:p-16 flex flex-col justify-center bg-white relative">
+        <!-- Bagian form login -->
+        <div class="w-full px-8 py-7 bg-white relative">
 
             <!-- Logo dan judul login -->
-            <div class="mb-10 text-center md:text-left">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-rose-50 rounded-2xl mb-4 border border-rose-100">
-                    <i class="fas fa-spa text-rose-600 text-3xl"></i>
+            <div class="mb-6 text-center">
+                <div class="inline-flex items-center justify-center w-14 h-14 bg-rose-50 rounded-2xl mb-3 border border-rose-100">
+                    <i class="fas fa-spa text-rose-600 text-2xl"></i>
                 </div>
-                <h1 class="text-3xl font-bold text-gray-900 serif-font">Mey Salon</h1>
-                <p class="text-gray-500 mt-2 font-light">Selamat datang kembali, silakan masuk ke akun Anda.</p>
+
+                <h1 class="text-3xl font-bold text-gray-900 serif-font">
+                    Mey Salon
+                </h1>
+
+                <p class="text-gray-500 mt-1 font-light text-sm">
+                    Selamat datang kembali, silakan masuk ke akun Anda.
+                </p>
             </div>
 
             <!-- Form login user -->
-            <form action="" method="POST" class="space-y-5">
+            <form action="" method="POST" class="space-y-4">
 
                 <!-- Input email -->
                 <div class="space-y-1">
-                    <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider ml-1">Email</label>
+                    <label for="email" class="text-xs font-semibold text-gray-400 uppercase tracking-wider ml-1">
+                        Email
+                    </label>
+
                     <div class="relative group">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
                             <i class="fas fa-envelope text-sm"></i>
                         </span>
+
                         <input 
                             type="email" 
                             name="email"
+                            id="email"
                             required 
-                            class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" 
+                            class="block w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" 
                             placeholder="Masukkan email"
                         >
                     </div>
@@ -140,16 +130,21 @@ if (isset($_POST['login'])) {
 
                 <!-- Input password -->
                 <div class="space-y-1">
-                    <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider ml-1">Password</label>
+                    <label for="password" class="text-xs font-semibold text-gray-400 uppercase tracking-wider ml-1">
+                        Password
+                    </label>
+
                     <div class="relative group">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
                             <i class="fas fa-lock text-sm"></i>
                         </span>
+
                         <input 
                             type="password" 
                             name="password"
+                            id="password"
                             required 
-                            class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" 
+                            class="block w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" 
                             placeholder="Masukkan password"
                         >
                     </div>
@@ -159,7 +154,7 @@ if (isset($_POST['login'])) {
                 <button 
                     type="submit" 
                     name="login"
-                    class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 px-4 rounded-2xl shadow-xl shadow-rose-200 transition active:scale-[0.98]"
+                    class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3.5 px-4 rounded-2xl shadow-xl shadow-rose-200 transition active:scale-[0.98]"
                 >
                     Masuk Sekarang
                 </button>
@@ -167,27 +162,32 @@ if (isset($_POST['login'])) {
 
             <!-- Link lupa password -->
             <div class="mt-4 text-center">
-                <a href="lupa-password.php" class="text-rose-600 font-bold hover:underline ml-1">Lupa password?</a>
+                <a href="lupa-password.php" class="text-rose-600 font-bold hover:underline text-sm">
+                    Lupa password?
+                </a>
             </div>
 
             <!-- Link menuju registrasi -->
-            <div class="mt-2 pt-2 border-t border-gray-100 text-center">
+            <div class="mt-3 pt-3 border-t border-gray-100 text-center">
                 <p class="text-gray-500 text-sm">
                     Belum punya akun?
-                    <a href="registrasi.php" class="text-rose-600 font-bold hover:underline ml-1">Daftar di sini</a>
+                    <a href="registrasi.php" class="text-rose-600 font-bold hover:underline ml-1">
+                        Daftar di sini
+                    </a>
                 </p>
             </div>
 
             <!-- Tombol kembali ke halaman utama -->
-            <div class="absolute bottom-6 left-8">
-                <a href="index.html" class="text-gray-400 hover:text-gray-600 transition">
-                    <i class="fas fa-arrow-left mr-2"></i>Kembali ke Beranda
+            <div class="mt-5 text-left">
+                <a href="index.php" class="inline-flex items-center text-gray-400 hover:text-gray-600 transition text-sm">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Kembali ke Beranda
                 </a>
             </div>
 
             <!-- Dekorasi icon gunting -->
             <div class="absolute bottom-4 right-4 opacity-10 pointer-events-none">
-                <i class="fas fa-scissors text-6xl text-rose-900 rotate-45"></i>
+                <i class="fas fa-scissors text-5xl text-rose-900 rotate-45"></i>
             </div>
         </div>
     </div>

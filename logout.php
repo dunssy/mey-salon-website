@@ -26,7 +26,7 @@ session_destroy();
 // Mengarahkan user ke halaman utama
 echo "<script>
         alert('Anda berhasil logout!');
-        window.location.href = 'index.html';
+        window.location.href = 'index.php';
       </script>";
 exit;
 ?>

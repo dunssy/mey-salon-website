@@ -64,16 +64,16 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
             <!-- Isi halaman -->
             <div class="p-4 md:p-8 flex-1">
 
-                <!-- Section data barang -->
+                <!-- Section data stok barang -->
                 <section id="section-barang" class="space-y-6">
 
                     <!-- Header halaman -->
-                    <div class="flex flex-col md:flex-row md:items-center gap-4">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
                         <!-- Judul halaman -->
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">
-                                <?= $sub_title; ?>
+                                <?= htmlspecialchars($sub_title); ?>
                             </h3>
 
                             <p class="text-xs text-gray-400">
@@ -81,22 +81,27 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                             </p>
                         </div>
 
-                        <!-- Tombol tambah barang -->
-                        <a 
-                            href="tambah-stok.php" 
-                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors"
-                        >
-                            <i class="fa-solid fa-plus"></i>
-                            <span>Tambah Barang</span>
+                        <!-- Tombol aksi kanan -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 md:justify-end">
 
-                        </a>
-                         <a  href="restok.php" class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-colors">
-
-                        <i class="fa-solid fa-boxes-stacked"></i>
-
-                                <span>Restok</span>
-
+                            <!-- Tombol tambah barang -->
+                            <a 
+                                href="tambah-stok.php" 
+                                class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors"
+                            >
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Tambah Barang</span>
                             </a>
+
+                            <!-- Tombol restok barang -->
+                            <a  
+                                href="restok.php" 
+                                class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-green-500 rounded-lg hover:bg-green-600 transition-colors"
+                            >
+                                <i class="fa-solid fa-boxes-stacked"></i>
+                                <span>Restok</span>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- Form pencarian barang -->
@@ -123,7 +128,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                     <!-- Pesan error hapus barang -->
                     <?php if (isset($error_message)) : ?>
                         <div class="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-xl text-sm font-medium">
-                            <?= $error_message; ?>
+                            <?= htmlspecialchars($error_message); ?>
                         </div>
                     <?php endif; ?>
 
@@ -206,7 +211,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 
                                                     <!-- Tombol edit -->
                                                     <a 
-                                                        href="edit-stok.php?id_barang=<?= $data_barang['id_barang']; ?>" 
+                                                        href="edit-stok.php?id_barang=<?= (int) $data_barang['id_barang']; ?>" 
                                                         class="inline-flex px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                                                     >
                                                         Edit
@@ -217,7 +222,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                         <button 
                                                             type="submit" 
                                                             name="hapus" 
-                                                            value="<?= $data_barang['id_barang']; ?>" 
+                                                            value="<?= (int) $data_barang['id_barang']; ?>" 
                                                             onclick="return confirm('Apakah Anda yakin ingin menghapus barang ini?')" 
                                                             class="inline-flex px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                                                         >
