@@ -1,6 +1,7 @@
 <?php
-global $booking_user;
+global $query_booking_user;
 ?>
+
 <!-- Section booking saya -->
 <section id="section-booking" class="content-section hidden">
 
@@ -17,7 +18,7 @@ global $booking_user;
 
     <!-- List booking user -->
     <div class="space-y-4">
-    <?php global $query_booking_user; ?>
+
         <?php if (mysqli_num_rows($query_booking_user) > 0) : ?>
 
             <?php while ($booking_user = mysqli_fetch_assoc($query_booking_user)) : ?>
@@ -25,10 +26,10 @@ global $booking_user;
                 <!-- Card booking -->
                 <div class="bg-white rounded-3xl border border-pink-100 shadow-sm p-6">
 
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
 
                         <!-- Info booking -->
-                        <div>
+                        <div class="flex-1">
                             <p class="text-[11px] font-bold text-pink-600 uppercase tracking-widest">
                                 Booking #<?= htmlspecialchars($booking_user['id_booking']); ?>
                             </p>
@@ -48,10 +49,99 @@ global $booking_user;
                                     Catatan: <?= htmlspecialchars($booking_user['catatan']); ?>
                                 </p>
                             <?php endif; ?>
+
+                            <?php if ($booking_user['status_booking'] == 'Pending' && !empty($booking_user['tanggal_saran']) && !empty($booking_user['jam_saran'])) : ?>
+
+                                <!-- Box saran jadwal admin -->
+                                <div class="mt-5 p-4 bg-orange-50 border border-orange-100 rounded-2xl">
+
+                                    <p class="text-[11px] font-bold text-orange-700 uppercase tracking-widest mb-3">
+                                        Saran Jadwal dari Admin
+                                    </p>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase">
+                                                Tanggal Saran
+                                            </p>
+
+                                            <p class="text-sm font-bold text-gray-800 mt-1">
+                                                <?= date('d M Y', strtotime($booking_user['tanggal_saran'])); ?>
+                                            </p>
+                                        </div>
+
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase">
+                                                Jam Saran
+                                            </p>
+
+                                            <p class="text-sm font-bold text-gray-800 mt-1">
+                                                <?= substr($booking_user['jam_saran'], 0, 5); ?>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <?php if (!empty($booking_user['catatan_admin'])) : ?>
+                                        <div class="mt-3">
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase">
+                                                Catatan Admin
+                                            </p>
+
+                                            <p class="text-sm text-gray-600 mt-1 leading-relaxed">
+                                                <?= htmlspecialchars($booking_user['catatan_admin']); ?>
+                                            </p>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <!-- Aksi saran jadwal -->
+                                    <div class="flex flex-col sm:flex-row gap-2 mt-4">
+
+                                        <!-- Tombol terima saran -->
+                                        <form action="" method="POST">
+                                            <input 
+                                                type="hidden" 
+                                                name="id_booking" 
+                                                value="<?= (int) $booking_user['id_booking']; ?>"
+                                            >
+
+                                            <button 
+                                                type="submit" 
+                                                name="terima_saran_booking"
+                                                onclick="return confirm('Terima saran jadwal dari admin?')"
+                                                class="w-full sm:w-auto px-4 py-2 bg-green-500 text-white text-xs font-bold rounded-xl hover:bg-green-600 transition"
+                                            >
+                                                <i class="fa-solid fa-check mr-1"></i>
+                                                Saya Bersedia
+                                            </button>
+                                        </form>
+
+                                        <!-- Tombol batal booking -->
+                                        <form action="" method="POST">
+                                            <input 
+                                                type="hidden" 
+                                                name="id_booking" 
+                                                value="<?= (int) $booking_user['id_booking']; ?>"
+                                            >
+
+                                            <button 
+                                                type="submit" 
+                                                name="batal_booking"
+                                                onclick="return confirm('Apakah Anda yakin ingin membatalkan booking ini?')"
+                                                class="w-full sm:w-auto px-4 py-2 bg-red-50 text-red-600 text-xs font-bold rounded-xl hover:bg-red-100 transition"
+                                            >
+                                                <i class="fa-solid fa-xmark mr-1"></i>
+                                                Tidak, Batalkan
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            <?php endif; ?>
                         </div>
 
                         <!-- Ringkasan booking -->
-                        <div class="text-left md:text-right">
+                        <div class="w-full md:w-56 text-left md:text-right">
+
                             <p class="text-sm font-bold text-gray-800">
                                 Rp <?= number_format($booking_user['total_harga'], 0, ',', '.'); ?>
                             </p>
@@ -72,7 +162,7 @@ global $booking_user;
                                     <input 
                                         type="hidden" 
                                         name="id_booking" 
-                                        value="<?= htmlspecialchars($booking_user['id_booking']); ?>"
+                                        value="<?= (int) $booking_user['id_booking']; ?>"
                                     >
 
                                     <button 
@@ -92,23 +182,27 @@ global $booking_user;
                                     Pending
                                 </span>
 
-                                <!-- Tombol batal booking -->
-                                <form action="" method="POST" class="mt-3">
-                                    <input 
-                                        type="hidden" 
-                                        name="id_booking" 
-                                        value="<?= htmlspecialchars($booking_user['id_booking']); ?>"
-                                    >
+                                <?php if (empty($booking_user['tanggal_saran']) || empty($booking_user['jam_saran'])) : ?>
 
-                                    <button 
-                                        type="submit" 
-                                        name="batal_booking"
-                                        onclick="return confirm('Apakah Anda yakin ingin membatalkan booking ini?')"
-                                        class="px-3 py-2 bg-red-50 text-red-600 text-[11px] font-bold rounded-xl hover:bg-red-100 transition"
-                                    >
-                                        Batalkan Booking
-                                    </button>
-                                </form>
+                                    <!-- Tombol batal jika belum ada saran jadwal -->
+                                    <form action="" method="POST" class="mt-3">
+                                        <input 
+                                            type="hidden" 
+                                            name="id_booking" 
+                                            value="<?= (int) $booking_user['id_booking']; ?>"
+                                        >
+
+                                        <button 
+                                            type="submit" 
+                                            name="batal_booking"
+                                            onclick="return confirm('Apakah Anda yakin ingin membatalkan booking ini?')"
+                                            class="px-3 py-2 bg-red-50 text-red-600 text-[11px] font-bold rounded-xl hover:bg-red-100 transition"
+                                        >
+                                            Batalkan Booking
+                                        </button>
+                                    </form>
+
+                                <?php endif; ?>
 
                             <?php elseif ($booking_user['status_booking'] == 'On-going') : ?>
 

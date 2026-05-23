@@ -1,9 +1,167 @@
-<?php 
+<?php
 // Mengatur judul halaman
 $page_title = "Laporan";
 
-// Memanggil header layout
+// Memanggil header layout dan koneksi
 include "../layout/header.php";
+include "../config/app.php";
+
+// Menggunakan koneksi database
+global $koneksi;
+
+// Mengambil filter laporan
+$jenis_laporan = isset($_GET['jenis']) ? $_GET['jenis'] : 'harian';
+$tanggal = isset($_GET['tanggal']) ? $_GET['tanggal'] : date('Y-m-d');
+$bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m');
+
+// Mengamankan nilai filter
+$jenis_laporan = $jenis_laporan === 'bulanan' ? 'bulanan' : 'harian';
+$tanggal = mysqli_real_escape_string($koneksi, $tanggal);
+$bulan = mysqli_real_escape_string($koneksi, $bulan);
+
+// Menentukan filter laporan
+if ($jenis_laporan === 'bulanan') {
+    $where_transaksi = "DATE_FORMAT(t.tanggal_transaksi, '%Y-%m') = '$bulan'";
+    $where_booking = "DATE_FORMAT(b.tanggal_booking, '%Y-%m') = '$bulan'";
+    $where_restok = "DATE_FORMAT(r.tanggal_restok, '%Y-%m') = '$bulan'";
+    $where_pengeluaran = "DATE_FORMAT(p.tanggal_pengeluaran, '%Y-%m') = '$bulan'";
+    $label_periode = date('F Y', strtotime($bulan . '-01'));
+} else {
+    $where_transaksi = "DATE(t.tanggal_transaksi) = '$tanggal'";
+    $where_booking = "DATE(b.tanggal_booking) = '$tanggal'";
+    $where_restok = "DATE(r.tanggal_restok) = '$tanggal'";
+    $where_pengeluaran = "DATE(p.tanggal_pengeluaran) = '$tanggal'";
+    $label_periode = date('d F Y', strtotime($tanggal));
+}
+
+// Mengambil pendapatan dari transaksi
+$query_pendapatan = mysqli_query($koneksi, "
+    SELECT 
+        t.id_transaksi,
+        t.id_booking,
+        t.tanggal_transaksi,
+        t.total_bayar,
+        t.jenis_pelanggan,
+        COALESCE(u.nama, 'Pelanggan Datang Langsung') AS nama_pelanggan,
+        COALESCE(
+            GROUP_CONCAT(DISTINCT l_transaksi.nama_layanan SEPARATOR ', '),
+            GROUP_CONCAT(DISTINCT l_booking.nama_layanan SEPARATOR ', '),
+            '-'
+        ) AS nama_layanan
+    FROM transaksi t
+    LEFT JOIN booking b ON t.id_booking = b.id_booking
+    LEFT JOIN user u ON b.id_user = u.id_user
+    LEFT JOIN transaksi_detail td ON t.id_transaksi = td.id_transaksi
+    LEFT JOIN layanan l_transaksi ON td.id_layanan = l_transaksi.id_layanan
+    LEFT JOIN booking_detail bd ON b.id_booking = bd.id_booking
+    LEFT JOIN layanan l_booking ON bd.id_layanan = l_booking.id_layanan
+    WHERE $where_transaksi
+    GROUP BY t.id_transaksi
+    ORDER BY t.tanggal_transaksi DESC
+");
+
+// Mengambil restok sebagai pengeluaran
+$query_restok = mysqli_query($koneksi, "
+    SELECT 
+        r.id_restok,
+        r.tanggal_restok,
+        r.jumlah_tambah,
+        r.total_harga_restok,
+        s.nama_barang
+    FROM restok r
+    JOIN stok_barang s ON r.id_barang = s.id_barang
+    WHERE $where_restok
+    ORDER BY r.tanggal_restok DESC
+");
+
+// Mengambil pengeluaran manual
+$query_pengeluaran = mysqli_query($koneksi, "
+    SELECT 
+        p.id_pengeluaran,
+        p.jenis_pengeluaran,
+        p.jumlah_pengeluaran,
+        p.tanggal_pengeluaran,
+        p.keterangan_pengeluaran,
+        u.nama AS nama_user
+    FROM pengeluaran p
+    LEFT JOIN user u ON p.id_user = u.id_user
+    WHERE $where_pengeluaran
+    ORDER BY p.tanggal_pengeluaran DESC
+");
+
+// Menyiapkan data pendapatan
+$data_pendapatan = [];
+$total_pendapatan = 0;
+$total_transaksi = 0;
+
+if ($query_pendapatan) {
+    while ($row = mysqli_fetch_assoc($query_pendapatan)) {
+        $data_pendapatan[] = $row;
+        $total_pendapatan += (int) $row['total_bayar'];
+        $total_transaksi++;
+    }
+}
+
+// Menyiapkan data restok
+$data_restok = [];
+$total_restok = 0;
+
+if ($query_restok) {
+    while ($row = mysqli_fetch_assoc($query_restok)) {
+        $data_restok[] = $row;
+        $total_restok += (int) $row['total_harga_restok'];
+    }
+}
+
+// Menyiapkan data pengeluaran manual
+$data_pengeluaran = [];
+$total_pengeluaran_manual = 0;
+
+if ($query_pengeluaran) {
+    while ($row = mysqli_fetch_assoc($query_pengeluaran)) {
+        $data_pengeluaran[] = $row;
+        $total_pengeluaran_manual += (int) $row['jumlah_pengeluaran'];
+    }
+}
+
+// Menghitung total pengeluaran dan laba bersih
+$total_pengeluaran = $total_restok + $total_pengeluaran_manual;
+$laba_bersih = $total_pendapatan - $total_pengeluaran;
+
+// Mengambil layanan terfavorit dari transaksi
+$query_layanan_favorit = mysqli_query($koneksi, "
+    SELECT 
+        l.nama_layanan,
+        COUNT(td.id_layanan) AS total_dipilih
+    FROM transaksi t
+    JOIN transaksi_detail td ON t.id_transaksi = td.id_transaksi
+    JOIN layanan l ON td.id_layanan = l.id_layanan
+    WHERE $where_transaksi
+    GROUP BY td.id_layanan
+    ORDER BY total_dipilih DESC
+    LIMIT 1
+");
+
+// Mengambil layanan favorit dari booking jika transaksi detail kosong
+$layanan_favorit = $query_layanan_favorit ? mysqli_fetch_assoc($query_layanan_favorit) : null;
+
+if (!$layanan_favorit) {
+    $query_layanan_favorit_booking = mysqli_query($koneksi, "
+        SELECT 
+            l.nama_layanan,
+            COUNT(bd.id_layanan) AS total_dipilih
+        FROM booking b
+        JOIN booking_detail bd ON b.id_booking = bd.id_booking
+        JOIN layanan l ON bd.id_layanan = l.id_layanan
+        WHERE $where_booking
+        AND b.status_booking = 'Done'
+        GROUP BY bd.id_layanan
+        ORDER BY total_dipilih DESC
+        LIMIT 1
+    ");
+
+    $layanan_favorit = $query_layanan_favorit_booking ? mysqli_fetch_assoc($query_layanan_favorit_booking) : null;
+}
 ?>
 
 <body class="text-gray-800 overflow-x-hidden">
@@ -26,211 +184,387 @@ include "../layout/header.php";
                 <!-- Section laporan -->
                 <section id="section-laporan" class="space-y-6">
 
-                    <!-- Header halaman laporan -->
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <!-- Header laporan -->
+                    <div class="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-4">
 
-                        <!-- Judul dan deskripsi -->
+                        <!-- Judul laporan -->
                         <div>
                             <h3 class="text-xl font-bold text-gray-800 tracking-tight">
-                                <?= $page_title; ?>
+                                <?= htmlspecialchars($page_title); ?>
                             </h3>
 
-                            <p class="text-xs text-gray-400">
-                                Pantau perkembangan data dan keuangan Mey Salon.
+                            <p class="text-xs text-gray-400 mt-1">
+                                Pantau pendapatan, pengeluaran, dan laba Mey Salon.
                             </p>
-                        </div>
-                        <div>
-                         <a 
-                            href="pengeluaran.php" 
-                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors"
-                        >
-                            <i class="fa-solid fa-plus"></i>
-                            <span>Tambah Pengeluaran</span>
-                        </a>
-                        </div>
-                        <!-- Filter dan tombol cetak -->
-                        <div class="flex items-center gap-2">
 
-                            <!-- Input tanggal laporan -->
-                            <input 
-                                type="date" 
-                                class="px-3 py-2 text-sm bg-white border border-pink-100 rounded-xl focus:outline-none focus:border-pink-300 text-gray-600"
-                            >
-
-                            <!-- Tombol cetak laporan -->
-                            <button 
-                                type="button"
-                                class="px-4 py-2 text-sm font-semibold text-white bg-pink-600 hover:bg-pink-700 rounded-xl shadow-sm shadow-pink-100 transition-colors flex items-center gap-2"
-                            >
-                                <i class="fa-solid fa-file-export"></i>
-                                <span>Cetak</span>
-                            </button>
+                            <!-- Tombol tambah pengeluaran -->
+                            <div class="mt-4">
+                                <a 
+                                    href="pengeluaran.php" 
+                                    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors"
+                                >
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Tambah Pengeluaran</span>
+                                </a>
+                            </div>
                         </div>
+
+                        <!-- Filter laporan -->
+                        <form action="" method="GET" class="bg-white p-4 rounded-2xl border border-pink-100 shadow-sm">
+                            <div class="flex flex-col sm:flex-row sm:items-end gap-3">
+
+                                <!-- Pilih jenis laporan -->
+                                <div>
+                                    <label for="jenis_laporan" class="block text-[11px] font-bold text-gray-400 uppercase mb-1">
+                                        Jenis
+                                    </label>
+
+                                    <select 
+                                        name="jenis" 
+                                        id="jenis_laporan"
+                                        onchange="toggleFilterInput()"
+                                        class="w-full px-3 py-2 text-sm bg-white border border-pink-100 rounded-xl focus:outline-none focus:border-pink-300 text-gray-600"
+                                    >
+                                        <option value="harian" <?= $jenis_laporan === 'harian' ? 'selected' : ''; ?>>
+                                            Harian
+                                        </option>
+                                        <option value="bulanan" <?= $jenis_laporan === 'bulanan' ? 'selected' : ''; ?>>
+                                            Bulanan
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Input tanggal harian -->
+                                <div id="filter_harian">
+                                    <label for="tanggal" class="block text-[11px] font-bold text-gray-400 uppercase mb-1">
+                                        Tanggal
+                                    </label>
+
+                                    <input 
+                                        type="date" 
+                                        name="tanggal" 
+                                        id="tanggal"
+                                        value="<?= htmlspecialchars($tanggal); ?>"
+                                        class="w-full px-3 py-2 text-sm bg-white border border-pink-100 rounded-xl focus:outline-none focus:border-pink-300 text-gray-600"
+                                    >
+                                </div>
+
+                                <!-- Input bulan -->
+                                <div id="filter_bulanan">
+                                    <label for="bulan" class="block text-[11px] font-bold text-gray-400 uppercase mb-1">
+                                        Bulan
+                                    </label>
+
+                                    <input 
+                                        type="month" 
+                                        name="bulan" 
+                                        id="bulan"
+                                        value="<?= htmlspecialchars($bulan); ?>"
+                                        class="w-full px-3 py-2 text-sm bg-white border border-pink-100 rounded-xl focus:outline-none focus:border-pink-300 text-gray-600"
+                                    >
+                                </div>
+
+                                <!-- Tombol filter -->
+                                <button 
+                                    type="submit"
+                                    class="px-4 py-2 text-sm font-semibold text-white bg-pink-600 hover:bg-pink-700 rounded-xl shadow-sm shadow-pink-100 transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <i class="fa-solid fa-filter"></i>
+                                    <span>Filter</span>
+                                </button>
+
+                                <!-- Tombol export PDF -->
+                                <a 
+                                    href="export-laporan.php?jenis=<?= urlencode($jenis_laporan); ?>&tanggal=<?= urlencode($tanggal); ?>&bulan=<?= urlencode($bulan); ?>&format=pdf"
+                                    target="_blank"
+                                    class="px-4 py-2 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                    <span>PDF</span>
+                                </a>
+
+                                <!-- Tombol export Excel -->
+                                <a 
+                                    href="export-laporan.php?jenis=<?= urlencode($jenis_laporan); ?>&tanggal=<?= urlencode($tanggal); ?>&bulan=<?= urlencode($bulan); ?>&format=excel"
+                                    class="px-4 py-2 text-sm font-semibold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <i class="fa-solid fa-file-excel"></i>
+                                    <span>Excel</span>
+                                </a>
+                            </div>
+                        </form>
                     </div>
 
-                    <!-- Grid ringkasan laporan -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <!-- Info periode laporan -->
+                    <div class="bg-white border border-pink-100 rounded-2xl p-4 shadow-sm">
+                        <p class="text-sm text-gray-500">
+                            Periode laporan:
+                            <span class="font-bold text-pink-600">
+                                <?= htmlspecialchars($label_periode); ?>
+                            </span>
+                        </p>
+                    </div>
 
-                        <!-- Card total pendapatan -->
+                    <!-- Ringkasan laporan -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+
+                        <!-- Card pendapatan -->
                         <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm">
                             <div class="flex justify-between items-start">
-
-                                <!-- Data pendapatan -->
                                 <div>
                                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                                         Total Pendapatan
                                     </p>
 
                                     <h4 class="text-2xl font-bold text-gray-800 mt-1">
-                                        Rp 12.450.000
+                                        Rp <?= number_format($total_pendapatan, 0, ',', '.'); ?>
                                     </h4>
                                 </div>
 
-                                <!-- Icon pendapatan -->
                                 <div class="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-lg">
                                     <i class="fa-solid fa-wallet"></i>
                                 </div>
                             </div>
-
-                            <!-- Informasi kenaikan -->
-                            <p class="text-xs text-green-600 font-medium mt-3 flex items-center gap-1">
-                                <i class="fa-solid fa-arrow-trend-up"></i>
-                                <span>+12% dibanding bulan lalu</span>
-                            </p>
                         </div>
 
-                        <!-- Card booking selesai -->
+                        <!-- Card pengeluaran -->
                         <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm">
                             <div class="flex justify-between items-start">
-
-                                <!-- Data booking selesai -->
                                 <div>
                                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                                        Booking Selesai
+                                        Total Pengeluaran
                                     </p>
 
                                     <h4 class="text-2xl font-bold text-gray-800 mt-1">
-                                        142 Transaksi
+                                        Rp <?= number_format($total_pengeluaran, 0, ',', '.'); ?>
                                     </h4>
                                 </div>
 
-                                <!-- Icon booking -->
-                                <div class="w-10 h-10 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center text-lg">
-                                    <i class="fa-solid fa-calendar-check"></i>
+                                <div class="w-10 h-10 bg-red-50 text-red-600 rounded-xl flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-money-bill-wave"></i>
                                 </div>
                             </div>
-
-                            <!-- Informasi rata-rata -->
-                            <p class="text-xs text-gray-400 font-medium mt-3">
-                                Rata-rata 5 reservasi / hari
-                            </p>
                         </div>
 
-                        <!-- Card layanan terfavorit -->
-                        <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm sm:col-span-2 lg:col-span-1">
+                        <!-- Card laba bersih -->
+                        <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm">
                             <div class="flex justify-between items-start">
-
-                                <!-- Data layanan favorit -->
                                 <div>
                                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                                        Layanan Terfavorit
+                                        Laba Bersih
                                     </p>
 
-                                    <h4 class="text-lg font-bold text-gray-800 mt-1">
-                                        Hair Styling
+                                    <h4 class="text-2xl font-bold <?= $laba_bersih >= 0 ? 'text-green-600' : 'text-red-600'; ?> mt-1">
+                                        Rp <?= number_format($laba_bersih, 0, ',', '.'); ?>
                                     </h4>
                                 </div>
 
-                                <!-- Icon layanan favorit -->
-                                <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-lg">
-                                    <i class="fa-solid fa-crown"></i>
+                                <div class="w-10 h-10 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-chart-line"></i>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Informasi jumlah layanan -->
-                            <p class="text-xs text-purple-600 font-medium mt-4">
-                                Dipilih sebanyak 68 kali
-                            </p>
+                        <!-- Card transaksi -->
+                        <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                        Total Transaksi
+                                    </p>
+
+                                    <h4 class="text-2xl font-bold text-gray-800 mt-1">
+                                        <?= $total_transaksi; ?>
+                                    </h4>
+                                </div>
+
+                                <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-receipt"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Card tabel riwayat pendapatan -->
-                    <div class="bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+                    <!-- Card layanan favorit -->
+                    <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm">
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                            Layanan Terfavorit
+                        </p>
 
-                        <!-- Header tabel -->
-                        <div class="p-5 border-b border-pink-50 flex justify-between items-center">
-                            <h4 class="font-bold text-gray-800 text-sm">
-                                Riwayat Pendapatan Terbaru
+                        <?php if ($layanan_favorit) : ?>
+                            <h4 class="text-lg font-bold text-gray-800 mt-1">
+                                <?= htmlspecialchars($layanan_favorit['nama_layanan']); ?>
                             </h4>
 
-                            <span class="text-xs text-pink-600 bg-pink-50 px-2.5 py-1 rounded-full font-semibold">
-                                Live Data
+                            <p class="text-xs text-purple-600 font-medium mt-2">
+                                Dipilih sebanyak <?= (int) $layanan_favorit['total_dipilih']; ?> kali
+                            </p>
+                        <?php else : ?>
+                            <h4 class="text-lg font-bold text-gray-400 mt-1">
+                                Belum ada data layanan.
+                            </h4>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Tabel pendapatan -->
+                    <div class="bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+
+                        <!-- Header tabel pendapatan -->
+                        <div class="p-5 border-b border-pink-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                            <h4 class="font-bold text-gray-800 text-sm">
+                                Riwayat Pendapatan Transaksi
+                            </h4>
+
+                            <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">
+                                Dari Tabel Transaksi
                             </span>
                         </div>
 
-                        <!-- Tabel responsive -->
+                        <!-- Tabel pendapatan -->
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse min-w-[700px]">
+                            <table class="w-full text-left border-collapse min-w-[850px]">
 
-                                <!-- Header kolom tabel -->
+                                <!-- Header tabel -->
                                 <thead>
                                     <tr class="bg-pink-50/40 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-pink-50">
-                                        <th class="py-3 px-6">ID Invoice</th>
+                                        <th class="py-3 px-6">Invoice</th>
                                         <th class="py-3 px-6">Pelanggan</th>
+                                        <th class="py-3 px-6">Jenis</th>
                                         <th class="py-3 px-6">Layanan</th>
                                         <th class="py-3 px-6">Tanggal</th>
                                         <th class="py-3 px-6">Total Bayar</th>
                                     </tr>
                                 </thead>
 
-                                <!-- Isi tabel laporan -->
+                                <!-- Isi tabel -->
+                                <tbody class="text-xs text-gray-600 divide-y divide-pink-50">
+                                    <?php if (!empty($data_pendapatan)) : ?>
+                                        <?php foreach ($data_pendapatan as $pendapatan) : ?>
+                                            <tr class="hover:bg-pink-50/10 transition-colors">
+                                                <td class="py-4 px-6 font-semibold text-pink-600">
+                                                    #TRX-<?= str_pad($pendapatan['id_transaksi'], 4, '0', STR_PAD_LEFT); ?>
+                                                </td>
+
+                                                <td class="py-4 px-6 font-medium text-gray-800">
+                                                    <?= htmlspecialchars($pendapatan['nama_pelanggan']); ?>
+                                                </td>
+
+                                                <td class="py-4 px-6">
+                                                    <?= htmlspecialchars($pendapatan['jenis_pelanggan']); ?>
+                                                </td>
+
+                                                <td class="py-4 px-6">
+                                                    <?= htmlspecialchars($pendapatan['nama_layanan']); ?>
+                                                </td>
+
+                                                <td class="py-4 px-6 text-gray-400">
+                                                    <?= date('d M Y H:i', strtotime($pendapatan['tanggal_transaksi'])); ?>
+                                                </td>
+
+                                                <td class="py-4 px-6 font-bold text-gray-800">
+                                                    Rp <?= number_format($pendapatan['total_bayar'], 0, ',', '.'); ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else : ?>
+                                        <tr>
+                                            <td colspan="6" class="py-6 px-6 text-center text-gray-400">
+                                                Belum ada pendapatan pada periode ini.
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tabel pengeluaran -->
+                    <div class="bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+
+                        <!-- Header tabel pengeluaran -->
+                        <div class="p-5 border-b border-pink-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                            <h4 class="font-bold text-gray-800 text-sm">
+                                Riwayat Pengeluaran
+                            </h4>
+
+                            <span class="text-xs text-red-600 bg-red-50 px-2.5 py-1 rounded-full font-semibold">
+                                Restok + Manual
+                            </span>
+                        </div>
+
+                        <!-- Tabel pengeluaran -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[800px]">
+
+                                <!-- Header tabel -->
+                                <thead>
+                                    <tr class="bg-pink-50/40 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-pink-50">
+                                        <th class="py-3 px-6">Jenis</th>
+                                        <th class="py-3 px-6">Keterangan</th>
+                                        <th class="py-3 px-6">Tanggal</th>
+                                        <th class="py-3 px-6">Total</th>
+                                    </tr>
+                                </thead>
+
+                                <!-- Isi tabel -->
                                 <tbody class="text-xs text-gray-600 divide-y divide-pink-50">
 
-                                    <!-- Contoh data laporan pertama -->
-                                    <tr class="hover:bg-pink-50/10 transition-colors">
-                                        <td class="py-4 px-6 font-semibold text-pink-600">
-                                            #INV-0024
-                                        </td>
+                                    <?php foreach ($data_restok as $restok) : ?>
+                                        <tr class="hover:bg-pink-50/10 transition-colors">
+                                            <td class="py-4 px-6 font-semibold text-red-600">
+                                                Restok
+                                            </td>
 
-                                        <td class="py-4 px-6 font-medium text-gray-800">
-                                            Siti Rahma
-                                        </td>
+                                            <td class="py-4 px-6 font-medium text-gray-800">
+                                                <?= htmlspecialchars($restok['nama_barang']); ?>
+                                                <span class="block text-[11px] text-gray-400 mt-1">
+                                                    Jumlah tambah: <?= (int) $restok['jumlah_tambah']; ?>
+                                                </span>
+                                            </td>
 
-                                        <td class="py-4 px-6">
-                                            Hair Cut & Styling
-                                        </td>
+                                            <td class="py-4 px-6 text-gray-400">
+                                                <?= date('d M Y H:i', strtotime($restok['tanggal_restok'])); ?>
+                                            </td>
 
-                                        <td class="py-4 px-6 text-gray-400">
-                                            15 Mei 2026
-                                        </td>
+                                            <td class="py-4 px-6 font-bold text-gray-800">
+                                                Rp <?= number_format($restok['total_harga_restok'], 0, ',', '.'); ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
 
-                                        <td class="py-4 px-6 font-bold text-gray-800">
-                                            Rp 85.000
-                                        </td>
-                                    </tr>
+                                    <?php foreach ($data_pengeluaran as $pengeluaran) : ?>
+                                        <tr class="hover:bg-pink-50/10 transition-colors">
+                                            <td class="py-4 px-6 font-semibold text-orange-600">
+                                                Manual
+                                            </td>
 
-                                    <!-- Contoh data laporan kedua -->
-                                    <tr class="hover:bg-pink-50/10 transition-colors">
-                                        <td class="py-4 px-6 font-semibold text-pink-600">
-                                            #INV-0023
-                                        </td>
+                                            <td class="py-4 px-6 font-medium text-gray-800">
+                                                <?= htmlspecialchars($pengeluaran['jenis_pengeluaran']); ?>
 
-                                        <td class="py-4 px-6 font-medium text-gray-800">
-                                            Rini Amalia
-                                        </td>
+                                                <?php if (!empty($pengeluaran['keterangan_pengeluaran'])) : ?>
+                                                    <span class="block text-[11px] text-gray-400 mt-1">
+                                                        <?= htmlspecialchars($pengeluaran['keterangan_pengeluaran']); ?>
+                                                    </span>
+                                                <?php endif; ?>
+                                            </td>
 
-                                        <td class="py-4 px-6">
-                                            Creambath + Catok
-                                        </td>
+                                            <td class="py-4 px-6 text-gray-400">
+                                                <?= date('d M Y H:i', strtotime($pengeluaran['tanggal_pengeluaran'])); ?>
+                                            </td>
 
-                                        <td class="py-4 px-6 text-gray-400">
-                                            14 Mei 2026
-                                        </td>
+                                            <td class="py-4 px-6 font-bold text-gray-800">
+                                                Rp <?= number_format($pengeluaran['jumlah_pengeluaran'], 0, ',', '.'); ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
 
-                                        <td class="py-4 px-6 font-bold text-gray-800">
-                                            Rp 120.000
-                                        </td>
-                                    </tr>
+                                    <?php if (empty($data_restok) && empty($data_pengeluaran)) : ?>
+                                        <tr>
+                                            <td colspan="4" class="py-6 px-6 text-center text-gray-400">
+                                                Belum ada pengeluaran pada periode ini.
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -242,6 +576,27 @@ include "../layout/header.php";
             <?php include "../layout/footer-component.php"; ?>
         </main>
     </div>
+
+    <!-- Script filter laporan -->
+    <script>
+        // Menampilkan input sesuai jenis laporan
+        function toggleFilterInput() {
+            const jenis = document.getElementById('jenis_laporan').value;
+            const filterHarian = document.getElementById('filter_harian');
+            const filterBulanan = document.getElementById('filter_bulanan');
+
+            if (jenis === 'bulanan') {
+                filterHarian.style.display = 'none';
+                filterBulanan.style.display = 'block';
+            } else {
+                filterHarian.style.display = 'block';
+                filterBulanan.style.display = 'none';
+            }
+        }
+
+        // Menjalankan filter saat halaman dibuka
+        toggleFilterInput();
+    </script>
 
 <?php
 // Memanggil footer utama

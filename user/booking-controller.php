@@ -94,6 +94,70 @@ if (isset($_POST['batal_booking'])) {
     }
 }
 
+// Memproses user menerima saran jadwal admin
+if (isset($_POST['terima_saran_booking'])) {
+    $id_booking = (int) $_POST['id_booking'];
+
+    // Mengambil data booking yang masih pending dan milik user login
+    $query_saran = mysqli_query(
+        $koneksi,
+        "SELECT * FROM booking 
+         WHERE id_booking = $id_booking 
+         AND id_user = $id_user 
+         AND status_booking = 'Pending'"
+    );
+
+    // Mengecek booking ditemukan
+    if (mysqli_num_rows($query_saran) > 0) {
+        $booking_saran = mysqli_fetch_assoc($query_saran);
+
+        $tanggal_saran = $booking_saran['tanggal_saran'];
+        $jam_saran = $booking_saran['jam_saran'];
+
+        // Menghitung ulang jam selesai berdasarkan durasi layanan
+        $query_durasi = mysqli_query(
+            $koneksi,
+            "SELECT SUM(layanan.durasi_layanan) AS total_durasi
+             FROM booking_detail
+             JOIN layanan ON booking_detail.id_layanan = layanan.id_layanan
+             WHERE booking_detail.id_booking = $id_booking"
+        );
+
+        $data_durasi = mysqli_fetch_assoc($query_durasi);
+        $total_durasi = (int) $data_durasi['total_durasi'];
+
+        $waktu_mulai = new DateTime($tanggal_saran . ' ' . $jam_saran);
+        $waktu_selesai = clone $waktu_mulai;
+        $waktu_selesai->modify("+$total_durasi minutes");
+
+        $jam_selesai = $waktu_selesai->format('H:i:s');
+
+        // Mengubah booking sesuai jadwal saran admin
+        mysqli_query(
+            $koneksi,
+            "UPDATE booking SET
+                tanggal_booking = '$tanggal_saran',
+                jam_mulai = '$jam_saran',
+                jam_selesai = '$jam_selesai',
+                status_booking = 'Waiting'
+             WHERE id_booking = $id_booking
+             AND id_user = $id_user"
+        );
+
+        echo "<script>
+                alert('Saran jadwal berhasil dikonfirmasi. Silakan tunggu konfirmasi admin.');
+                window.location.href = 'booking.php';
+              </script>";
+        exit;
+    } else {
+        echo "<script>
+                alert('Saran jadwal tidak ditemukan atau booking tidak valid.');
+                window.location.href = 'booking.php';
+              </script>";
+        exit;
+    }
+}
+
 // Mengambil data layanan
 $query_layanan = mysqli_query($koneksi, "SELECT * FROM layanan ORDER BY nama_layanan ASC");
 

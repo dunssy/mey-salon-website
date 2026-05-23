@@ -24,7 +24,7 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['id_user'])) {
 // Mengambil id user dari session
 $id_user = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : (int) $_SESSION['id_user'];
 
-// Mengambil data user yang sedang login
+// Mengambil data user login
 $query_user = select("SELECT * FROM user WHERE id_user = $id_user");
 
 // Mengecek data user ditemukan
@@ -36,7 +36,7 @@ if (empty($query_user)) {
     exit;
 }
 
-// Menyimpan data user ke variabel
+// Menyimpan data user
 $user = $query_user[0];
 
 // Menyiapkan pesan notifikasi
@@ -49,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
     $no_hp = mysqli_real_escape_string($koneksi, strip_tags($_POST['no_hp']));
     $alamat = mysqli_real_escape_string($koneksi, strip_tags($_POST['alamat']));
 
+    // Menyimpan perubahan profil
     $query_update = "UPDATE user SET 
                         nama = '$nama',
                         no_hp = '$no_hp',
@@ -58,6 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
     if (mysqli_query($koneksi, $query_update)) {
         $success_message = "Profil berhasil diperbarui!";
         $user = select("SELECT * FROM user WHERE id_user = $id_user")[0];
+
+        // Memperbarui session nama jika ada
+        $_SESSION['nama'] = $user['nama'];
     } else {
         $error_message = "Profil gagal diperbarui!";
     }
@@ -85,22 +89,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                 <section id="section-profil" class="space-y-6">
 
                     <!-- Header halaman -->
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
 
                         <!-- Judul halaman -->
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">
-                                <?= $sub_title; ?>
+                                <?= htmlspecialchars($sub_title); ?>
                             </h3>
 
-                            <p class="text-xs text-gray-400">
+                            <p class="text-xs text-gray-400 mt-1">
                                 Kelola informasi profil akun Mey Salon Anda.
                             </p>
                         </div>
+
+                        <!-- Tombol kembali -->
+                        <a 
+                            href="dashboard-admin.php" 
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-gray-400 bg-white border border-pink-100 rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-colors"
+                        >
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Kembali</span>
+                        </a>
                     </div>
 
                     <!-- Card profil -->
-                    <div class="max-w-xl mx-auto bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+                    <div class="max-w-2xl mx-auto bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+
+                        <!-- Header card profil -->
+                        <div class="p-6 border-b border-pink-100 bg-pink-50/30">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+
+                                <!-- Foto profil placeholder -->
+                                <img 
+                                    src="https://placehold.co/100x100/fbcfe8/db2777?text=<?= urlencode(substr($user['nama'], 0, 1)); ?>" 
+                                    alt="Foto Profil"
+                                    class="w-20 h-20 rounded-3xl border-4 border-white shadow-sm"
+                                >
+
+                                <!-- Info profil -->
+                                <div>
+                                    <h3 class="font-bold text-xl text-gray-800">
+                                        <?= htmlspecialchars($user['nama']); ?>
+                                    </h3>
+
+                                    <p class="text-xs text-pink-500 font-semibold uppercase mt-1">
+                                        <?= htmlspecialchars($user['role']); ?>
+                                    </p>
+
+                                    <p class="text-xs text-gray-400 mt-2">
+                                        Email dan role hanya bisa dilihat, tidak bisa diubah dari halaman ini.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Isi card profil -->
                         <div class="p-6 md:p-8 space-y-6">
@@ -118,27 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                                     <?= htmlspecialchars($error_message); ?>
                                 </div>
                             <?php endif; ?>
-
-                            <!-- Header profil -->
-                            <div class="text-center">
-
-                                <!-- Foto profil placeholder -->
-                                <img 
-                                    src="https://placehold.co/100x100/fbcfe8/db2777?text=<?= urlencode(substr($user['nama'], 0, 1)); ?>" 
-                                    alt="Foto Profil"
-                                    class="w-24 h-24 rounded-3xl mx-auto mb-4 border-4 border-pink-50 shadow-sm"
-                                >
-
-                                <!-- Nama profil -->
-                                <h3 class="font-bold text-xl text-gray-800">
-                                    <?= htmlspecialchars($user['nama']); ?>
-                                </h3>
-
-                                <!-- Role profil -->
-                                <p class="text-xs text-pink-500 font-semibold uppercase mt-1">
-                                    <?= htmlspecialchars($user['role']); ?>
-                                </p>
-                            </div>
 
                             <!-- Form update profil -->
                             <form action="" method="POST" class="space-y-4">
@@ -162,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                                 <!-- Input email -->
                                 <div>
                                     <label for="email" class="text-[11px] font-bold text-gray-400 uppercase ml-1">
-                                        email
+                                        Email
                                     </label>
 
                                     <input 
@@ -220,14 +240,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                                     >
                                 </div>
 
-                                <!-- Tombol submit -->
-                                <button 
-                                    type="submit" 
-                                    name="update_profil" 
-                                    class="w-full py-4 bg-pink-600 text-white font-bold rounded-2xl hover:bg-pink-700 transition-all shadow-lg shadow-pink-100"
-                                >
-                                    Simpan Perubahan
-                                </button>
+                                <!-- Tombol aksi -->
+                                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+
+                                    <!-- Tombol simpan -->
+                                    <button 
+                                        type="submit" 
+                                        name="update_profil" 
+                                        class="flex-1 py-4 bg-pink-600 text-white font-bold rounded-2xl hover:bg-pink-700 transition-all shadow-lg shadow-pink-100"
+                                    >
+                                        Simpan Perubahan
+                                    </button>
+
+                                    <!-- Tombol kembali bawah -->
+                                    <a 
+                                        href="dashboard-admin.php"
+                                        class="flex-1 py-4 bg-gray-50 text-gray-500 font-bold rounded-2xl hover:bg-pink-50 hover:text-pink-600 transition-all text-center"
+                                    >
+                                        Kembali
+                                    </a>
+                                </div>
                             </form>
                         </div>
                     </div>
