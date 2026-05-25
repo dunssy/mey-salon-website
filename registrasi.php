@@ -3,58 +3,58 @@
 session_start();
 
 // Memanggil koneksi dan fungsi email
-// include "config/app.php";
-// include "config/email.php";
+include "config/app.php";
+include "config/email.php";
 
 // Menggunakan koneksi database
 global $koneksi;
 
 // Memproses form registrasi
-// if (isset($_POST['registrasi'])) {
-//     $nama = mysqli_real_escape_string($koneksi, strip_tags($_POST['nama']));
-//     $email = mysqli_real_escape_string($koneksi, strip_tags($_POST['email']));
-//     $no_hp = mysqli_real_escape_string($koneksi, strip_tags($_POST['no_hp']));
-//     $alamat = mysqli_real_escape_string($koneksi, strip_tags($_POST['alamat']));
-//     $password = $_POST['password'];
-//     $konfirmasi_password = $_POST['konfirmasi_password'];
+if (isset($_POST['registrasi'])) {
+    $nama = mysqli_real_escape_string($koneksi, strip_tags($_POST['nama']));
+    $email = mysqli_real_escape_string($koneksi, strip_tags($_POST['email']));
+    $no_hp = mysqli_real_escape_string($koneksi, strip_tags($_POST['no_hp']));
+    $alamat = mysqli_real_escape_string($koneksi, strip_tags($_POST['alamat']));
+    $password = $_POST['password'];
+    $konfirmasi_password = $_POST['konfirmasi_password'];
 
-//     // Mengecek password dan konfirmasi password
-//     if ($password !== $konfirmasi_password) {
-//         echo "<script>alert('Password dan konfirmasi password tidak sama!');</script>";
-//     } else {
-//         // Mengecek email sudah terdaftar
-//         $cek_email = mysqli_query($koneksi, "SELECT email FROM user WHERE email = '$email'");
+    // Mengecek password dan konfirmasi password
+    if ($password !== $konfirmasi_password) {
+        echo "<script>alert('Password dan konfirmasi password tidak sama!');</script>";
+    } else {
+        // Mengecek email sudah terdaftar
+        $cek_email = mysqli_query($koneksi, "SELECT email FROM user WHERE email = '$email'");
 
-//         if (mysqli_num_rows($cek_email) > 0) {
-//             echo "<script>alert('Email sudah terdaftar!');</script>";
-//         } else {
-//             // Membuat OTP 6 digit
-//             $otp = random_int(100000, 999999);
+        if (mysqli_num_rows($cek_email) > 0) {
+            echo "<script>alert('Email sudah terdaftar!');</script>";
+        } else {
+            // Membuat OTP 6 digit
+            $otp = random_int(100000, 999999);
 
-//             // Menyimpan data registrasi sementara ke session
-//             $_SESSION['register_data'] = [
-//                 'nama' => $nama,
-//                 'email' => $email,
-//                 'no_hp' => $no_hp,
-//                 'alamat' => $alamat,
-//                 'password' => password_hash($password, PASSWORD_DEFAULT),
-//                 'otp' => (string) $otp,
-//                 'expired' => time() + 600
-//             ];
+            // Menyimpan data registrasi sementara ke session
+            $_SESSION['register_data'] = [
+                'nama' => $nama,
+                'email' => $email,
+                'no_hp' => $no_hp,
+                'alamat' => $alamat,
+                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'otp' => (string) $otp,
+                'expired' => time() + 600
+            ];
 
-//             // Mengirim OTP ke email
-//             if (kirimOtpEmail($email, $nama, $otp, 'Kode OTP Registrasi Mey Salon')) {
-//                 echo "<script>
-//                         alert('Kode OTP berhasil dikirim ke email Anda!');
-//                         window.location.href = 'verifikasi-registrasi.php';
-//                       </script>";
-//                 exit;
-//             } else {
-//                 echo "<script>alert('Gagal mengirim OTP. Cek konfigurasi SMTP email.');</script>";
-//             }
-//         }
-//     }
-// }
+            // Mengirim OTP ke email
+            if (kirimOtpEmail($email, $nama, $otp, 'Kode OTP Registrasi Mey Salon')) {
+                echo "<script>
+                        alert('Kode OTP berhasil dikirim ke email Anda!');
+                        window.location.href = 'verifikasi-registrasi.php';
+                      </script>";
+                exit;
+            } else {
+                echo "<script>alert('Gagal mengirim OTP. Cek konfigurasi SMTP email.');</script>";
+            }
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">

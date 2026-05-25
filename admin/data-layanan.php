@@ -189,7 +189,13 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                         >
                                                             Hapus
                                                         </button>
+                                                        
+                                                            
                                                     </form>
+                                                    <a href = "detail-layanan.php?id_layanan=<?= $data_layanan['id_layanan']; ?>" class="inline-flex px-3 py-1.5 text-xs font-medium bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                                                        Detail
+                                                    </a>
+
                                                 </td>
                                             </tr>
 

@@ -1,35 +1,35 @@
 <?php
 session_start();
-// include "config/app.php";
-// include "config/email.php";
+include "config/app.php";
+include "config/email.php";
 global $koneksi;
 
-// if (isset($_POST['kirim'])) {
-//     $email = mysqli_real_escape_string($koneksi, strip_tags($_POST['email']));
-//     $query_user = mysqli_query($koneksi, "SELECT * FROM user WHERE email = '$email'");
+if (isset($_POST['kirim'])) {
+    $email = mysqli_real_escape_string($koneksi, strip_tags($_POST['email']));
+    $query_user = mysqli_query($koneksi, "SELECT * FROM user WHERE email = '$email'");
 
-//     if (mysqli_num_rows($query_user) > 0) {
-//         $user = mysqli_fetch_assoc($query_user);
-//         $otp = random_int(100000, 999999);
+    if (mysqli_num_rows($query_user) > 0) {
+        $user = mysqli_fetch_assoc($query_user);
+        $otp = random_int(100000, 999999);
 
-//         $_SESSION['reset_password'] = [
-//             'id_user' => $user['id_user'],
-//             'nama' => $user['nama'],
-//             'email' => $user['email'],
-//             'otp' => (string) $otp,
-//             'expired' => time() + 600
-//         ];
+        $_SESSION['reset_password'] = [
+            'id_user' => $user['id_user'],
+            'nama' => $user['nama'],
+            'email' => $user['email'],
+            'otp' => (string) $otp,
+            'expired' => time() + 600
+        ];
 
-//         if (kirimOtpEmail($user['email'], $user['nama'], $otp, 'Kode OTP Reset Password Mey Salon')) {
-//             echo "<script>alert('Kode OTP berhasil dikirim ke email Anda!'); window.location.href = 'reset-password.php';</script>";
-//             exit;
-//         } else {
-//             echo "<script>alert('Gagal mengirim OTP. Cek konfigurasi SMTP email.');</script>";
-//         }
-//     } else {
-//         echo "<script>alert('Email tidak terdaftar!');</script>";
-//     }
-// }
+        if (kirimOtpEmail($user['email'], $user['nama'], $otp, 'Kode OTP Reset Password Mey Salon')) {
+            echo "<script>alert('Kode OTP berhasil dikirim ke email Anda!'); window.location.href = 'reset-password.php';</script>";
+            exit;
+        } else {
+            echo "<script>alert('Gagal mengirim OTP. Cek konfigurasi SMTP email.');</script>";
+        }
+    } else {
+        echo "<script>alert('Email tidak terdaftar!');</script>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
