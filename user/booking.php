@@ -25,10 +25,13 @@ include "../layout/header-user.php";
 
         <!-- Section profil -->
         <?php include "views/section-profil.php"; ?>
-
+        
+        <!-- booking cart -->
+        <?php include "booking-cart.php"; ?>
+        
         <!-- Modal konfirmasi booking -->
         <?php include "views/modal-booking.php"; ?>
-
+        
     </main>
 
     <!-- Footer user -->

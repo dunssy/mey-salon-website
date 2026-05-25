@@ -302,8 +302,12 @@ function getServiceImage($namaLayanan)
                                             <?= htmlspecialchars($layanan['nama_layanan']); ?>
                                         </h3>
                                         <p class="text-accent-pink font-bold text-lg">
-                                            <?= htmlspecialchars(formatRupiah($layanan['harga_layanan'])); ?>
-                                        </p>
+                                        <?php if (!empty($layanan['harga_max'])) : ?>
+                                            Rp <?= number_format($layanan['harga_min'], 0, ',', '.'); ?> -
+                                            Rp <?= number_format($layanan['harga_max'], 0, ',', '.'); ?>
+                                        <?php else : ?>
+                                            Rp <?= number_format($layanan['harga_min'], 0, ',', '.'); ?>
+                                        <?php endif; ?>                                        </p>
                                     </div>
 
                                     <p class="text-xs md:text-sm text-soft-brown leading-relaxed mb-5">
@@ -395,11 +399,6 @@ function getServiceImage($namaLayanan)
             </div>
 
             <div class="text-center md:text-right space-y-4">
-                <div class="flex space-x-6 justify-center md:justify-end text-xs md:text-sm tracking-widest text-gray-400">
-                    <a href="#" class="hover:text-accent-pink transition">INSTAGRAM</a>
-                    <a href="#" class="hover:text-accent-pink transition">WHATSAPP</a>
-                    <a href="#" class="hover:text-accent-pink transition">TIKTOK</a>
-                </div>
                 <div class="text-gray-500 text-[8px] md:text-[10px] tracking-[3px] md:tracking-[5px] font-bold uppercase">
                     © 2026 MEY SALON. ALL RIGHTS RESERVED.
                 </div>

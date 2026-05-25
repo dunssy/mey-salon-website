@@ -1,19 +1,54 @@
 <!-- Section layanan -->
-<section id="section-layanan" class="content-section">
+<section id="section-layanan" class="content-section pb-24">
 
-    <!-- Header halaman -->
-    <div class="mb-8">
-        <h2 class="text-2xl font-bold text-gray-800 tracking-tight">
-            Booking Layanan
-        </h2>
+    <!-- Style layanan 2 baris horizontal -->
+    <style>
+        #section-layanan .services-area {
+            min-width: 0;
+        }
 
-        <p class="text-sm text-gray-500">
-            Pilih tanggal, jam, dan layanan yang ingin Anda booking.
-        </p>
-    </div>
+        #section-layanan .services-scroll-wrapper {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+            padding-bottom: 14px;
+        }
+
+        #section-layanan .services-scroll-wrapper::-webkit-scrollbar {
+            height: 9px;
+        }
+
+        #section-layanan .services-scroll-wrapper::-webkit-scrollbar-track {
+            background: #fdf2f8;
+            border-radius: 999px;
+        }
+
+        #section-layanan .services-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: #f472b6;
+            border-radius: 999px;
+        }
+
+        #section-layanan .services-slider-grid {
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-rows: repeat(2, 1fr);
+            grid-auto-columns: 280px;
+            gap: 18px;
+            width: max-content;
+            min-width: max-content;
+        }
+
+        @media (min-width: 768px) {
+            #section-layanan .services-slider-grid {
+                grid-auto-columns: 310px;
+            }
+        }
+    </style>
 
     <!-- Layout booking -->
-    <div class="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-6 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-[340px_minmax(0,1fr)] gap-6 items-start">
 
         <!-- Kalender dan jam booking -->
         <aside class="bg-white rounded-3xl p-6 shadow-sm border border-pink-100 lg:sticky lg:top-24">
@@ -99,79 +134,144 @@
             </div>
         </aside>
 
-        <!-- Area kanan layanan dan keranjang -->
-        <div class="space-y-6">
+        <!-- Area kanan layanan -->
+        <div class="services-area space-y-4">
 
-            <!-- Daftar layanan -->
-            <div>
-                <div class="mb-4">
+            <!-- Header kecil layanan -->
+            <div class="flex items-center justify-between gap-3">
+                <div>
                     <h3 class="text-lg font-bold text-gray-800">
                         Pilih Layanan
                     </h3>
 
                     <p class="text-xs text-gray-400">
-                        Layanan yang dipilih akan muncul di keranjang bawah.
+                        Centang layanan, lalu klik ikon keranjang bawah untuk checkout.
                     </p>
                 </div>
 
-                <!-- Grid layanan dari database -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <?php global $query_layanan; ?>
+                <div class="flex items-center gap-2">
+                    <button 
+                        type="button"
+                        onclick="scrollServiceLanding(-1)"
+                        class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 hover:bg-pink-100 transition"
+                    >
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <button 
+                        type="button"
+                        onclick="scrollServiceLanding(1)"
+                        class="w-10 h-10 rounded-xl bg-pink-600 text-white hover:bg-pink-700 transition"
+                    >
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slider layanan 2 baris -->
+            <div id="services-scroll-wrapper" class="services-scroll-wrapper">
+                <div class="services-slider-grid">
+
+                    <?php global $query_layanan; ?>
+
                     <?php if (mysqli_num_rows($query_layanan) > 0) : ?>
 
                         <?php while ($layanan = mysqli_fetch_assoc($query_layanan)) : ?>
+                            <?php
+                                // Mengambil gambar layanan dari DB final
+                                $gambar_layanan = "../layout/images/mey-salon.png";
+
+                                if (!empty($layanan['gambar_layanan'])) {
+                                    $gambar_layanan = "../uploads/layanan/" . $layanan['gambar_layanan'];
+                                } elseif (!empty($layanan['foto_layanan'])) {
+                                    $gambar_layanan = "../uploads/layanan/" . $layanan['foto_layanan'];
+                                }
+
+                                // Harga min dan max sesuai DB final
+                                $harga_min = isset($layanan['harga_min']) ? (int) $layanan['harga_min'] : (int) ($layanan['harga_layanan'] ?? 0);
+                                $harga_max = isset($layanan['harga_max']) ? (int) $layanan['harga_max'] : 0;
+                            ?>
 
                             <!-- Card layanan -->
-                            <div class="bg-white rounded-3xl p-6 shadow-sm border border-pink-100 group">
+                            <label 
+                                id="service-card-<?= (int) $layanan['id_layanan']; ?>"
+                                class="service-card cursor-pointer bg-white rounded-[1.8rem] p-4 shadow-sm border border-pink-100 hover:border-pink-300 hover:shadow-md transition-all"
+                            >
 
-                                <!-- Icon layanan -->
-                                <div class="w-14 h-14 bg-pink-50 text-pink-500 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:bg-pink-600 group-hover:text-white transition-all">
-                                    <i class="fa-solid fa-scissors"></i>
-                                </div>
+                                <!-- Foto layanan -->
+                                <div class="relative">
+                                    <img
+                                        src="<?= htmlspecialchars($gambar_layanan); ?>"
+                                        alt="<?= htmlspecialchars($layanan['nama_layanan']); ?>"
+                                        class="w-full h-36 object-cover rounded-2xl border border-pink-100 bg-pink-50"
+                                    >
 
-                                <!-- Nama layanan -->
-                                <h3 class="font-bold text-lg text-gray-800">
-                                    <?= htmlspecialchars($layanan['nama_layanan']); ?>
-                                </h3>
+                                    <!-- Input checkbox yang langsung memakai addToCart/removeFromCart dari booking-script.js -->
+                                    <input
+                                        type="checkbox"
+                                        class="service-checkbox peer sr-only"
+                                        data-id="<?= (int) $layanan['id_layanan']; ?>"
+                                        data-name="<?= htmlspecialchars($layanan['nama_layanan'], ENT_QUOTES); ?>"
+                                        data-price="<?= $harga_min; ?>"
+                                        data-duration="<?= (int) $layanan['durasi_layanan']; ?>"
+                                        onchange="toggleServiceToCartFromScript(this)"
+                                    >
 
-                                <!-- Durasi layanan -->
-                                <p class="text-xs text-gray-400 mt-2 leading-relaxed">
-                                    Durasi layanan sekitar <?= htmlspecialchars($layanan['durasi_layanan']); ?> menit.
-                                </p>
-
-                                <!-- Harga dan tombol pilih -->
-                                <div class="flex justify-between items-center mt-6">
-                                    <div>
-                                        <span class="block text-pink-600 font-bold">
-                                            Rp <?= number_format($layanan['harga_layanan'], 0, ',', '.'); ?>
-                                        </span>
-
-                                        <span class="text-[11px] text-gray-400">
-                                            Estimasi <?= htmlspecialchars($layanan['durasi_layanan']); ?> menit
-                                        </span>
+                                    <!-- Kotak checklist -->
+                                    <div class="absolute top-3 right-3 w-10 h-10 rounded-xl bg-white border-2 border-pink-200 flex items-center justify-center text-transparent shadow-sm peer-checked:bg-pink-600 peer-checked:border-pink-600 peer-checked:text-white transition-all">
+                                        <i class="fa-solid fa-check text-sm"></i>
                                     </div>
 
-                                    <button 
-                                        type="button"
-                                        onclick="addToCart(
-                                            <?= (int) $layanan['id_layanan']; ?>,
-                                            '<?= htmlspecialchars($layanan['nama_layanan'], ENT_QUOTES); ?>',
-                                            <?= (int) $layanan['harga_layanan']; ?>,
-                                            <?= (int) $layanan['durasi_layanan']; ?>
-                                        )"
-                                        class="px-5 py-2.5 bg-pink-600 text-white text-xs font-bold rounded-xl hover:bg-pink-700 active:scale-95 transition-all"
-                                    >
-                                        Pilih
-                                    </button>
+                                    <!-- Label range harga -->
+                                    <?php if (!empty($harga_max)) : ?>
+                                        <div class="absolute left-3 top-3 px-3 py-1 rounded-full bg-white/90 backdrop-blur text-[10px] font-bold text-pink-600">
+                                            Mulai Rp <?= number_format($harga_min, 0, ',', '.'); ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
-                            </div>
+
+                                <!-- Isi card -->
+                                <div class="mt-4">
+                                    <h4 class="font-bold text-base text-gray-800 leading-snug line-clamp-2 min-h-[44px]">
+                                        <?= htmlspecialchars($layanan['nama_layanan']); ?>
+                                    </h4>
+
+                                    <p class="text-xs text-gray-400 mt-2">
+                                        Estimasi <?= (int) $layanan['durasi_layanan']; ?> menit
+                                    </p>
+                                </div>
+
+                                <!-- Harga dan status -->
+                                <div class="mt-4 flex items-end justify-between gap-3">
+                                    <div>
+                                        <p class="text-pink-600 font-bold leading-tight">
+                                            <?php if (!empty($harga_max)) : ?>
+                                                Rp <?= number_format($harga_min, 0, ',', '.'); ?> - 
+                                                Rp <?= number_format($harga_max, 0, ',', '.'); ?>
+                                            <?php else : ?>
+                                                Rp <?= number_format($harga_min, 0, ',', '.'); ?>
+                                            <?php endif; ?>
+                                        </p>
+
+                                        <?php if (!empty($layanan['keterangan_harga'])) : ?>
+                                            <p class="text-[10px] text-gray-400 mt-1 line-clamp-1">
+                                                <?= htmlspecialchars($layanan['keterangan_harga']); ?>
+                                            </p>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <span class="service-status-label text-[11px] font-bold text-gray-400 whitespace-nowrap">
+                                        Belum
+                                    </span>
+                                </div>
+                            </label>
 
                         <?php endwhile; ?>
 
                     <?php else : ?>
 
                         <!-- Pesan layanan kosong -->
-                        <div class="md:col-span-2 bg-white rounded-3xl p-10 text-center border border-dashed border-pink-200">
+                        <div class="bg-white rounded-3xl p-10 text-center border border-dashed border-pink-200">
                             <i class="fa-solid fa-scissors text-4xl text-pink-100 mb-4"></i>
                             <p class="text-sm text-gray-400 font-medium">
                                 Belum ada layanan tersedia.
@@ -181,101 +281,93 @@
                     <?php endif; ?>
                 </div>
             </div>
-
-            <!-- Keranjang booking -->
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-pink-100">
-
-                <!-- Header keranjang -->
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800">
-                            Keranjang Booking
-                        </h3>
-
-                        <p id="cart-item-count" class="text-xs text-pink-600 font-bold">
-                            0 layanan dipilih
-                        </p>
-                    </div>
-
-                    <i class="fa-solid fa-basket-shopping text-2xl text-pink-500"></i>
-                </div>
-
-                <!-- Isi keranjang -->
-                <div id="cart-items-container" class="space-y-3">
-                    <div id="empty-cart-msg" class="text-center py-8 border border-dashed border-pink-100 rounded-2xl text-gray-400">
-                        <i class="fa-solid fa-basket-shopping text-3xl mb-3 text-pink-100"></i>
-                        <p class="text-sm font-medium">
-                            Belum ada layanan dipilih.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Ringkasan tanggal, jam, pembayaran -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-6 border-t border-pink-50">
-                    <div>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                            Tanggal
-                        </p>
-
-                        <p id="summary-date" class="text-sm font-bold text-gray-800">
-                            -
-                        </p>
-                    </div>
-
-                    <div>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                            Jam
-                        </p>
-
-                        <p id="summary-time" class="text-sm font-bold text-gray-800">
-                            -
-                        </p>
-                    </div>
-
-                    <div>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                            Pembayaran
-                        </p>
-
-                        <p class="text-sm font-bold text-gray-800">
-                            Cash
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Ringkasan harga dan durasi -->
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6">
-                    <div>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                            Total Harga
-                        </p>
-
-                        <p id="cart-total-price" class="text-2xl font-bold text-pink-600">
-                            Rp 0
-                        </p>
-                    </div>
-
-                    <div>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                            Estimasi Waktu
-                        </p>
-
-                        <p id="cart-total-duration" class="text-2xl font-bold text-gray-800">
-                            0 Menit
-                        </p>
-                    </div>
-
-                    <button 
-                        id="btn-open-confirm"
-                        type="button"
-                        onclick="openBookingModal()"
-                        disabled
-                        class="px-6 py-4 bg-pink-600 text-white font-bold rounded-2xl hover:bg-pink-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                    >
-                        Lihat Keranjang
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 </section>
+
+<!-- Script kecil untuk menghubungkan checkbox ke booking-script.js -->
+<script>
+    // Scroll layanan dengan tombol panah
+    function scrollServiceLanding(direction) {
+        const wrapper = document.getElementById('services-scroll-wrapper');
+
+        if (!wrapper) return;
+
+        wrapper.scrollBy({
+            left: direction * 650,
+            behavior: 'smooth'
+        });
+    }
+
+    // Mengubah tampilan card layanan
+    function updateServiceCardFromScript(checkbox) {
+        const card = checkbox.closest('.service-card');
+        const label = card ? card.querySelector('.service-status-label') : null;
+
+        if (!card || !label) return;
+
+        if (checkbox.checked) {
+            card.classList.add('ring-2', 'ring-pink-300', 'bg-pink-50/40');
+            label.textContent = 'Dipilih';
+            label.classList.remove('text-gray-400');
+            label.classList.add('text-pink-600');
+        } else {
+            card.classList.remove('ring-2', 'ring-pink-300', 'bg-pink-50/40');
+            label.textContent = 'Belum';
+            label.classList.add('text-gray-400');
+            label.classList.remove('text-pink-600');
+        }
+    }
+
+    // Fungsi utama: memakai addToCart/removeFromCart dari booking-script.js
+    function toggleServiceToCartFromScript(checkbox) {
+        const id = Number(checkbox.dataset.id);
+        const name = checkbox.dataset.name;
+        const price = Number(checkbox.dataset.price || 0);
+        const duration = Number(checkbox.dataset.duration || 0);
+
+        if (checkbox.checked) {
+            if (typeof addToCart === 'function') {
+                addToCart(id, name, price, duration);
+            } else {
+                alert('Fungsi addToCart belum ditemukan. Pastikan booking-script.js sudah dipanggil.');
+                checkbox.checked = false;
+            }
+        } else {
+            if (typeof removeFromCart === 'function') {
+                removeFromCart(id);
+            }
+        }
+
+        updateServiceCardFromScript(checkbox);
+    }
+
+    // Sinkron checkbox saat layanan dihapus dari keranjang lewat script lama
+    const originalRemoveFromCartWatcher = setInterval(function () {
+        if (typeof cart === 'undefined' || !Array.isArray(cart)) return;
+
+        document.querySelectorAll('.service-checkbox').forEach(function (checkbox) {
+            const id = Number(checkbox.dataset.id);
+            const exists = cart.some(function (item) {
+                return Number(item.id) === id;
+            });
+
+            checkbox.checked = exists;
+            updateServiceCardFromScript(checkbox);
+        });
+    }, 300);
+
+    // Scroll mouse vertical menjadi horizontal di area layanan
+    document.addEventListener('DOMContentLoaded', function () {
+        const wrapper = document.getElementById('services-scroll-wrapper');
+
+        if (wrapper) {
+            wrapper.addEventListener('wheel', function (event) {
+                if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+                    event.preventDefault();
+                    wrapper.scrollLeft += event.deltaY;
+                }
+            }, { passive: false });
+        }
+    });
+</script>
