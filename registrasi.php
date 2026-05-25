@@ -18,7 +18,7 @@ if (isset($_POST['registrasi'])) {
     $password = $_POST['password'];
     $konfirmasi_password = $_POST['konfirmasi_password'];
 
-    // Mengecek password dan konfirmasi password
+//// Mengecek password dan konfirmasi password
     if ($password !== $konfirmasi_password) {
         echo "<script>alert('Password dan konfirmasi password tidak sama!');</script>";
     } else {

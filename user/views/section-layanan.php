@@ -188,7 +188,7 @@
                                 }
 
                                 // Harga min dan max sesuai DB final
-                                $harga_min = isset($layanan['harga_min']) ? (int) $layanan['harga_min'] : (int) ($layanan['harga_layanan'] ?? 0);
+                                $harga_min = isset($layanan['harga_min']) ? (int) $layanan['harga_min'] : 0;
                                 $harga_max = isset($layanan['harga_max']) ? (int) $layanan['harga_max'] : 0;
                             ?>
 

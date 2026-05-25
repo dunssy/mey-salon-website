@@ -40,14 +40,13 @@ $query_booking = mysqli_query(
         b.jam_mulai,
         b.jam_selesai,
         b.status_booking,
-        b.catatan,
         b.tanggal_saran,
         b.jam_saran,
         b.catatan_admin,
         u.nama,
         u.no_hp,
         GROUP_CONCAT(l.nama_layanan SEPARATOR ', ') AS nama_layanan,
-        SUM(l.harga_layanan) AS total_harga,
+        SUM(l.harga_min) AS total_harga,
         SUM(l.durasi_layanan) AS total_durasi
      FROM booking b
      JOIN user u ON b.id_user = u.id_user

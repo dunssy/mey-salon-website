@@ -159,7 +159,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 
                                                 <!-- Harga layanan -->
                                                 <td class="p-4">
-                                                    Rp <?= number_format($data_layanan['harga_layanan'], 0, ',', '.'); ?>
+                                                    Rp <?= number_format($data_layanan['harga_min'], 0, ',', '.'); ?>
                                                 </td>
 
                                                 <!-- Durasi layanan -->

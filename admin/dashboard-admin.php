@@ -6,20 +6,21 @@ $page_title = "Dashboard";
 include "../layout/header.php";
 include "../config/app.php";
 
-// Menggunakan koneksi database
+
+// Mengakses variabel koneksi yang ada pada koneksi.php dan di gunakan secara globa;
 global $koneksi;
 
-// Mengambil tanggal hari ini
+// Mengambil WAKRU DAN HARI HARI INI
 $hari_ini = date('Y-m-d');
 
-// Menghitung total pelanggan
+// Menghitung total pelanggan DARI tabel user dengan role 'Customer'
 $query_customer = mysqli_query(
     $koneksi,
     "SELECT COUNT(*) AS total FROM user WHERE role = 'Customer'"
 );
 $total_customer = mysqli_fetch_assoc($query_customer)['total'] ?? 0;
 
-// Menghitung booking hari ini
+// Menghitung booking hari ini , dengan membandingkan tanggal_booking dengan hari ini
 $query_booking_today = mysqli_query(
     $koneksi,
     "SELECT COUNT(*) AS total 
@@ -28,7 +29,7 @@ $query_booking_today = mysqli_query(
 );
 $total_booking_today = mysqli_fetch_assoc($query_booking_today)['total'] ?? 0;
 
-// Menghitung booking yang butuh respon admin
+// MENGHITUNG BOOKING YANG BUTUH RESPON , dengan status booking 'Waiting' atau 'Pending'
 $query_pending = mysqli_query(
     $koneksi,
     "SELECT COUNT(*) AS total 
@@ -37,7 +38,9 @@ $query_pending = mysqli_query(
 );
 $total_pending = mysqli_fetch_assoc($query_pending)['total'] ?? 0;
 
-// Menghitung pendapatan hari ini dari transaksi
+// MENGHITUNG PENDAPATAN HARI INI DARI TABEL TRANSAKSI, DENGAN MEMBANDINGKAN TANGGAL_TRANSAKSI DENGAN
+///HARI INI, DAN MENJUMLAHKAN TOTAL_BAYAR   
+
 $query_pendapatan = mysqli_query(
     $koneksi,
     "SELECT COALESCE(SUM(total_bayar), 0) AS total 
@@ -46,36 +49,28 @@ $query_pendapatan = mysqli_query(
 );
 $total_pendapatan = mysqli_fetch_assoc($query_pendapatan)['total'] ?? 0;
 
-// Mengambil histori booking terbaru beserta pelanggan dan layanan
+// JADI UNTUK b. itu adalah nama table 
+// MENGAMBIL 10 BOOKING TERBARU DENGAN JOIN KE TABEL USER UNTUK MENDAPATKAN NAMA PELANGGAN, DAN JOIN KE TABEL BOOKING_DETAIL DAN LAYANAN UNTUK MENDAPATKAN NAMA LAYANAN
 $query_booking = mysqli_query(
     $koneksi,
-    "SELECT 
-        b.id_booking,
-        b.tanggal_booking,
-        b.jam_mulai,
-        b.jam_selesai,
-        b.status_booking,
-        u.nama,
-        GROUP_CONCAT(l.nama_layanan SEPARATOR ', ') AS nama_layanan
-     FROM booking b
-     JOIN user u ON b.id_user = u.id_user
-     LEFT JOIN booking_detail bd ON b.id_booking = bd.id_booking
-     LEFT JOIN layanan l ON bd.id_layanan = l.id_layanan
-     GROUP BY b.id_booking
-     ORDER BY b.tanggal_booking DESC, b.jam_mulai DESC
-     LIMIT 10"
+    "SELECT b.id_booking,b.tanggal_booking,b.jam_mulai,b.jam_selesai,
+        b.status_booking,u.nama,GROUP_CONCAT(l.nama_layanan SEPARATOR ', ') AS nama_layanan
+     FROM booking b JOIN user u ON b.id_user = u.id_user LEFT JOIN booking_detail bd ON b.id_booking = bd.id_booking
+     LEFT JOIN layanan l ON bd.id_layanan = l.id_layanan GROUP BY b.id_booking ORDER BY b.tanggal_booking DESC, b.jam_mulai DESC LIMIT 10"
 );
 
 // Mengambil stok barang yang hampir habis
 $query_stok_menipis = mysqli_query(
     $koneksi,
-    "SELECT COUNT(*) AS total 
-     FROM stok_barang 
-     WHERE jumlah_barang <= minimal_stok"
+    // MENGHITUNG STOK BARANG YANG JUMALAHNYA KURANG DARI ATAU SAMA DENGAN MINIMAL_STOK
+    "SELECT COUNT(*) AS total FROM stok_barang WHERE jumlah_barang <= minimal_stok"
 );
+// MENGAMBIL HASIL QUERY STOK MENIPIS DAN MENGAMBIL NILAI TOTAL DARI HASIL
+// QUERY, JIKA TIDAK ADA HASIL MAKA DEFAULTNYA 0
 $total_stok_menipis = mysqli_fetch_assoc($query_stok_menipis)['total'] ?? 0;
 
-// Mengambil transaksi terbaru
+//MENGAMBIL 5 TRANSAKSI TERBARU DENGAN JOIN KE TABEL BOOKING DAN USER UNTUK 
+////MENDAPATKAN NAMA PELANGGAN, DAN MENAMPILKAN JENIS PELANGGAN (DARI BOOKING.JENIS_PELANGGAN)
 $query_transaksi_terbaru = mysqli_query(
     $koneksi,
     "SELECT 
@@ -91,10 +86,11 @@ $query_transaksi_terbaru = mysqli_query(
      LIMIT 5"
 );
 
-// Mengatur warna badge status booking
+//MENGATUR WARNA BADGE STATUS BOOKING 
+//BERDSARKAN STATUS BOOKING, SEHINGGA MEMUDAHKAN ADMIN UNTUK MELIHAT STATUS BOOKING DENGAN CEPAT
 function statusBadgeClass($status)
 {
-    if ($status == 'Waiting') {
+    if ($status == 'Waiting') { 
         return 'bg-yellow-100 text-yellow-700';
     }
 
@@ -171,6 +167,7 @@ function statusBadgeClass($status)
                                     </p>
 
                                     <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mt-1">
+                                        <!-- Total Booking Hari Ini -->
                                         <?= (int) $total_booking_today; ?>
                                     </h3>
                                 </div>
@@ -194,6 +191,7 @@ function statusBadgeClass($status)
                                     </p>
 
                                     <h3 class="text-2xl md:text-3xl font-bold text-pink-600 mt-1">
+                                        <!-- Total Booking Butuh Respon -->
                                         <?= (int) $total_pending; ?>
                                     </h3>
                                 </div>
@@ -217,6 +215,7 @@ function statusBadgeClass($status)
                                     </p>
 
                                     <h3 class="text-xl md:text-2xl font-bold text-gray-800 mt-1">
+                                        <!-- Total Pendapatan Hari Ini -->
                                         Rp <?= number_format($total_pendapatan, 0, ',', '.'); ?>
                                     </h3>
                                 </div>
@@ -227,6 +226,7 @@ function statusBadgeClass($status)
                             </div>
 
                             <div class="mt-3 text-[10px] text-green-600 font-bold bg-green-50 inline-block px-2 py-0.5 rounded">
+                                <!-- Total Pendapatan Hari Ini -->
                                 Dari Transaksi
                             </div>
                         </div>
@@ -240,6 +240,7 @@ function statusBadgeClass($status)
                                     </p>
 
                                     <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mt-1">
+                                        <!-- Total Pelanggan -->
                                         <?= (int) $total_customer; ?>
                                     </h3>
                                 </div>
@@ -263,6 +264,7 @@ function statusBadgeClass($status)
                                     </p>
 
                                     <h3 class="text-2xl md:text-3xl font-bold text-red-600 mt-1">
+                                        <!-- Total Stok Menipis -->
                                         <?= (int) $total_stok_menipis; ?>
                                     </h3>
                                 </div>
@@ -319,8 +321,8 @@ function statusBadgeClass($status)
 
                                     <!-- Isi tabel booking -->
                                     <tbody class="divide-y divide-pink-50">
-
-                                        <?php if (mysqli_num_rows($query_booking) > 0) : ?>
+                                        <!--CEK JIKA ADA DATA BOOKING MAKA TAMPILKAN DATA DARI TABLE BOOKING -->
+                                        <?php if (mysqli_num_rows($query_booking) > 0) : ?> 
 
                                             <!-- Perulangan booking -->
                                             <?php while ($booking = mysqli_fetch_assoc($query_booking)) : ?>

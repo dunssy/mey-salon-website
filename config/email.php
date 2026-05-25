@@ -1,23 +1,24 @@
 <?php
-// Memanggil PHPMailer dari Composer
-require_once __DIR__ . '/../vendor/autoload.php';
 
-// Menggunakan class PHPMailer
+// Memanggil PHPMailer DARI FOLDER VENDOR DIMANA FILE BERNAMA AUTOLOAD.PHP BERADA 
+require_once __DIR__ . '/../vendor/autoload.php';
+// Memanggil namespace PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Mengatur akun SMTP Gmail
-define('SMTP_EMAIL', 'mchdalief24@gmail.com');
-define('SMTP_APP_PASSWORD', 'bmzv ccwn nscv fnhc');
-define('SMTP_NAME', 'Mey Salon');
+define('SMTP_EMAIL', 'mchdalief24@gmail.com'); // Ganti dengan email Gmail Anda
+define('SMTP_APP_PASSWORD', 'bmzv ccwn nscv fnhc'); // Ganti dengan App Password yang Anda buat di Gmail
+define('SMTP_NAME', 'Mey Salon'); // Ganti dengan nama yang ingin ditampilkan sebagai pengirim email
 
 // Mengirim email HTML
-function kirimEmail($tujuan, $nama_tujuan, $subject, $body)
-{
+function kirimEmail($tujuan, $nama_tujuan, $subject, $body){
+
+    // MEMBUAT OBJEK PHP MAILER
     $mail = new PHPMailer(true);
 
     try {
-        // Mengatur SMTP Gmail
+        //MENGATUR KONFIGURASI SMTP GMAIL
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
@@ -26,11 +27,11 @@ function kirimEmail($tujuan, $nama_tujuan, $subject, $body)
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-        // Mengatur pengirim dan penerima
+        //MENGATUR DAN MENGIRIM KEPADA PENERIMA
         $mail->setFrom(SMTP_EMAIL, SMTP_NAME);
         $mail->addAddress($tujuan, $nama_tujuan);
 
-        // Mengatur isi email
+        //MENGATUR ISI EMAIL
         $mail->isHTML(true);
         $mail->CharSet = 'UTF-8';
         $mail->Subject = $subject;
@@ -43,8 +44,8 @@ function kirimEmail($tujuan, $nama_tujuan, $subject, $body)
 }
 
 // Mengirim kode OTP ke email
-function kirimOtpEmail($email, $nama, $otp, $judul = 'Kode OTP Mey Salon')
-{
+function kirimOtpEmail($email, $nama, $otp, $judul = 'Kode OTP Mey Salon'){
+   
     $body = "
         <div style='font-family: Arial, sans-serif; background:#fff1f2; padding:24px;'>
             <div style='max-width:520px; margin:auto; background:white; border-radius:18px; padding:28px; border:1px solid #ffe4e6;'>
@@ -67,7 +68,7 @@ function kirimOtpEmail($email, $nama, $otp, $judul = 'Kode OTP Mey Salon')
                 </p>
 
                 <p style='font-size:12px; color:#6b7280;'>
-                    Jika Anda tidak meminta kode ini, abaikan email ini.
+                   jika Anda tidak meminta kode ini, abaikan email ini.
                 </p>
             </div>
         </div>

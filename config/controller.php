@@ -84,7 +84,7 @@ function tambah_layanan($post)
     $durasi = clean_number($post['durasi_layanan']);
 
     $query = "INSERT INTO layanan 
-                (nama_layanan, harga_layanan, durasi_layanan) 
+                (nama_layanan, harga_min, durasi_layanan) 
               VALUES 
                 ('$nama_layanan', '$harga', '$durasi')";
 
@@ -105,7 +105,7 @@ function edit_layanan($post)
 
     $query = "UPDATE layanan SET 
                 nama_layanan = '$nama_layanan',
-                harga_layanan = '$harga',
+                harga_min = '$harga',
                 durasi_layanan = '$durasi'
               WHERE id_layanan = $id_layanan";
 

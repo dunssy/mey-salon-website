@@ -16,6 +16,7 @@ global $koneksi;
 $id_booking = isset($_GET['id_booking']) ? (int) $_GET['id_booking'] : 0;
 
 // Mengecek id booking valid
+// SWEET ALERT ID BOOKING TIDAK VALID
 if ($id_booking <= 0) {
     echo "<script>
             alert('ID booking tidak valid!');
@@ -38,12 +39,9 @@ $kolom_saran_ada = (
 // Memproses konfirmasi booking
 if (isset($_POST['konfirmasi_booking'])) {
     mysqli_query(
-        $koneksi,
-        "UPDATE booking 
-         SET status_booking = 'On-going'
-         WHERE id_booking = $id_booking"
+        $koneksi,"UPDATE booking SET status_booking = 'On-going' WHERE id_booking = $id_booking"
     );
-
+// SWEET ALERT KONFIRMASI BERHASIL
     echo "<script>
             alert('Booking berhasil dikonfirmasi!');
             window.location.href = 'detail-booking.php?id_booking=$id_booking';
@@ -51,32 +49,29 @@ if (isset($_POST['konfirmasi_booking'])) {
     exit;
 }
 
-// Memproses pending booking dan saran jadwal
+// CEK JADWAL SUGGESTION DAN MASUKKAN KE PENDING JIKA ADA
 if (isset($_POST['pending_booking'])) {
     $tanggal_saran = mysqli_real_escape_string($koneksi, $_POST['tanggal_saran']);
     $jam_saran = mysqli_real_escape_string($koneksi, $_POST['jam_saran']);
     $catatan_admin = mysqli_real_escape_string($koneksi, $_POST['catatan_admin']);
-
+// Mengecek jika kolom saran sudah tersedia maka update dengan
+// saran jadwal, jika tidak update hanya status booking saja
     if ($kolom_saran_ada) {
         mysqli_query(
-            $koneksi,
-            "UPDATE booking 
-             SET 
-                status_booking = 'Pending',
+            $koneksi,"UPDATE booking SET status_booking = 'Pending', 
                 tanggal_saran = '$tanggal_saran',
                 jam_saran = '$jam_saran',
                 catatan_admin = '$catatan_admin'
              WHERE id_booking = $id_booking"
         );
+//
     } else {
         mysqli_query(
             $koneksi,
-            "UPDATE booking 
-             SET status_booking = 'Pending'
-             WHERE id_booking = $id_booking"
+            "UPDATE booking SET status_booking = 'Pending' WHERE id_booking = $id_booking"
         );
     }
-
+// SWEET ALERT PENDING DAN SARAN JADWAL BERHASIL
     echo "<script>
             alert('Booking dibuat pending dan saran jadwal berhasil disimpan!');
             window.location.href = 'detail-booking.php?id_booking=$id_booking';
@@ -92,7 +87,7 @@ if (isset($_POST['cancel_booking'])) {
          SET status_booking = 'Cancel'
          WHERE id_booking = $id_booking"
     );
-
+// SWEET ALERT PEMBATALAN BERHASIL
     echo "<script>
             alert('Booking berhasil dibatalkan!');
             window.location.href = 'detail-booking.php?id_booking=$id_booking';
@@ -113,7 +108,7 @@ if (isset($_POST['done_booking'])) {
         $koneksi,
         "SELECT id_transaksi FROM transaksi WHERE id_booking = $id_booking"
     );
-
+// SWEET ALERT JIKA TRANSAKSI SUDAH ADA
     if (mysqli_num_rows($cek_transaksi) > 0) {
         echo "<script>
                 alert('Booking ini sudah pernah masuk transaksi!');
@@ -122,15 +117,10 @@ if (isset($_POST['done_booking'])) {
         exit;
     }
 
-    // Mengambil layanan booking
+    // Mengambil layanan booking BERDASARAKAN FOREGIN KEY id_booking di table booking_detail
     $query_layanan_booking = mysqli_query(
         $koneksi,
-        "SELECT 
-            bd.id_layanan,
-            l.harga_layanan
-         FROM booking_detail bd
-         JOIN layanan l ON bd.id_layanan = l.id_layanan
-         WHERE bd.id_booking = $id_booking"
+        "SELECT bd.id_layanan,l.harga_min AS harga_layanan FROM booking_detail bd JOIN layanan l ON bd.id_layanan = l.id_layanan WHERE bd.id_booking = $id_booking"
     );
 
     $layanan_booking = [];
@@ -141,14 +131,14 @@ if (isset($_POST['done_booking'])) {
         $total_layanan += (int) $layanan['harga_layanan'];
     }
 
-    // Menghitung total transaksi
+    // Menghitung total transaksi 
     $total_bayar = $total_layanan + $tambahan_harga;
 
     // Memulai transaksi database
     mysqli_begin_transaction($koneksi);
 
     try {
-        // Menyimpan transaksi utama
+        // Menyimpan transaksi utama 
         mysqli_query(
             $koneksi,
             "INSERT INTO transaksi 
@@ -284,7 +274,7 @@ $query_layanan = mysqli_query(
     $koneksi,
     "SELECT 
         layanan.nama_layanan,
-        layanan.harga_layanan,
+        layanan.harga_min AS harga_layanan,
         layanan.durasi_layanan
      FROM booking_detail
      JOIN layanan ON booking_detail.id_layanan = layanan.id_layanan
@@ -473,6 +463,31 @@ $data_stok_barang = select("
 
                                         <p class="text-sm font-bold text-gray-800 mt-1">
                                             <?= htmlspecialchars($booking['alamat']); ?>
+                                        </p>
+                                    </div>
+
+                                    <!-- Bukti pembayarab -->
+                                    <div>
+                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                            Bukti Pembayaran
+                                        </p>
+                                        <!-- JIKA ADA BUKTI PEMBAYARAN -->
+                                        <p class="text-sm font-bold text-gray-800 mt-1">
+                                            <?php if ($booking['bukti_pembayaran']) : ?>
+                                                <a 
+                                                    
+                                                    href="../uploads/bukti-pembayaran/<?= htmlspecialchars($booking['bukti_pembayaran']); ?>" 
+                                                    target="_blank" 
+                                                    class="inline-flex items-center gap-1 text-blue-600 hover:underline"
+                                                >
+                                                    <i class="fa-solid fa-file-image"></i>
+                                                    Lihat Bukti
+                                                </a>
+                                            <?php else : ?>
+                                                <p class="text-sm text-gray-500">
+                                                    Tidak ada bukti pembayaran
+                                                </p>
+                                            <?php endif; ?>
                                         </p>
                                     </div>
                                 </div>

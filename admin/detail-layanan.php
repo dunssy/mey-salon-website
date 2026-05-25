@@ -150,7 +150,7 @@ $total_estimasi_modal = 0;
                                     </p>
 
                                     <p class="text-xl font-bold text-pink-600 mt-1">
-                                        Rp <?= number_format($layanan['harga_layanan'], 0, ',', '.'); ?>
+                                        Rp <?= number_format($layanan['harga_min'], 0, ',', '.'); ?>
                                     </p>
                                 </div>
 
