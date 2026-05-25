@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 23 Bulan Mei 2026 pada 18.34
+-- Waktu pembuatan: 25 Bulan Mei 2026 pada 03.36
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -40,15 +40,6 @@ CREATE TABLE `booking` (
   `catatan_admin` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `booking`
---
-
-INSERT INTO `booking` (`id_booking`, `id_user`, `tanggal_booking`, `jam_mulai`, `jam_selesai`, `status_booking`, `catatan`, `tanggal_saran`, `jam_saran`, `catatan_admin`) VALUES
-(5, 5, '2026-05-25', '14:00:00', '15:45:00', 'Done', 'potong wolf cut', '2026-05-25', '14:00:00', 'besok aja sekarang penuh'),
-(6, 5, '2026-05-26', '14:00:00', '18:15:00', 'Done', '', NULL, NULL, NULL),
-(7, 5, '2026-05-31', '14:00:00', '17:00:00', 'Waiting', '', NULL, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -61,17 +52,6 @@ CREATE TABLE `booking_detail` (
   `id_layanan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `booking_detail`
---
-
-INSERT INTO `booking_detail` (`id_detail_booking`, `id_booking`, `id_layanan`) VALUES
-(11, 5, 3),
-(10, 5, 11),
-(13, 6, 4),
-(12, 6, 9),
-(14, 7, 4);
-
 -- --------------------------------------------------------
 
 --
@@ -82,6 +62,9 @@ CREATE TABLE `layanan` (
   `id_layanan` int(11) NOT NULL,
   `nama_layanan` varchar(50) NOT NULL,
   `harga_layanan` int(11) NOT NULL,
+  `harga_min` int(11) DEFAULT NULL,
+  `harga_max` int(11) DEFAULT NULL,
+  `keterangan_harga` varchar(100) DEFAULT NULL,
   `durasi_layanan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -89,18 +72,24 @@ CREATE TABLE `layanan` (
 -- Dumping data untuk tabel `layanan`
 --
 
-INSERT INTO `layanan` (`id_layanan`, `nama_layanan`, `harga_layanan`, `durasi_layanan`) VALUES
-(1, 'Potong Pria', 15000, 30),
-(2, 'Potong Wanita', 25000, 45),
-(3, 'Potong + Cuci', 35000, 60),
-(4, 'Smoothing', 250000, 180),
-(5, 'Cat Rambut', 200000, 120),
-(6, 'Highlight', 100000, 90),
-(7, 'Creambath', 50000, 60),
-(8, 'Hair Mask', 60000, 60),
-(9, 'Hair Spa', 75000, 75),
-(10, 'Eyelash Extension', 100000, 90),
-(11, 'Nail Art', 50000, 45);
+INSERT INTO `layanan` (`id_layanan`, `nama_layanan`, `harga_layanan`, `harga_min`, `harga_max`, `keterangan_harga`, `durasi_layanan`) VALUES
+(30, 'Gunting Rambut', 25000, NULL, NULL, NULL, 30),
+(31, 'Cuci Gunting Blow', 40000, NULL, NULL, NULL, 45),
+(32, 'Cuci Gunting Catok', 50000, NULL, NULL, NULL, 60),
+(33, 'Cuci Catok Pendek', 40000, NULL, NULL, NULL, 45),
+(34, 'Cuci Catok Panjang', 45000, NULL, NULL, NULL, 60),
+(35, 'Cuci Blow Pendek', 30000, NULL, NULL, NULL, 45),
+(36, 'Cuci Blow Panjang', 35000, NULL, NULL, NULL, 60),
+(37, 'Cuci Curly', 50000, NULL, NULL, NULL, 60),
+(38, 'Creambath CBD Blow', 60000, NULL, NULL, NULL, 75),
+(39, 'Hair Mask Keratin CBD Catok', 80000, NULL, NULL, NULL, 90),
+(40, 'Highlight', 100000, 100000, 300000, 'Tergantung panjang dan ketebalan rambut', 120),
+(41, 'Bleaching Full', 200000, 200000, 400000, 'Tergantung panjang dan ketebalan rambut', 180),
+(42, 'Cat Warna / Coloring', 200000, 200000, 500000, 'Tergantung warna, panjang, dan bahan', 180),
+(43, 'Cat Hitam / Toning', 150000, 150000, 400000, 'Tergantung panjang rambut', 150),
+(44, 'Rebonding Makarizo', 200000, 200000, 500000, 'Tergantung panjang rambut', 180),
+(45, 'Smoothing Keratin / Matrix', 250000, 250000, 600000, 'Tergantung panjang rambut dan produk', 180),
+(46, 'Extension', 10000, 10000, NULL, 'Harga per helai', 30);
 
 -- --------------------------------------------------------
 
@@ -120,14 +109,44 @@ CREATE TABLE `paket_stok` (
 --
 
 INSERT INTO `paket_stok` (`id_paket`, `id_layanan`, `id_barang`, `jumlah_stok`) VALUES
-(1, 4, 5, 100),
-(2, 4, 6, 100),
-(3, 5, 1, 50),
-(4, 3, 3, 20),
-(5, 7, 3, 30),
-(6, 7, 4, 1),
-(7, 8, 3, 30),
-(8, 8, 4, 1);
+(9, 30, 27, 5),
+(10, 31, 9, 20),
+(11, 31, 10, 10),
+(12, 31, 11, 5),
+(13, 32, 9, 20),
+(14, 32, 10, 10),
+(15, 32, 11, 5),
+(16, 33, 9, 20),
+(17, 33, 11, 5),
+(18, 34, 9, 30),
+(19, 34, 11, 8),
+(20, 35, 9, 20),
+(21, 35, 11, 5),
+(22, 36, 9, 30),
+(23, 36, 11, 8),
+(24, 37, 9, 25),
+(25, 37, 11, 8),
+(26, 38, 9, 25),
+(27, 38, 19, 50),
+(28, 38, 11, 5),
+(29, 39, 9, 25),
+(30, 39, 20, 50),
+(31, 39, 21, 10),
+(32, 40, 13, 40),
+(33, 40, 16, 40),
+(34, 40, 29, 100),
+(35, 41, 18, 80),
+(36, 41, 17, 120),
+(37, 42, 13, 80),
+(38, 42, 16, 80),
+(39, 43, 13, 70),
+(40, 43, 15, 70),
+(41, 44, 22, 80),
+(42, 44, 23, 80),
+(43, 45, 24, 80),
+(44, 45, 25, 80),
+(45, 45, 21, 20),
+(46, 46, 26, 1);
 
 -- --------------------------------------------------------
 
@@ -141,15 +160,6 @@ CREATE TABLE `pemakaian_stok` (
   `id_transaksi` int(11) NOT NULL,
   `jumlah_pemakaian` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `pemakaian_stok`
---
-
-INSERT INTO `pemakaian_stok` (`id_pemakaian`, `id_barang`, `id_transaksi`, `jumlah_pemakaian`) VALUES
-(1, 5, 5, 100),
-(2, 6, 5, 100),
-(3, 5, 5, 10);
 
 -- --------------------------------------------------------
 
@@ -166,13 +176,6 @@ CREATE TABLE `pengeluaran` (
   `keterangan_pengeluaran` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `pengeluaran`
---
-
-INSERT INTO `pengeluaran` (`id_pengeluaran`, `id_user`, `jenis_pengeluaran`, `jumlah_pengeluaran`, `tanggal_pengeluaran`, `keterangan_pengeluaran`) VALUES
-(5, 5, 'Listrik', 100000, '2026-05-31 17:00:00', 'bulan juni');
-
 -- --------------------------------------------------------
 
 --
@@ -186,13 +189,6 @@ CREATE TABLE `restok` (
   `jumlah_tambah` int(11) NOT NULL,
   `total_harga_restok` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `restok`
---
-
-INSERT INTO `restok` (`id_restok`, `id_barang`, `tanggal_restok`, `jumlah_tambah`, `total_harga_restok`) VALUES
-(2, 5, '2026-05-23 14:29:35', 10, 1800000);
 
 -- --------------------------------------------------------
 
@@ -215,12 +211,27 @@ CREATE TABLE `stok_barang` (
 --
 
 INSERT INTO `stok_barang` (`id_barang`, `nama_barang`, `jenis_barang`, `jumlah_barang`, `satuan_barang`, `minimal_stok`, `harga_beli`) VALUES
-(1, 'CBD ColorMax (Warna)', 'Chemical', 512, 'ml', 100, 45000),
-(2, 'CBD ColorMax (Natural)', 'Chemical', 500, 'ml', 100, 45000),
-(3, 'CBD Keratin Shampoo', 'Hair Care', 1000, 'ml', 200, 120000),
-(4, 'Makarizo Hair Energy', 'Hair Care', 20, 'pcs', 5, 8000),
-(5, 'Obat Smoothing Step 1', 'Chemical', 900, 'ml', 250, 180000),
-(6, 'Neutralizer Step 2', 'Chemical', 900, 'ml', 250, 150000);
+(9, 'Shampoo Salon', 'Bahan Cuci Rambut', 5000, 'ml', 500, 35000),
+(10, 'Conditioner Salon', 'Bahan Cuci Rambut', 3000, 'ml', 300, 35000),
+(11, 'Hair Serum Collagen', 'Vitamin Rambut', 1200, 'ml', 150, 45000),
+(12, 'Hair Repair Serum Vanestrix', 'Vitamin Rambut', 600, 'ml', 100, 40000),
+(13, 'CBD ColorMax Color Cream', 'Cat Rambut', 1200, 'ml', 200, 55000),
+(14, 'CBD Color Cream Jar', 'Cat Rambut', 2000, 'gram', 300, 65000),
+(15, 'Developer 6%', 'Developer', 2000, 'ml', 300, 45000),
+(16, 'Developer 9%', 'Developer', 2000, 'ml', 300, 45000),
+(17, 'Developer 12%', 'Developer', 2000, 'ml', 300, 45000),
+(18, 'Bleaching Powder', 'Bleaching', 1000, 'gram', 200, 60000),
+(19, 'Creambath CBD', 'Creambath', 2500, 'gram', 300, 55000),
+(20, 'Hair Mask Keratin', 'Hair Mask', 2000, 'gram', 300, 65000),
+(21, 'Keratin Treatment', 'Treatment', 2000, 'ml', 300, 80000),
+(22, 'Rebonding Cream Makarizo', 'Rebonding', 2000, 'gram', 300, 85000),
+(23, 'Neutralizer Rebonding', 'Rebonding', 2000, 'ml', 300, 60000),
+(24, 'Smoothing Cream Matrix', 'Smoothing', 2000, 'gram', 300, 95000),
+(25, 'Neutralizer Smoothing', 'Smoothing', 2000, 'ml', 300, 65000),
+(26, 'Hair Extension Helai', 'Extension', 100, 'helai', 20, 5000),
+(27, 'Tissue Salon', 'Perlengkapan', 100, 'lembar', 20, 15000),
+(28, 'Sarung Tangan', 'Perlengkapan', 100, 'pcs', 20, 20000),
+(29, 'Aluminium Foil', 'Perlengkapan Coloring', 1000, 'cm', 200, 25000);
 
 -- --------------------------------------------------------
 
@@ -238,13 +249,6 @@ CREATE TABLE `transaksi` (
   `catatan_tambahan` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `transaksi`
---
-
-INSERT INTO `transaksi` (`id_transaksi`, `id_booking`, `tanggal_transaksi`, `total_bayar`, `jenis_pelanggan`, `tambahan_harga`, `catatan_tambahan`) VALUES
-(5, 6, '2026-05-23 14:20:37', 374999, 'booking', 49999, 'panjang rambut');
-
 -- --------------------------------------------------------
 
 --
@@ -259,14 +263,6 @@ CREATE TABLE `transaksi_detail` (
   `jumlah_layanan` int(11) NOT NULL,
   `subtotal` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `transaksi_detail`
---
-
-INSERT INTO `transaksi_detail` (`id_transaksi_detail`, `id_transaksi`, `id_layanan`, `harga_satuan`, `jumlah_layanan`, `subtotal`) VALUES
-(1, 5, 4, 250000, 1, 250000),
-(2, 5, 9, 75000, 1, 75000);
 
 -- --------------------------------------------------------
 
@@ -395,13 +391,13 @@ ALTER TABLE `booking_detail`
 -- AUTO_INCREMENT untuk tabel `layanan`
 --
 ALTER TABLE `layanan`
-  MODIFY `id_layanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_layanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT untuk tabel `paket_stok`
 --
 ALTER TABLE `paket_stok`
-  MODIFY `id_paket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_paket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT untuk tabel `pemakaian_stok`
@@ -425,7 +421,7 @@ ALTER TABLE `restok`
 -- AUTO_INCREMENT untuk tabel `stok_barang`
 --
 ALTER TABLE `stok_barang`
-  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT untuk tabel `transaksi`
