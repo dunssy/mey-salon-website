@@ -109,21 +109,6 @@
                 </div>
             </div>
 
-            <!-- Detail tanggal dipilih -->
-            <div class="mt-6 p-4 bg-pink-50/60 rounded-2xl border border-pink-100">
-                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                    Tanggal Dipilih
-                </p>
-
-                <h4 id="selected-date-text" class="text-sm font-bold text-gray-800 mt-1">
-                    Belum memilih tanggal
-                </h4>
-
-                <p id="selected-date-status" class="text-xs text-pink-600 mt-1">
-                    Pilih tanggal pada kalender.
-                </p>
-            </div>
-
             <!-- Pilih jam booking -->
             <div class="mt-6">
                 <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-3">

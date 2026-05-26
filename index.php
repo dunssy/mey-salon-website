@@ -224,10 +224,21 @@ function getServiceImage($namaLayanan)
                 </div>
             </div>
 
-            <div class="relative animate-fade order-1 lg:order-2" style="animation-delay: 0.2s">
-                <div class="rounded-[26px] md:rounded-[36px] overflow-hidden shadow-2xl border-[8px] md:border-[10px] border-white dark:border-[#1E1E1E] max-w-sm md:max-w-md lg:max-w-md mx-auto">
-                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=1000" alt="Interior Salon" class="w-full aspect-[4/5] object-cover" />
-                </div>
+          <div class="relative animate-fade order-1 lg:order-2" style="animation-delay: 0.2s">
+    <div class="rounded-[26px] md:rounded-[36px] overflow-hidden shadow-2xl border-[8px] md:border-[10px] border-white dark:border-[#1E1E1E] max-w-sm md:max-w-md lg:max-w-md mx-auto">
+        <video 
+            class="w-full aspect-[4/5] object-cover"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+        >
+            <source src="layout/images/vidio-mey.mp4" type="video/mp4">
+            Browser Anda tidak mendukung video.
+        </video>
+    </div>
+</div>
                 <div class="absolute -bottom-8 -left-8 w-32 h-32 md:w-44 md:h-44 bg-pastel-pink rounded-full -z-10 opacity-40 blur-3xl"></div>
             </div>
         </div>
@@ -235,31 +246,77 @@ function getServiceImage($namaLayanan)
 
     <!-- About section -->
     <section id="about" class="section-compact py-14 md:py-20 bg-[#FAF7F2] dark:bg-[#1A1A1A]">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-serif text-center text-dark-brown mb-10 md:mb-14 uppercase tracking-widest">Tentang Kami</h2>
-            <div class="grid md:grid-cols-2 gap-8 md:gap-10">
-                <div class="service-card p-4 rounded-[30px] shadow-sm group">
-                    <div class="rounded-[24px] overflow-hidden mb-6 h-56 md:h-72">
-                        <img src="layout/images/gaya-rambut.jpg" alt="Layanan Kami" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
-                    </div>
-                    <div class="px-4 md:px-6 pb-5 md:pb-6">
-                        <h3 class="text-xl md:text-2xl font-serif text-dark-brown mb-3">Gaya Rambut yang Bercerita Tentang Anda</h3>
-                        <p class="text-sm md:text-base text-soft-brown leading-relaxed">Ekspresikan diri lewat gaya rambut yang dirancang khusus sesuai dengan karakter unik Anda.</p>
-                    </div>
+    <div class="max-w-5xl mx-auto px-6">
+
+        <!-- Judul section -->
+       <h2 class="text-3xl md:text-4xl font-serif text-center text-white/90 mb-10 uppercase tracking-widest">
+    Tentang Kami
+</h2>
+
+        <!-- Grid dua kolom -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
+
+            <!-- Card kiri video -->
+           <div class="service-card p-4 rounded-[28px] group bg-white">
+                <!-- Video -->
+                <div class="rounded-[22px] overflow-hidden shadow-lg border-[5px] border-white dark:border-[#1E1E1E] w-full max-w-[300px] mx-auto mb-5">
+                    <video 
+                        class="w-full h-[340px] object-cover bg-black"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="metadata"
+                    >
+                        <source src="layout/images/vidio-mey4.mp4" type="video/mp4">
+                        Browser Anda tidak mendukung video.
+                    </video>
                 </div>
 
-                <div class="service-card p-4 rounded-[30px] shadow-sm group">
-                    <div class="rounded-[24px] overflow-hidden mb-6 h-56 md:h-72">
-                        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=800" alt="Filosofi Kami" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
-                    </div>
-                    <div class="px-4 md:px-6 pb-5 md:pb-6">
-                        <h3 class="text-xl md:text-2xl font-serif text-dark-brown mb-3">Waktunya Me-Time</h3>
-                        <p class="text-sm md:text-base text-soft-brown leading-relaxed">Tempat yang tepat untuk merawat diri sekaligus beristirahat sejenak dari rutinitas.</p>
-                    </div>
+                <!-- Text -->
+                <div class="px-3 md:px-4 pb-4 text-center md:text-left">
+                    <h3 class="text-xl md:text-2xl font-serif text-dark-brown mb-3">
+                        Gaya Rambut yang Bercerita Tentang Anda
+                    </h3>
+
+                    <p class="text-sm md:text-base text-soft-brown leading-relaxed">
+                        Ekspresikan diri lewat gaya rambut yang dirancang khusus sesuai dengan karakter unik Anda.
+                    </p>
                 </div>
             </div>
+
+            <!-- Card kanan gambar -->
+            <div class="service-card p-4 rounded-[28px] group bg-white">
+                 <!-- Video -->
+                <div class="rounded-[22px] overflow-hidden shadow-lg border-[5px] border-white dark:border-[#1E1E1E] w-full max-w-[300px] mx-auto mb-5">
+                    <video 
+                        class="w-full h-[340px] object-cover bg-black"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="metadata"
+                    >
+                        <source src="layout/images/vidio-mey2.mp4" type="video/mp4">
+                        Browser Anda tidak mendukung video.
+                    </video>
+                </div>
+
+                <!-- Text -->
+                <div class="px-3 md:px-4 pb-4 text-center md:text-left">
+                    <h3 class="text-xl md:text-2xl font-serif text-dark-brown mb-3">
+                        Waktunya Me-Time
+                    </h3>
+
+                    <p class="text-sm md:text-base text-soft-brown leading-relaxed">
+                        Tempat yang tepat untuk merawat diri sekaligus beristirahat sejenak dari rutinitas.
+                    </p>
+                </div>
+            </div>
+
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Section produk unggulan -->
     <section id="product" class="section-compact py-14 md:py-20 px-6 overflow-hidden">

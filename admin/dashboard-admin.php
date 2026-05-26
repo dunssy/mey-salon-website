@@ -156,7 +156,7 @@ function statusBadgeClass($status)
                     </div>
 
                     <!-- Grid statistik dashboard -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 md:gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-1 md:gap-2">
 
                         <!-- Card booking hari ini -->
                         <div class="glass-card p-5 md:p-6 rounded-2xl shadow-sm border border-white">
@@ -231,30 +231,6 @@ function statusBadgeClass($status)
                             </div>
                         </div>
 
-                        <!-- Card pelanggan -->
-                        <div class="glass-card p-5 md:p-6 rounded-2xl shadow-sm border border-white">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <p class="text-xs font-semibold text-gray-500">
-                                        Pelanggan
-                                    </p>
-
-                                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mt-1">
-                                        <!-- Total Pelanggan -->
-                                        <?= (int) $total_customer; ?>
-                                    </h3>
-                                </div>
-
-                                <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center">
-                                    <i class="fa-solid fa-users"></i>
-                                </div>
-                            </div>
-
-                            <div class="mt-3 text-[10px] text-purple-600 font-bold bg-purple-50 inline-block px-2 py-0.5 rounded">
-                                Customer
-                            </div>
-                        </div>
-
                         <!-- Card stok menipis -->
                         <div class="glass-card p-5 md:p-6 rounded-2xl shadow-sm border border-white">
                             <div class="flex justify-between items-start">
@@ -281,13 +257,13 @@ function statusBadgeClass($status)
                     </div>
 
                     <!-- Grid tabel dashboard -->
-                    <div class="grid grid-cols-1 xl:grid-cols-[1.6fr_1fr] gap-6">
+                    <div class="grid grid-cols-1 gap-6">
 
                         <!-- Card histori booking -->
-                        <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100">
+                        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-pink-100">
 
                             <!-- Header tabel booking -->
-                            <div class="px-6 py-4 border-b border-pink-50 flex justify-between items-center">
+                            <div class="px-8 py-6 border-b border-pink-50 flex justify-between items-center">
                                 <div>
                                     <h4 class="font-bold text-gray-700">
                                         Histori Booking Terbaru
@@ -310,12 +286,12 @@ function statusBadgeClass($status)
                                     <!-- Header kolom tabel -->
                                     <thead class="bg-pink-50/30 text-gray-400 text-[10px] uppercase font-bold tracking-widest">
                                         <tr>
-                                            <th class="px-6 py-4">Tanggal</th>
-                                            <th class="px-6 py-4">Jam</th>
-                                            <th class="px-6 py-4">Pelanggan</th>
-                                            <th class="px-6 py-4">Layanan</th>
-                                            <th class="px-6 py-4 text-center">Status</th>
-                                            <th class="px-6 py-4 text-center">Aksi</th>
+                                            <th class="px-8 py-6">Tanggal</th>
+                                            <th class="px-8 py-6">Jam</th>
+                                            <th class="px-8 py-6">Pelanggan</th>
+                                            <th class="px-8 py-6">Layanan</th>
+                                            <th class="px-8 py-6 text-center">Status</th>
+                                            <th class="px-8 py-6 text-center">Aksi</th>
                                         </tr>
                                     </thead>
 
@@ -330,35 +306,35 @@ function statusBadgeClass($status)
                                                 <tr class="hover:bg-pink-50/20 transition">
 
                                                     <!-- Tanggal booking -->
-                                                    <td class="px-6 py-4 font-bold text-pink-600">
+                                                    <td class="px-8 py-6 font-bold text-pink-600">
                                                         <?= date('d M Y', strtotime($booking['tanggal_booking'])); ?>
                                                     </td>
 
                                                     <!-- Jam booking -->
-                                                    <td class="px-6 py-4 text-gray-500">
+                                                    <td class="px-8 py-6 text-gray-500">
                                                         <?= substr($booking['jam_mulai'], 0, 5); ?> -
                                                         <?= substr($booking['jam_selesai'], 0, 5); ?>
                                                     </td>
 
                                                     <!-- Nama pelanggan -->
-                                                    <td class="px-6 py-4 font-semibold text-gray-700">
+                                                    <td class="px-8 py-6 font-semibold text-gray-700">
                                                         <?= htmlspecialchars($booking['nama']); ?>
                                                     </td>
 
                                                     <!-- Layanan booking -->
-                                                    <td class="px-6 py-4 text-gray-500">
+                                                    <td class="px-8 py-6 text-gray-500">
                                                         <?= htmlspecialchars($booking['nama_layanan'] ?: '-'); ?>
                                                     </td>
 
                                                     <!-- Status booking -->
-                                                    <td class="px-6 py-4 text-center">
+                                                    <td class="px-8 py-6 text-center">
                                                         <span class="<?= statusBadgeClass($booking['status_booking']); ?> px-3 py-1 text-[10px] font-bold rounded-lg uppercase">
                                                             <?= htmlspecialchars($booking['status_booking']); ?>
                                                         </span>
                                                     </td>
 
                                                     <!-- Tombol detail -->
-                                                    <td class="px-6 py-4 text-center">
+                                                    <td class="px-8 py-6 text-center">
                                                         <a 
                                                             href="detail-booking.php?id_booking=<?= (int) $booking['id_booking']; ?>" 
                                                             class="bg-pink-600 text-white px-3 py-1 text-[10px] font-bold rounded-lg hover:bg-pink-700 transition"
@@ -385,72 +361,6 @@ function statusBadgeClass($status)
                                 </table>
                             </div>
                         </div>
-
-                        <!-- Card transaksi terbaru -->
-                        <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100">
-
-                            <!-- Header transaksi -->
-                            <div class="px-6 py-4 border-b border-pink-50">
-                                <h4 class="font-bold text-gray-700">
-                                    Transaksi Terbaru
-                                </h4>
-
-                                <p class="text-xs text-gray-400 mt-1">
-                                    Pendapatan terbaru dari tabel transaksi.
-                                </p>
-                            </div>
-
-                            <!-- List transaksi -->
-                            <div class="p-4 space-y-3">
-
-                                <?php if (mysqli_num_rows($query_transaksi_terbaru) > 0) : ?>
-
-                                    <?php while ($transaksi = mysqli_fetch_assoc($query_transaksi_terbaru)) : ?>
-
-                                        <!-- Item transaksi -->
-                                        <div class="p-4 bg-pink-50/40 border border-pink-100 rounded-2xl">
-                                            <div class="flex items-start justify-between gap-3">
-                                                <div>
-                                                    <p class="text-[11px] font-bold text-pink-600 uppercase">
-                                                        #TRX-<?= str_pad($transaksi['id_transaksi'], 4, '0', STR_PAD_LEFT); ?>
-                                                    </p>
-
-                                                    <h5 class="text-sm font-bold text-gray-800 mt-1">
-                                                        <?= htmlspecialchars($transaksi['nama_pelanggan']); ?>
-                                                    </h5>
-
-                                                    <p class="text-xs text-gray-400 mt-1">
-                                                        <?= date('d M Y H:i', strtotime($transaksi['tanggal_transaksi'])); ?>
-                                                    </p>
-                                                </div>
-
-                                                <p class="text-sm font-bold text-green-600 whitespace-nowrap">
-                                                    Rp <?= number_format($transaksi['total_bayar'], 0, ',', '.'); ?>
-                                                </p>
-                                            </div>
-
-                                            <span class="inline-block mt-3 text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-1 rounded-lg">
-                                                <?= htmlspecialchars($transaksi['jenis_pelanggan']); ?>
-                                            </span>
-                                        </div>
-
-                                    <?php endwhile; ?>
-
-                                <?php else : ?>
-
-                                    <!-- Pesan transaksi kosong -->
-                                    <div class="py-10 text-center text-gray-400">
-                                        <i class="fa-solid fa-receipt text-3xl text-pink-100 mb-3"></i>
-
-                                        <p class="text-sm">
-                                            Belum ada transaksi.
-                                        </p>
-                                    </div>
-
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
                 </section>
             </div>
 
