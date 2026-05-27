@@ -7,7 +7,7 @@
     <title><?= isset($page_title) ? $page_title : 'Mey Salon'; ?></title>
 
     <!-- Memanggil Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../src/output.css" rel="stylesheet">
 
     <!-- Memanggil font dan icon -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">

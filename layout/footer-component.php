@@ -7,7 +7,7 @@
         <!-- Informasi aplikasi -->
         <div class="text-center md:text-left">
             <h5 class="text-pink-600 font-bold italic text-lg">
-                Mey Salon
+                Mey Salons
             </h5>
 
             <p class="mt-2 text-[11px] text-gray-400 leading-relaxed">
