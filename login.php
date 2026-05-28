@@ -24,22 +24,34 @@ if (isset($_POST['login'])) {
             $_SESSION['role'] = $user['role'];
 
             if ($user['role'] == 'Administrator') {
-                echo "<script>
-                        alert('Login berhasil sebagai Administrator!');
-                        window.location.href = 'admin/dashboard-admin.php';
-                      </script>";
+                $_SESSION ['success'] = 'Login berhasil sebagai Administrator!';
+                header("Location : admin/dashboard-admin.php");
+                exit();
+
+                // echo "
+                //         alert('Login berhasil sebagai Administrator!');
+                //         window.location.href = 'admin/dashboard-admin.php';
+                //       </script>";
             } else {
-                echo "<script>
-                        alert('Login berhasil!');
-                        window.location.href = 'user/booking.php';
-                      </script>";
+                $_SESSION ['success'] = 'Login berhasil!';
+                header("Location: user/booking.php");
+                exit();
+                // echo "<script>
+                //         alert('Login berhasil!');
+                //         window.location.href = 'user/booking.php';
+                //       </script>";
             }
         } else {
-            echo "<script>alert('Password salah!');</script>";
+            $_SESSION['alert'] = 'Password salah!';
+            header("Location: login.php");
+            exit();
         }
     } else {
-        echo "<script>alert('Email tidak ditemukan!');</script>";
+        $_SESSION['alert'] = 'Email tidak ditemukan!';
+        header("Location: login.php");
+        exit();
     }
+
 }
 ?>
 
@@ -102,6 +114,14 @@ if (isset($_POST['login'])) {
                     Selamat datang kembali, silakan masuk ke akun Anda.
                 </p>
             </div>
+            <?php if (isset($_SESSION['alert'])): ?>
+                <!-- alert -->
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">UPss!</strong>
+                    <span class="block sm:inline"><?php echo $_SESSION['alert']; ?></span>
+                </div>
+                <?php unset($_SESSION['alert']); ?>
+            <?php endif; ?>
 
             <!-- Form login user -->
             <form action="" method="POST" class="space-y-4">

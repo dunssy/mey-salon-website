@@ -70,10 +70,10 @@ function getServiceImage($layanan)
     <title>Mey Salon</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="src/output.css" rel="stylesheet"/>
     <link rel="stylesheet" href="layout/css/style.css" />
 
-    <style>
+   <style>
         html { scroll-behavior: smooth; }
         .product-slider-wrapper { position: relative; }
         .product-slider { scroll-behavior: smooth; scrollbar-width: none; }

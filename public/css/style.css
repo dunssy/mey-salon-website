@@ -1,5 +1,4 @@
 /*! tailwindcss v4.3.0 | MIT License | https://tailwindcss.com */
-/* ini  adalah file sumber untuk kompononen pada projek-projek diatas  */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -31,6 +30,10 @@
     --color-green-500: oklch(72.3% 0.219 149.579);
     --color-green-600: oklch(62.7% 0.194 149.214);
     --color-green-700: oklch(52.7% 0.154 150.069);
+    --color-emerald-200: oklch(90.5% 0.093 164.15);
+    --color-emerald-400: oklch(76.5% 0.177 163.223);
+    --color-emerald-600: oklch(59.6% 0.145 163.225);
+    --color-emerald-700: oklch(50.8% 0.118 165.612);
     --color-blue-50: oklch(97% 0.014 254.604);
     --color-blue-100: oklch(93.2% 0.032 255.585);
     --color-blue-500: oklch(62.3% 0.214 259.815);
@@ -1027,6 +1030,9 @@
     --tw-border-style: dashed;
     border-style: dashed;
   }
+  .border-emerald-400 {
+    border-color: var(--color-emerald-400);
+  }
   .border-gray-100 {
     border-color: var(--color-gray-100);
   }
@@ -1062,6 +1068,9 @@
   }
   .border-red-200 {
     border-color: var(--color-red-200);
+  }
+  .border-red-400 {
+    border-color: var(--color-red-400);
   }
   .border-rose-100 {
     border-color: var(--color-rose-100);
@@ -1518,6 +1527,12 @@
   .text-blue-700 {
     color: var(--color-blue-700);
   }
+  .text-emerald-600 {
+    color: var(--color-emerald-600);
+  }
+  .text-emerald-700 {
+    color: var(--color-emerald-700);
+  }
   .text-gray-300 {
     color: var(--color-gray-300);
   }
@@ -1716,6 +1731,10 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
+  .duration-200 {
+    --tw-duration: 200ms;
+    transition-duration: 200ms;
+  }
   .duration-300 {
     --tw-duration: 300ms;
     transition-duration: 300ms;
@@ -1848,6 +1867,13 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-blue-600);
+      }
+    }
+  }
+  .hover\:bg-emerald-200 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-emerald-200);
       }
     }
   }
@@ -2092,6 +2118,11 @@
   .sm\:hidden {
     @media (width >= 40rem) {
       display: none;
+    }
+  }
+  .sm\:inline {
+    @media (width >= 40rem) {
+      display: inline;
     }
   }
   .sm\:w-\[230px\] {

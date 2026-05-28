@@ -1,10 +1,14 @@
 <?php
+
 // Mengambil data user jika tersedia
 global $user;
 
 $nama_user = $user['nama'] ?? 'User';
 $role_user = $user['role'] ?? 'Customer';
 $inisial_user = strtoupper(substr($nama_user, 0, 1));
+
+
+
 ?>
 
 <!-- Navbar user -->
@@ -218,7 +222,7 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
         </div>
     </div>
 </nav>
-
+    
 <!-- Script dropdown profile user -->
 <script>
     // Membuka dan menutup dropdown profile desktop

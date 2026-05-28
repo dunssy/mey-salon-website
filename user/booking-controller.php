@@ -1,18 +1,7 @@
 <?php
+
 // Memulai session user
-session_start();
-
-// Memanggil koneksi dan controller utama
-include "../config/app.php";
-
-// Menggunakan koneksi database
 global $koneksi;
-
-// Mengecek user sudah login
-if (!isset($_SESSION['id_user']) && !isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
-    exit;
-}
 
 // Mengambil id user dari session
 $id_user = isset($_SESSION['id_user']) ? (int) $_SESSION['id_user'] : (int) $_SESSION['user_id'];

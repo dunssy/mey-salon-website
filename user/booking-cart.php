@@ -1,7 +1,8 @@
 <!-- Keranjang booking model checkout Shopee -->
 <div id="checkout-cart-bar" class="fixed bottom-0 left-0 right-0 z-[90] bg-white/95 backdrop-blur-md border-t border-pink-100 shadow-[0_-8px_28px_rgba(219,39,119,0.14)]">
     <div class="max-w-6xl mx-auto px-3 py-2">
-
+        <!-- alert succes dan X -->
+     
         <!-- Bar checkout kecil -->
         <div class="flex items-center gap-3">
 
