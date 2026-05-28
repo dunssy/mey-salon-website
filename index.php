@@ -68,7 +68,13 @@ function getServiceImage($layanan)
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mey Salon</title>
-
+    <!-- ico mey salon -->
+     <!-- untuk android -->
+      
+    <link rel="apple-touch-icon" sizes="180x180" href="layout/images/favicon_io/apple-touch-icon.png">
+    <!-- untuk desktop -->
+    <link rel="icon" type="image/png" sizes="32x32" href="layout/images/favicon_io/favicon-32x32.png">
+    <link rel="icon" href="layout/images/favicon_io/favicon.ico" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
     <link href="src/output.css" rel="stylesheet"/>
     <link rel="stylesheet" href="layout/css/style.css" />
@@ -347,7 +353,7 @@ function getServiceImage($layanan)
     <footer class="bg-[#1A120B] text-white py-10 md:py-14 px-6">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 md:gap-10">
             <div class="flex items-center space-x-4">
-                <div class="w-10 h-10 md:w-12 md:h-12 bg-button-pink rounded-xl flex items-center justify-center text-white shadow-xl">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-button-red rounded-xl flex items-center justify-center text-white shadow-xl">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-7 md:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-4.879-4.879L12 12m0 0L9.121 9.121m0 0L4 4m5.121 5.121L12 12m0 0l2.879 2.879M12 12L9.121 14.121m0 0L4 19m5.121-5.121L12 12m0 0l2.879-2.879M12 12l2.121-2.121M19 4l-4.879 4.879" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v2m0 16v2m10-10h-2M4 12H2" />

@@ -1087,6 +1087,9 @@
   .bg-\[\#F3D9D9\]\/20 {
     background-color: color-mix(in oklab, #F3D9D9 20%, transparent);
   }
+  .bg-\[\#ffffff\] {
+    background-color: #ffffff;
+  }
   .bg-black {
     background-color: var(--color-black);
   }
