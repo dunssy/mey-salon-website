@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 25 Bulan Mei 2026 pada 13.18
--- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
+-- Generation Time: Jun 03, 2026 at 09:35 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `booking`
+-- Table structure for table `booking`
 --
 
 CREATE TABLE `booking` (
@@ -42,10 +42,18 @@ CREATE TABLE `booking` (
   `catatan_admin` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`id_booking`, `id_user`, `tanggal_booking`, `jam_mulai`, `jam_selesai`, `status_booking`, `total_dp`, `bukti_pembayaran`, `catatan_costumer`, `tanggal_saran`, `jam_saran`, `catatan_admin`) VALUES
+(11, 7, '2026-05-26', '12:00:00', '14:30:00', 'Cancel', 150000, 'bukti_20260526041202_1453.jpeg', '', NULL, NULL, NULL),
+(12, 9, '2026-06-03', '11:00:00', '12:15:00', 'Waiting', 60000, 'bukti_20260602055821_1908.png', '', NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `booking_detail`
+-- Table structure for table `booking_detail`
 --
 
 CREATE TABLE `booking_detail` (
@@ -54,10 +62,18 @@ CREATE TABLE `booking_detail` (
   `id_layanan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `booking_detail`
+--
+
+INSERT INTO `booking_detail` (`id_detail_booking`, `id_booking`, `id_layanan`) VALUES
+(19, 11, 6),
+(20, 12, 1);
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `layanan`
+-- Table structure for table `layanan`
 --
 
 CREATE TABLE `layanan` (
@@ -71,23 +87,23 @@ CREATE TABLE `layanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `layanan`
+-- Dumping data for table `layanan`
 --
 
 INSERT INTO `layanan` (`id_layanan`, `nama_layanan`, `harga_min`, `harga_max`, `durasi_layanan`, `keterangan_harga`, `gambar_layanan`) VALUES
-(1, 'Creambath CBD Blow', 60000, NULL, 75, NULL, ''),
-(2, 'Hair Mask Keratin CBD Catok', 80000, NULL, 90, NULL, ''),
-(3, 'Highlight', 100000, 300000, 120, 'Tergantung panjang dan ketebalan rambut', ''),
-(4, 'Bleaching Full', 200000, 400000, 180, 'Tergantung panjang dan ketebalan rambut', ''),
-(5, 'Cat Warna / Coloring', 200000, 500000, 180, 'Tergantung warna, panjang, dan bahan', ''),
-(6, 'Cat Hitam / Toning', 150000, 400000, 150, 'Tergantung panjang rambut', ''),
-(7, 'Rebonding Makarizo', 200000, 500000, 180, 'Tergantung panjang rambut', ''),
-(8, 'Smoothing Keratin / Matrix', 250000, 600000, 180, 'Tergantung panjang rambut dan produk', '');
+(1, 'Creambath CBD Blow', 60000, NULL, 75, NULL, 'creambath.jpg'),
+(2, 'Hair Mask Keratin CBD Catok', 80000, NULL, 90, NULL, 'hair-mask.avif'),
+(3, 'Highlight', 100000, 300000, 120, 'Tergantung panjang dan ketebalan rambut', 'highlight.jpg'),
+(4, 'Bleaching Full', 200000, 400000, 180, 'Tergantung panjang dan ketebalan rambut', 'bleaching.jpg'),
+(5, 'Cat Warna / Coloring', 200000, 500000, 180, 'Tergantung warna, panjang, dan bahan', 'cat-color.jpg'),
+(6, 'Cat Hitam / Toning', 150000, 400000, 150, 'Tergantung panjang rambut', 'cat-hitam.jpg'),
+(7, 'Rebonding Makarizo', 200000, 500000, 180, 'Tergantung panjang rambut', 'rebonding.webp'),
+(8, 'Smoothing Keratin / Matrix', 250000, 600000, 180, 'Tergantung panjang rambut dan produk', 'smoothing.jpg');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `paket_stok`
+-- Table structure for table `paket_stok`
 --
 
 CREATE TABLE `paket_stok` (
@@ -98,7 +114,7 @@ CREATE TABLE `paket_stok` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `paket_stok`
+-- Dumping data for table `paket_stok`
 --
 
 INSERT INTO `paket_stok` (`id_paket`, `id_layanan`, `id_barang`, `jumlah_stok`) VALUES
@@ -120,7 +136,7 @@ INSERT INTO `paket_stok` (`id_paket`, `id_layanan`, `id_barang`, `jumlah_stok`) 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pemakaian_stok`
+-- Table structure for table `pemakaian_stok`
 --
 
 CREATE TABLE `pemakaian_stok` (
@@ -133,7 +149,7 @@ CREATE TABLE `pemakaian_stok` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pengeluaran`
+-- Table structure for table `pengeluaran`
 --
 
 CREATE TABLE `pengeluaran` (
@@ -148,7 +164,7 @@ CREATE TABLE `pengeluaran` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `restok`
+-- Table structure for table `restok`
 --
 
 CREATE TABLE `restok` (
@@ -160,10 +176,17 @@ CREATE TABLE `restok` (
   `total_harga_restok` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `restok`
+--
+
+INSERT INTO `restok` (`id_restok`, `id_barang`, `tanggal_restok`, `jumlah_tambah`, `harga_restok`, `total_harga_restok`) VALUES
+(4, 1, '2026-06-03 07:27:45', 8, 0, 360000);
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `stok_barang`
+-- Table structure for table `stok_barang`
 --
 
 CREATE TABLE `stok_barang` (
@@ -178,11 +201,11 @@ CREATE TABLE `stok_barang` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `stok_barang`
+-- Dumping data for table `stok_barang`
 --
 
 INSERT INTO `stok_barang` (`id_barang`, `nama_barang`, `jenis_barang`, `jumlah_barang`, `satuan_barang`, `minimal_stok`, `harga_beli`, `gambar_barang`) VALUES
-(1, 'CBD Cica+Vit Hair Mask', 'Hair Mask', 500, 'gram', 100, 45000, NULL),
+(1, 'CBD Cica+Vit Hair Mask', 'Hair Mask', 508, 'gram', 100, 45000, NULL),
 (2, 'CBD Color Hair Mask Pomegranate', 'Hair Mask', 500, 'gram', 100, 45000, NULL),
 (3, 'CBD Collagen Repair Hair Mask', 'Hair Mask', 500, 'gram', 100, 45000, NULL),
 (4, 'CBD Collagen Repair Hair Serum Oil', 'Serum', 80, 'ml', 20, 35000, NULL),
@@ -193,7 +216,7 @@ INSERT INTO `stok_barang` (`id_barang`, `nama_barang`, `jenis_barang`, `jumlah_b
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `transaksi`
+-- Table structure for table `transaksi`
 --
 
 CREATE TABLE `transaksi` (
@@ -209,7 +232,7 @@ CREATE TABLE `transaksi` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `transaksi_detail`
+-- Table structure for table `transaksi_detail`
 --
 
 CREATE TABLE `transaksi_detail` (
@@ -224,7 +247,7 @@ CREATE TABLE `transaksi_detail` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -238,28 +261,30 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id_user`, `nama`, `no_hp`, `alamat`, `email`, `role`, `password`) VALUES
 (1, 'Mas Diman', '0895358711991', 'Subang', 'diman@gmail.com', 'Administrator', 'diman123'),
 (5, 'Laely Fauziah Az', '082295450340', 'Pagaden', 'f02290511@gmail.com', 'Customer', '$2y$10$MEai8/4xW3jy3sZNoLB./eFxcLjjhukMexRXuLYynBCRyTJJUe7q.'),
 (6, 'Tegar Zulian', '089507953836', 'Soklat, Subang', 'karbitan55@gmail.com', 'Customer', '$2y$10$r2412c62CAZ7aPMc5pd7B.kMYvWOEzoCw.x4GYYDIeOAfkyLT7nMm'),
-(7, 'moch alipp', '082310326703', 'Cianjur', 'mchdalief24@gmail.com', 'Customer', '$2y$10$Lccexm.NuF44/Tgz3Kd3Ve0DlCd4SN077.Q5nxjZgulf/agp7S/PG');
+(7, 'moch alipp', '082310326703', 'Cianjur', 'mchdalief24@gmail.com', 'Customer', '$2y$10$UpllWfpib5fZZzXJjlOJ2ukTHPO38mAoa.i2mlWiYgn1mf1b7vHzu'),
+(8, 'Hilman', '0882002224583', 'Soklat, Subang', 'kybercunk@gmail.com', 'Customer', '$2y$10$3cTw.8IPBewGRtTRiA3ai.r2r0F5GDvF9d03jaBIL7Fp3wjXVEk0i'),
+(9, 'Dryan Pasha Albani', '089678227707', 'Jepangdiperum', 'dryanpasha452@gmail.com', 'Customer', '$2y$10$dt2qO9vsbLcSiFFnRlqXcO6GCZ4obS4UhHMGBayB.nn1f8BcEEspK');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `booking`
+-- Indexes for table `booking`
 --
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`id_booking`),
   ADD KEY `id_user` (`id_user`);
 
 --
--- Indeks untuk tabel `booking_detail`
+-- Indexes for table `booking_detail`
 --
 ALTER TABLE `booking_detail`
   ADD PRIMARY KEY (`id_detail_booking`),
@@ -267,13 +292,13 @@ ALTER TABLE `booking_detail`
   ADD KEY `id_layanan` (`id_layanan`);
 
 --
--- Indeks untuk tabel `layanan`
+-- Indexes for table `layanan`
 --
 ALTER TABLE `layanan`
   ADD PRIMARY KEY (`id_layanan`);
 
 --
--- Indeks untuk tabel `paket_stok`
+-- Indexes for table `paket_stok`
 --
 ALTER TABLE `paket_stok`
   ADD PRIMARY KEY (`id_paket`),
@@ -281,7 +306,7 @@ ALTER TABLE `paket_stok`
   ADD KEY `id_barang` (`id_barang`);
 
 --
--- Indeks untuk tabel `pemakaian_stok`
+-- Indexes for table `pemakaian_stok`
 --
 ALTER TABLE `pemakaian_stok`
   ADD PRIMARY KEY (`id_pemakaian`),
@@ -289,14 +314,14 @@ ALTER TABLE `pemakaian_stok`
   ADD KEY `id_tranksaksi` (`id_transaksi`);
 
 --
--- Indeks untuk tabel `pengeluaran`
+-- Indexes for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
   ADD PRIMARY KEY (`id_pengeluaran`),
   ADD KEY `user` (`id_user`) USING BTREE;
 
 --
--- Indeks untuk tabel `restok`
+-- Indexes for table `restok`
 --
 ALTER TABLE `restok`
   ADD PRIMARY KEY (`id_restok`),
@@ -304,20 +329,20 @@ ALTER TABLE `restok`
   ADD KEY `id_barang_2` (`id_barang`);
 
 --
--- Indeks untuk tabel `stok_barang`
+-- Indexes for table `stok_barang`
 --
 ALTER TABLE `stok_barang`
   ADD PRIMARY KEY (`id_barang`);
 
 --
--- Indeks untuk tabel `transaksi`
+-- Indexes for table `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`id_transaksi`),
   ADD UNIQUE KEY `id_booking` (`id_booking`);
 
 --
--- Indeks untuk tabel `transaksi_detail`
+-- Indexes for table `transaksi_detail`
 --
 ALTER TABLE `transaksi_detail`
   ADD PRIMARY KEY (`id_transaksi_detail`),
@@ -325,132 +350,132 @@ ALTER TABLE `transaksi_detail`
   ADD KEY `layanan` (`id_layanan`) USING BTREE;
 
 --
--- Indeks untuk tabel `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `booking`
+-- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id_booking` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_booking` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT untuk tabel `booking_detail`
+-- AUTO_INCREMENT for table `booking_detail`
 --
 ALTER TABLE `booking_detail`
-  MODIFY `id_detail_booking` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_detail_booking` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT untuk tabel `layanan`
+-- AUTO_INCREMENT for table `layanan`
 --
 ALTER TABLE `layanan`
   MODIFY `id_layanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
--- AUTO_INCREMENT untuk tabel `paket_stok`
+-- AUTO_INCREMENT for table `paket_stok`
 --
 ALTER TABLE `paket_stok`
   MODIFY `id_paket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
--- AUTO_INCREMENT untuk tabel `pemakaian_stok`
+-- AUTO_INCREMENT for table `pemakaian_stok`
 --
 ALTER TABLE `pemakaian_stok`
   MODIFY `id_pemakaian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `pengeluaran`
+-- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
   MODIFY `id_pengeluaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT untuk tabel `restok`
+-- AUTO_INCREMENT for table `restok`
 --
 ALTER TABLE `restok`
-  MODIFY `id_restok` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_restok` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `stok_barang`
+-- AUTO_INCREMENT for table `stok_barang`
 --
 ALTER TABLE `stok_barang`
   MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
--- AUTO_INCREMENT untuk tabel `transaksi`
+-- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
   MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT untuk tabel `transaksi_detail`
+-- AUTO_INCREMENT for table `transaksi_detail`
 --
 ALTER TABLE `transaksi_detail`
   MODIFY `id_transaksi_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `booking`
+-- Constraints for table `booking`
 --
 ALTER TABLE `booking`
   ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `booking_detail`
+-- Constraints for table `booking_detail`
 --
 ALTER TABLE `booking_detail`
   ADD CONSTRAINT `booking_detail_ibfk_1` FOREIGN KEY (`id_booking`) REFERENCES `booking` (`id_booking`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `booking_detail_ibfk_2` FOREIGN KEY (`id_layanan`) REFERENCES `layanan` (`id_layanan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `paket_stok`
+-- Constraints for table `paket_stok`
 --
 ALTER TABLE `paket_stok`
   ADD CONSTRAINT `paket_stok_ibfk_1` FOREIGN KEY (`id_layanan`) REFERENCES `layanan` (`id_layanan`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `paket_stok_ibfk_2` FOREIGN KEY (`id_barang`) REFERENCES `stok_barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `pemakaian_stok`
+-- Constraints for table `pemakaian_stok`
 --
 ALTER TABLE `pemakaian_stok`
   ADD CONSTRAINT `pemakaian_stok_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `stok_barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `pemakaian_stok_ibfk_2` FOREIGN KEY (`id_transaksi`) REFERENCES `transaksi` (`id_transaksi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `pengeluaran`
+-- Constraints for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
   ADD CONSTRAINT `pengeluaran_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `restok`
+-- Constraints for table `restok`
 --
 ALTER TABLE `restok`
   ADD CONSTRAINT `restok_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `stok_barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `transaksi`
+-- Constraints for table `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_booking`) REFERENCES `booking` (`id_booking`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `transaksi_detail`
+-- Constraints for table `transaksi_detail`
 --
 ALTER TABLE `transaksi_detail`
   ADD CONSTRAINT `transaksi_detail_ibfk_1` FOREIGN KEY (`id_layanan`) REFERENCES `layanan` (`id_layanan`) ON DELETE CASCADE ON UPDATE CASCADE,

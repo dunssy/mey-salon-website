@@ -107,6 +107,11 @@
                     <span class="w-3 h-3 rounded-full bg-gray-800"></span>
                     <span>Dipilih</span>
                 </div>
+
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-100 border border-red-200"></span>
+                    <span>Libur setiap hari Rabu</span>
+                </div>
             </div>
 
             <!-- Pilih jam booking -->
@@ -163,18 +168,19 @@
 
                         <?php while ($layanan = mysqli_fetch_assoc($query_layanan)) : ?>
                             <?php
-                                // Mengambil gambar layanan dari DB final
-                                $gambar_layanan = "../layout/images/mey-salon.png";
+                            // Mengambil gambar layanan dari DB final
+                            $gambar_layanan = "../layout/images/mey-salon.png";
 
-                                if (!empty($layanan['gambar_layanan'])) {
-                                    $gambar_layanan = "../uploads/layanan/" . $layanan['gambar_layanan'];
-                                } elseif (!empty($layanan['foto_layanan'])) {
-                                    $gambar_layanan = "../uploads/layanan/" . $layanan['foto_layanan'];
-                                }
+                            // Mengambil nama file gambar dari database
+                            if (!empty($layanan['gambar_layanan'])) {
+                                $gambar_layanan = "../layout/images/" . $layanan['gambar_layanan'];
+                            } elseif (!empty($layanan['foto_layanan'])) {
+                                $gambar_layanan = "../layout/images/" . $layanan['foto_layanan'];
+                            }
 
-                                // Harga min dan max sesuai DB final
-                                $harga_min = isset($layanan['harga_min']) ? (int) $layanan['harga_min'] : 0;
-                                $harga_max = isset($layanan['harga_max']) ? (int) $layanan['harga_max'] : 0;
+                            // Harga min dan max sesuai DB final
+                            $harga_min = isset($layanan['harga_min']) ? (int) $layanan['harga_min'] : 0;
+                            $harga_max = isset($layanan['harga_max']) ? (int) $layanan['harga_max'] : 0;
                             ?>
 
                             <!-- Card layanan -->
@@ -355,4 +361,139 @@
             }, { passive: false });
         }
     });
+
+    // Mengambil tanggal dari tombol kalender
+    function getDateFromCalendarButtonWednesday(button) {
+        const directDate =
+            button.dataset.date ||
+            button.dataset.fullDate ||
+            button.dataset.tanggal ||
+            button.dataset.value ||
+            button.value ||
+            '';
+
+        if (directDate && /^\d{4}-\d{2}-\d{2}$/.test(directDate)) {
+            return directDate;
+        }
+
+        const dayMatch = button.textContent.trim().match(/\d+/);
+        const monthTitle = document.getElementById('calendar-month-title')?.textContent.trim() || '';
+
+        if (!dayMatch || !monthTitle) return '';
+
+        const monthMap = {
+            'januari': '01',
+            'februari': '02',
+            'maret': '03',
+            'april': '04',
+            'mei': '05',
+            'juni': '06',
+            'juli': '07',
+            'agustus': '08',
+            'september': '09',
+            'oktober': '10',
+            'november': '11',
+            'desember': '12'
+        };
+
+        const parts = monthTitle.split(/\s+/);
+        const month = monthMap[String(parts[0] || '').toLowerCase()];
+        const year = parts[1];
+        const day = String(dayMatch[0]).padStart(2, '0');
+
+        if (!month || !year) return '';
+
+        return `${year}-${month}-${day}`;
+    }
+
+    // Mengecek apakah tanggal adalah hari Rabu
+    function isWednesdayClosed(dateValue) {
+        if (!dateValue) return false;
+
+        const date = new Date(dateValue + 'T00:00:00');
+
+        if (isNaN(date.getTime())) return false;
+
+        return date.getDay() === 3;
+    }
+
+    // Menandai dan menonaktifkan hari Rabu di kalender
+    function disableWednesdayCalendar() {
+        const buttons = document.querySelectorAll('#calendar-days button');
+
+        buttons.forEach(function (button) {
+            const dateValue = getDateFromCalendarButtonWednesday(button);
+
+            if (!dateValue) return;
+
+            if (isWednesdayClosed(dateValue)) {
+                button.disabled = true;
+                button.dataset.closed = 'wednesday';
+                button.title = 'Salon libur setiap hari Rabu';
+                button.classList.add(
+                    'bg-red-50',
+                    'text-red-300',
+                    'cursor-not-allowed',
+                    'line-through',
+                    'border',
+                    'border-red-100'
+                );
+            }
+        });
+    }
+
+    // Mengosongkan jam jika tanggal Rabu terlanjur dipilih
+    function clearTimeIfWednesdaySelected() {
+        if (typeof selectedBookingDate !== 'undefined' && isWednesdayClosed(selectedBookingDate)) {
+            selectedBookingDate = '';
+            selectedBookingTime = '';
+
+            const timeSlots = document.getElementById('time-slots');
+
+            if (timeSlots) {
+                timeSlots.innerHTML = `
+                    <div class="col-span-3 p-4 bg-red-50 text-red-500 text-xs font-bold rounded-2xl text-center border border-red-100">
+                        Salon libur setiap hari Rabu.
+                    </div>
+                `;
+            }
+
+            alert('Salon libur setiap hari Rabu. Silakan pilih tanggal lain.');
+        }
+    }
+
+    // Mencegah klik tanggal Rabu
+    document.addEventListener('click', function (event) {
+        const dateButton = event.target.closest('#calendar-days button');
+
+        if (!dateButton) return;
+
+        const dateValue = getDateFromCalendarButtonWednesday(dateButton);
+
+        if (isWednesdayClosed(dateValue)) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            alert('Salon libur setiap hari Rabu. Silakan pilih tanggal lain.');
+        }
+    }, true);
+
+    // Observer untuk kalender yang dibuat ulang oleh booking-script.js
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarDays = document.getElementById('calendar-days');
+
+        if (!calendarDays) return;
+
+        disableWednesdayCalendar();
+
+        const observer = new MutationObserver(function () {
+            disableWednesdayCalendar();
+            clearTimeIfWednesdaySelected();
+        });
+
+        observer.observe(calendarDays, {
+            childList: true,
+            subtree: true
+        });
+    });
+
 </script>

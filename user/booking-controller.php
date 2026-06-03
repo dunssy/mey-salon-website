@@ -1,11 +1,13 @@
 <?php
 // Memulai session user
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Memanggil koneksi dan controller utama
+// Memanggil koneksi database
 include "../config/app.php";
 
-// Menggunakan koneksi database
+// Menggunakan koneksi global
 global $koneksi;
 
 // Mengecek user sudah login
@@ -19,6 +21,8 @@ $id_user = isset($_SESSION['id_user']) ? (int) $_SESSION['id_user'] : (int) $_SE
 
 // Mengambil data user login
 $query_user = mysqli_query($koneksi, "SELECT * FROM user WHERE id_user = $id_user");
+
+// Mengubah data user menjadi array
 $user = mysqli_fetch_assoc($query_user);
 
 // Mengecek data user ditemukan
@@ -30,8 +34,94 @@ if (!$user) {
     exit;
 }
 
+// Fungsi redirect dengan alert
+function redirectAlert($pesan, $tujuan = 'booking.php')
+{
+    // Menampilkan pesan dan pindah halaman
+    echo "<script>
+            alert('$pesan');
+            window.location.href = '$tujuan';
+          </script>";
+    exit;
+}
+
+// Fungsi hapus file jika ada
+function hapusFileJikaAda($path)
+{
+    // Mengecek file lalu hapus
+    if (!empty($path) && file_exists($path)) {
+        unlink($path);
+    }
+}
+
+// Fungsi validasi hari Rabu
+function validasiSalonTidakLiburRabu($tanggal)
+{
+    // Mengambil angka hari dari tanggal
+    $hari = date('w', strtotime($tanggal));
+
+    // Menolak booking hari Rabu
+    if ($hari == 3) {
+        redirectAlert('Salon libur setiap hari Rabu. Silakan pilih tanggal lain!');
+    }
+}
+
+// Fungsi upload bukti pembayaran
+function uploadBuktiPembayaran()
+{
+    // Mengecek file wajib ada
+    if (!isset($_FILES['bukti_pembayaran']) || $_FILES['bukti_pembayaran']['error'] !== UPLOAD_ERR_OK) {
+        redirectAlert('Bukti pembayaran wajib diupload!');
+    }
+
+    // Mengambil data file
+    $file_tmp = $_FILES['bukti_pembayaran']['tmp_name'];
+    $file_name = $_FILES['bukti_pembayaran']['name'];
+    $file_size = $_FILES['bukti_pembayaran']['size'];
+    $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+    // Menentukan ekstensi yang diizinkan
+    $allowed_ext = ['jpg', 'jpeg', 'png', 'webp', 'pdf'];
+
+    // Mengecek format file
+    if (!in_array($file_ext, $allowed_ext)) {
+        redirectAlert('Format bukti pembayaran harus JPG, JPEG, PNG, WEBP, atau PDF!');
+    }
+
+    // Mengecek ukuran maksimal 2MB
+    if ($file_size > 2 * 1024 * 1024) {
+        redirectAlert('Ukuran bukti pembayaran maksimal 2MB!');
+    }
+
+    // Menentukan folder upload
+    $upload_dir = "../uploads/bukti-pembayaran/";
+
+    // Membuat folder jika belum ada
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
+    }
+
+    // Membuat nama file unik
+    $bukti_pembayaran = "bukti_" . date('YmdHis') . "_" . rand(1000, 9999) . "." . $file_ext;
+
+    // Menentukan path upload
+    $upload_path = $upload_dir . $bukti_pembayaran;
+
+    // Memindahkan file upload
+    if (!move_uploaded_file($file_tmp, $upload_path)) {
+        redirectAlert('Upload bukti pembayaran gagal!');
+    }
+
+    // Mengembalikan nama dan path file
+    return [
+        'nama_file' => $bukti_pembayaran,
+        'path_file' => $upload_path
+    ];
+}
+
 // Memproses update profil user
 if (isset($_POST['update_profil'])) {
+    // Mengambil input profil
     $nama = mysqli_real_escape_string($koneksi, strip_tags($_POST['nama']));
     $no_hp = mysqli_real_escape_string($koneksi, strip_tags($_POST['no_hp']));
     $email = mysqli_real_escape_string($koneksi, strip_tags($_POST['email']));
@@ -45,15 +135,12 @@ if (isset($_POST['update_profil'])) {
          AND id_user != $id_user"
     );
 
+    // Menolak jika email sudah digunakan
     if (mysqli_num_rows($cek_email) > 0) {
-        echo "<script>
-                alert('Email sudah digunakan oleh akun lain!');
-                window.location.href = 'booking.php';
-              </script>";
-        exit;
+        redirectAlert('Email sudah digunakan oleh akun lain!');
     }
 
-    // Mengupdate profil user
+    // Query update profil
     $query_update_profil = "UPDATE user SET 
                                 nama = '$nama',
                                 no_hp = '$no_hp',
@@ -61,26 +148,21 @@ if (isset($_POST['update_profil'])) {
                                 alamat = '$alamat'
                             WHERE id_user = $id_user";
 
+    // Menjalankan update profil
     if (mysqli_query($koneksi, $query_update_profil)) {
         $_SESSION['nama'] = $nama;
-
-        echo "<script>
-                alert('Profil berhasil diperbarui!');
-                window.location.href = 'booking.php';
-              </script>";
-        exit;
+        redirectAlert('Profil berhasil diperbarui!');
     } else {
-        echo "<script>
-                alert('Profil gagal diperbarui!');
-              </script>";
+        echo "<script>alert('Profil gagal diperbarui!');</script>";
     }
 }
 
 // Memproses batal booking
 if (isset($_POST['batal_booking'])) {
+    // Mengambil id booking
     $id_booking = (int) $_POST['id_booking'];
 
-    // Mengecek booking milik user dan status masih bisa dibatalkan
+    // Mengecek booking milik user dan status bisa batal
     $cek_booking = mysqli_query(
         $koneksi,
         "SELECT * FROM booking 
@@ -89,7 +171,7 @@ if (isset($_POST['batal_booking'])) {
          AND status_booking IN ('Waiting', 'Pending')"
     );
 
-    // Jika booking ditemukan dan status masih Waiting atau Pending
+    // Membatalkan booking jika valid
     if (mysqli_num_rows($cek_booking) > 0) {
         mysqli_query(
             $koneksi,
@@ -99,25 +181,19 @@ if (isset($_POST['batal_booking'])) {
              AND id_user = $id_user"
         );
 
-        echo "<script>
-                alert('Booking berhasil dibatalkan!');
-                window.location.href = 'booking.php';
-              </script>";
-        exit;
-    } else {
-        echo "<script>
-                alert('Booking tidak bisa dibatalkan karena sudah diproses admin!');
-                window.location.href = 'booking.php';
-              </script>";
-        exit;
+        redirectAlert('Booking berhasil dibatalkan!');
     }
+
+    // Menolak batal jika status tidak valid
+    redirectAlert('Booking tidak bisa dibatalkan karena sudah diproses admin!');
 }
 
 // Memproses user menerima saran jadwal admin
 if (isset($_POST['terima_saran_booking'])) {
+    // Mengambil id booking
     $id_booking = (int) $_POST['id_booking'];
 
-    // Mengambil data booking yang masih pending dan milik user login
+    // Mengambil booking pending milik user
     $query_saran = mysqli_query(
         $koneksi,
         "SELECT * FROM booking 
@@ -126,72 +202,72 @@ if (isset($_POST['terima_saran_booking'])) {
          AND status_booking = 'Pending'"
     );
 
-    // Mengecek booking ditemukan
-    if (mysqli_num_rows($query_saran) > 0) {
-        $booking_saran = mysqli_fetch_assoc($query_saran);
-
-        $tanggal_saran = $booking_saran['tanggal_saran'];
-        $jam_saran = $booking_saran['jam_saran'];
-
-        // Mengecek saran tanggal dan jam tersedia
-        if (empty($tanggal_saran) || empty($jam_saran)) {
-            echo "<script>
-                    alert('Admin belum memberikan saran tanggal atau jam.');
-                    window.location.href = 'booking.php';
-                  </script>";
-            exit;
-        }
-
-        // Menghitung ulang jam selesai berdasarkan durasi layanan
-        $query_durasi = mysqli_query(
-            $koneksi,
-            "SELECT COALESCE(SUM(l.durasi_layanan), 0) AS total_durasi
-             FROM booking_detail bd
-             JOIN layanan l ON bd.id_layanan = l.id_layanan
-             WHERE bd.id_booking = $id_booking"
-        );
-
-        $data_durasi = mysqli_fetch_assoc($query_durasi);
-        $total_durasi = (int) ($data_durasi['total_durasi'] ?? 0);
-
-        if ($total_durasi <= 0) {
-            echo "<script>
-                    alert('Durasi layanan tidak valid.');
-                    window.location.href = 'booking.php';
-                  </script>";
-            exit;
-        }
-
-        $waktu_mulai = new DateTime($tanggal_saran . ' ' . $jam_saran);
-        $waktu_selesai = clone $waktu_mulai;
-        $waktu_selesai->modify("+$total_durasi minutes");
-
-        $jam_selesai = $waktu_selesai->format('H:i:s');
-
-        // Mengubah booking sesuai jadwal saran admin
-        mysqli_query(
-            $koneksi,
-            "UPDATE booking SET
-                tanggal_booking = '$tanggal_saran',
-                jam_mulai = '$jam_saran',
-                jam_selesai = '$jam_selesai',
-                status_booking = 'Waiting'
-             WHERE id_booking = $id_booking
-             AND id_user = $id_user"
-        );
-
-        echo "<script>
-                alert('Saran jadwal berhasil dikonfirmasi. Silakan tunggu konfirmasi admin.');
-                window.location.href = 'booking.php';
-              </script>";
-        exit;
-    } else {
-        echo "<script>
-                alert('Saran jadwal tidak ditemukan atau booking tidak valid.');
-                window.location.href = 'booking.php';
-              </script>";
-        exit;
+    // Mengecek data saran
+    if (mysqli_num_rows($query_saran) <= 0) {
+        redirectAlert('Saran jadwal tidak ditemukan atau booking tidak valid.');
     }
+
+    // Mengambil data booking saran
+    $booking_saran = mysqli_fetch_assoc($query_saran);
+
+    // Mengambil tanggal dan jam saran
+    $tanggal_saran = $booking_saran['tanggal_saran'];
+    $jam_saran = $booking_saran['jam_saran'];
+
+    // Mengecek saran lengkap
+    if (empty($tanggal_saran) || empty($jam_saran)) {
+        redirectAlert('Admin belum memberikan saran tanggal atau jam.');
+    }
+
+    // Validasi salon libur Rabu
+    validasiSalonTidakLiburRabu($tanggal_saran);
+
+    // Menghitung total durasi layanan
+    $query_durasi = mysqli_query(
+        $koneksi,
+        "SELECT COALESCE(SUM(l.durasi_layanan), 0) AS total_durasi
+         FROM booking_detail bd
+         JOIN layanan l ON bd.id_layanan = l.id_layanan
+         WHERE bd.id_booking = $id_booking"
+    );
+
+    // Mengambil data durasi
+    $data_durasi = mysqli_fetch_assoc($query_durasi);
+
+    // Mengubah durasi ke integer
+    $total_durasi = (int) ($data_durasi['total_durasi'] ?? 0);
+
+    // Mengecek durasi valid
+    if ($total_durasi <= 0) {
+        redirectAlert('Durasi layanan tidak valid.');
+    }
+
+    // Membuat waktu mulai
+    $waktu_mulai = new DateTime($tanggal_saran . ' ' . $jam_saran);
+
+    // Membuat waktu selesai
+    $waktu_selesai = clone $waktu_mulai;
+
+    // Menambahkan durasi
+    $waktu_selesai->modify("+$total_durasi minutes");
+
+    // Mengambil jam selesai
+    $jam_selesai = $waktu_selesai->format('H:i:s');
+
+    // Mengubah booking ke jadwal saran
+    mysqli_query(
+        $koneksi,
+        "UPDATE booking SET
+            tanggal_booking = '$tanggal_saran',
+            jam_mulai = '$jam_saran',
+            jam_selesai = '$jam_selesai',
+            status_booking = 'Waiting'
+         WHERE id_booking = $id_booking
+         AND id_user = $id_user"
+    );
+
+    // Redirect berhasil
+    redirectAlert('Saran jadwal berhasil dikonfirmasi. Silakan tunggu konfirmasi admin.');
 }
 
 // Mengambil data layanan sesuai DB final
@@ -210,7 +286,7 @@ $query_layanan = mysqli_query(
      ORDER BY nama_layanan ASC"
 );
 
-// Mengambil data booking untuk kalender
+// Mengambil data booking aktif untuk kalender
 $query_booking = mysqli_query(
     $koneksi,
     "SELECT 
@@ -228,22 +304,30 @@ $query_booking = mysqli_query(
      ORDER BY b.tanggal_booking ASC, b.jam_mulai ASC"
 );
 
-// Menyiapkan data kalender untuk JavaScript
+// Menyiapkan data kalender
 $jadwal_booking = [];
 
+// Mengisi data kalender
 while ($booking = mysqli_fetch_assoc($query_booking)) {
+    // Mengambil tanggal booking
     $tanggal = $booking['tanggal_booking'];
+
+    // Mengambil jam booking
     $jam = substr($booking['jam_mulai'], 0, 5);
+
+    // Mengambil nama layanan
     $layanan = $booking['nama_layanan'] ?: 'Booking';
 
+    // Membuat array tanggal jika belum ada
     if (!isset($jadwal_booking[$tanggal])) {
         $jadwal_booking[$tanggal] = [];
     }
 
+    // Menambahkan jadwal booking
     $jadwal_booking[$tanggal][] = $jam . " - " . $layanan;
 }
 
-// Mengambil booking user login sesuai DB final
+// Mengambil booking user login
 $query_booking_user = mysqli_query(
     $koneksi,
     "SELECT 
@@ -262,17 +346,25 @@ $query_booking_user = mysqli_query(
 
 // Memproses booking baru
 if (isset($_POST['konfirmasi_booking'])) {
+    // Mengambil tanggal booking
     $tanggal_booking = mysqli_real_escape_string($koneksi, $_POST['tanggal_booking'] ?? '');
+
+    // Mengambil jam mulai
     $jam_mulai = mysqli_real_escape_string($koneksi, $_POST['jam_mulai'] ?? '');
+
+    // Mengambil catatan customer
     $catatan = isset($_POST['catatan']) ? mysqli_real_escape_string($koneksi, strip_tags($_POST['catatan'])) : '';
 
-    // Mengambil layanan terpilih dari JSON
+    // Mengambil layanan terpilih JSON
     $layanan_terpilih_raw = $_POST['layanan_terpilih'] ?? '';
+
+    // Decode layanan terpilih
     $layanan_terpilih_decode = json_decode($layanan_terpilih_raw, true);
 
-    // Menyiapkan list id layanan agar cocok dengan format lama dan format cart baru
+    // Menyiapkan id layanan
     $id_layanan_list = [];
 
+    // Membaca id layanan dari JSON
     if (is_array($layanan_terpilih_decode)) {
         foreach ($layanan_terpilih_decode as $item) {
             if (is_array($item)) {
@@ -286,12 +378,17 @@ if (isset($_POST['konfirmasi_booking'])) {
     // Membersihkan id layanan kosong dan duplikat
     $id_layanan_list = array_values(array_unique(array_filter($id_layanan_list)));
 
+    // Mengecek input wajib
     if (empty($tanggal_booking) || empty($jam_mulai) || empty($id_layanan_list)) {
         echo "<script>alert('Tanggal, jam, dan layanan wajib dipilih!');</script>";
     } else {
+        // Validasi salon libur Rabu
+        validasiSalonTidakLiburRabu($tanggal_booking);
+
+        // Menggabungkan id layanan untuk query
         $id_layanan_string = implode(',', $id_layanan_list);
 
-        // Mengambil total durasi dan total harga minimum dari layanan
+        // Mengambil total durasi dan total harga minimum
         $query_total = mysqli_query(
             $koneksi,
             "SELECT 
@@ -301,69 +398,49 @@ if (isset($_POST['konfirmasi_booking'])) {
              WHERE id_layanan IN ($id_layanan_string)"
         );
 
+        // Mengambil hasil total
         $data_total = mysqli_fetch_assoc($query_total);
+
+        // Mengambil total durasi
         $total_durasi = (int) ($data_total['total_durasi'] ?? 0);
+
+        // Mengambil total DP dari harga minimum
         $total_dp = (int) ($data_total['total_harga'] ?? 0);
 
+        // Mengecek total valid
         if ($total_durasi <= 0 || $total_dp <= 0) {
             echo "<script>alert('Durasi atau total harga layanan tidak valid!');</script>";
         } else {
-            // Upload bukti pembayaran sesuai kolom DB: bukti_pembayaran
-            $bukti_pembayaran = '';
+            // Upload bukti pembayaran
+            $upload_bukti = uploadBuktiPembayaran();
 
-            if (!isset($_FILES['bukti_pembayaran']) || $_FILES['bukti_pembayaran']['error'] !== UPLOAD_ERR_OK) {
-                echo "<script>alert('Bukti pembayaran wajib diupload!');</script>";
-                exit;
-            }
+            // Mengambil nama file bukti
+            $bukti_pembayaran = $upload_bukti['nama_file'];
 
-            $file_tmp = $_FILES['bukti_pembayaran']['tmp_name'];
-            $file_name = $_FILES['bukti_pembayaran']['name'];
-            $file_size = $_FILES['bukti_pembayaran']['size'];
-            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+            // Mengambil path file bukti
+            $upload_path = $upload_bukti['path_file'];
 
-            $allowed_ext = ['jpg', 'jpeg', 'png', 'webp', 'pdf'];
-
-            if (!in_array($file_ext, $allowed_ext)) {
-                echo "<script>alert('Format bukti pembayaran harus JPG, JPEG, PNG, WEBP, atau PDF!');</script>";
-                exit;
-            }
-
-            if ($file_size > 2 * 1024 * 1024) {
-                echo "<script>alert('Ukuran bukti pembayaran maksimal 2MB!');</script>";
-                exit;
-            }
-
-            $upload_dir = "../uploads/bukti-pembayaran/";
-
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
-            }
-
-            $bukti_pembayaran = "bukti_" . date('YmdHis') . "_" . rand(1000, 9999) . "." . $file_ext;
-            $upload_path = $upload_dir . $bukti_pembayaran;
-
-            if (!move_uploaded_file($file_tmp, $upload_path)) {
-                echo "<script>alert('Upload bukti pembayaran gagal!');</script>";
-                exit;
-            }
-
+            // Membuat waktu mulai
             $waktu_mulai = new DateTime($tanggal_booking . ' ' . $jam_mulai);
+
+            // Membuat waktu selesai
             $waktu_selesai = clone $waktu_mulai;
+
+            // Menambahkan durasi ke waktu selesai
             $waktu_selesai->modify("+$total_durasi minutes");
 
-            // Jam tutup salon 21:00
+            // Menentukan batas jam tutup salon
             $batas_tutup = new DateTime($tanggal_booking . ' 21:00:00');
 
+            // Mengecek melewati jam tutup
             if ($waktu_selesai > $batas_tutup) {
-                if (!empty($upload_path) && file_exists($upload_path)) {
-                    unlink($upload_path);
-                }
-
+                hapusFileJikaAda($upload_path);
                 echo "<script>alert('Estimasi waktu melewati jam tutup salon!');</script>";
             } else {
+                // Mengambil jam selesai
                 $jam_selesai = $waktu_selesai->format('H:i:s');
 
-                // Mengecek jadwal bentrok dengan booking aktif
+                // Mengecek jadwal bentrok
                 $cek_jadwal = mysqli_query(
                     $koneksi,
                     "SELECT * FROM booking 
@@ -376,24 +453,25 @@ if (isset($_POST['konfirmasi_booking'])) {
                      )"
                 );
 
+                // Menolak jika jadwal bentrok
                 if (mysqli_num_rows($cek_jadwal) > 0) {
-                    if (!empty($upload_path) && file_exists($upload_path)) {
-                        unlink($upload_path);
-                    }
-
+                    hapusFileJikaAda($upload_path);
                     echo "<script>alert('Jadwal pada jam tersebut sudah terisi!');</script>";
                 } else {
+                    // Memulai transaksi database
                     mysqli_begin_transaction($koneksi);
 
                     try {
-                        // Menyimpan booking sesuai DB final:
-                        // total_dp dan bukti_pembayaran sudah ada, metode_pembayaran tidak dipakai karena tidak ada di DB
+                        // Query insert booking
                         $query_insert = "INSERT INTO booking 
                                             (id_user, tanggal_booking, jam_mulai, jam_selesai, status_booking, total_dp, bukti_pembayaran, catatan_costumer)
                                          VALUES 
                                             ($id_user, '$tanggal_booking', '$jam_mulai', '$jam_selesai', 'Waiting', $total_dp, '$bukti_pembayaran', '$catatan')";
 
+                        // Menyimpan booking
                         mysqli_query($koneksi, $query_insert);
+
+                        // Mengambil id booking baru
                         $id_booking = mysqli_insert_id($koneksi);
 
                         // Menyimpan detail layanan booking
@@ -405,25 +483,20 @@ if (isset($_POST['konfirmasi_booking'])) {
                             );
                         }
 
+                        // Commit transaksi
                         mysqli_commit($koneksi);
 
-                        echo "<script>
-                                alert('Booking berhasil dibuat! Silakan tunggu admin mengecek bukti pembayaran QRIS.');
-                                window.location.href = 'booking.php';
-                              </script>";
-                        exit;
+                        // Redirect berhasil
+                        redirectAlert('Booking berhasil dibuat! Silakan tunggu admin mengecek bukti pembayaran QRIS.');
                     } catch (Exception $e) {
+                        // Rollback transaksi
                         mysqli_rollback($koneksi);
 
-                        if (!empty($upload_path) && file_exists($upload_path)) {
-                            unlink($upload_path);
-                        }
+                        // Hapus file bukti
+                        hapusFileJikaAda($upload_path);
 
-                        echo "<script>
-                                alert('Booking gagal dibuat!');
-                                window.location.href = 'booking.php';
-                              </script>";
-                        exit;
+                        // Redirect gagal
+                        redirectAlert('Booking gagal dibuat!');
                     }
                 }
             }

@@ -1,12 +1,3 @@
-<!-- <?php 
-// jika role bukan admin 
-// if ($_SESSION['role'] !== 'Admin') {
-//     // redirect ke halaman login
-//     header("Location: ../login.php");    
-//     exit();
-// }
-?> -->
-
 <!DOCTYPE html>
 <html lang="id">
 <head>

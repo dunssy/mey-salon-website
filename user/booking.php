@@ -37,6 +37,25 @@ include "../layout/header-user.php";
     <!-- Footer user -->
     <?php include "../layout/footer-component-user.php"; ?>
 
+<!-- Script buka section dari URL -->
+<script>
+    // Membuka section sesuai parameter URL
+    document.addEventListener('DOMContentLoaded', function () {
+        const params = new URLSearchParams(window.location.search);
+        const section = params.get('section') || window.location.hash.replace('#', '');
+
+        if (typeof showSection !== 'function') return;
+
+        if (section === 'profil') {
+            showSection('profil');
+        } else if (section === 'booking') {
+            showSection('booking');
+        } else {
+            showSection('layanan');
+        }
+    });
+</script>
+
 <?php
 // Memanggil footer utama user
 include "../layout/footer-user.php";
