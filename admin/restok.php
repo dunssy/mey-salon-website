@@ -18,26 +18,31 @@ $id_barang_get = isset($_GET['id_barang']) ? (int) $_GET['id_barang'] : 0;
 // Memproses tambah restok barang
 if (isset($_POST['submit'])) {
     $id_barang = (int) $_POST['id_barang'];
-    $jumlah_tambah = (int) $_POST['jumlah_tambah'];
+    $jumlah_tambah_awal = (int) $_POST['jumlah_tambah_awal'];
 
     // Mengambil data barang berdasarkan id
     $barang = select("SELECT * FROM stok_barang WHERE id_barang = $id_barang");
 
     // Mengecek barang dan jumlah valid
-    if (!empty($barang) && $jumlah_tambah > 0) {
+    if (!empty($barang) && $jumlah_tambah_awal > 0) {
         $barang = $barang[0];
-
+        $jumlah_tambah = $jumlah_tambah_awal * ($barang['jumlah_satuan']);
+        // harga beli satuan
+        $harga_beli_satuan = (int) $barang['harga_beli'];
+        
+        
+        
         // Menghitung total harga restok
         $harga_beli = (int) $barang['harga_beli'];
-        $total_harga_restok = $harga_beli * $jumlah_tambah;
+        $total_harga_restok = $harga_beli * $jumlah_tambah_awal;
 
         // Menyimpan data restok untuk laporan pengeluaran
         mysqli_query(
             $koneksi,
             "INSERT INTO restok 
-                (id_barang, jumlah_tambah, total_harga_restok) 
+                (id_barang, jumlah_tambah, harga_restok, total_harga_restok) 
              VALUES 
-                ($id_barang, $jumlah_tambah, $total_harga_restok)"
+                ($id_barang, $jumlah_tambah, $harga_beli_satuan, $total_harga_restok)"
         );
 
         // Menambahkan stok barang
@@ -262,8 +267,8 @@ foreach ($data_restok as $restok_item) {
 
                                     <input
                                         type="number"
-                                        name="jumlah_tambah"
-                                        id="jumlah_tambah"
+                                        name="jumlah_tambah_awal"
+                                        id="jumlah_tambah_awal"
                                         required
                                         min="1"
                                         placeholder="Masukkan jumlah restok"

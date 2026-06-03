@@ -186,6 +186,21 @@ if (isset($_POST['submit'])) {
                                     </option>
                                 </select>
                             </div>
+                            <div>
+                                <label for="jumlah_barang_perbotol" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Jumlah Barang Per Botol
+                                </label>
+
+                                <input 
+                                    type="number" 
+                                    name="jumlah_barang_perbotol" 
+                                    id="jumlah_barang_perbotol" 
+                                    value="<?= htmlspecialchars($barang['jumlah_satuan']); ?>" 
+                                    required 
+                                    min="1"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                >
+                            </div>
 
                             <!-- Input minimal stok -->
                             <div>

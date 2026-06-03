@@ -839,6 +839,8 @@ function getServiceImage($layanan)
 
             <!-- Grid kontak -->
             <div class="grid lg:grid-cols-2 gap-8 md:gap-12 items-stretch">
+                <div class="map-responsive shadow-2xl rounded-[30px] md:rounded-[36px] overflow-hidden border-4 md:border-8 border-white min-h-[310px]">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.6546680698507!2d107.759136477936!3d-6.565198595110477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e693c9ced4b58e5%3A0x7f8a07a95c8b627f!2sMey%20Salon!5e0!3m2!1sid!2sid!4v1779330835533!5m2!1sid!2sid" width="600" height="450" style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="w-full h-full min-h-[320px]"></iframe>
 
                 <!-- Google map -->
                 <div class="map-responsive shadow-2xl rounded-[30px] md:rounded-[36px] overflow-hidden border-4 md:border-8 theme-video-border min-h-[320px]">
