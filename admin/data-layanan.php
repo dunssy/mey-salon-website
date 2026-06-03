@@ -26,6 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['hapus'])) {
     }
 }
 
+// METODE PENCARIAN LAYANAN 
+if(isset($_GET['cari'])){
+    $keyword = $_GET['cari'];
+    $layanan = cari_layanan($keyword);
+}
+
 // Mengatur jumlah data per halaman
 $jumlah_per_halaman = 5;
 
@@ -98,7 +104,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                             <input 
                                 type="text" 
-                                name="search" 
+                                name="cari" 
                                 placeholder="Cari layanan..." 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
                             >
@@ -139,11 +145,10 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 
                                 <!-- Isi tabel -->
                                 <tbody class="divide-y divide-pink-50">
-
-                                    <?php if (!empty($layanan)) : ?>
-
+                            
+                                    <?php if (!empty($layanan)){ ?>
                                         <!-- Perulangan data layanan -->
-                                        <?php foreach ($layanan as $data_layanan) : ?>
+                                        <?php foreach ($layanan as $data_layanan  ){ ?>
 
                                             <tr class="hover:bg-pink-50/20 transition-colors">
 
@@ -199,9 +204,9 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                 </td>
                                             </tr>
 
-                                        <?php endforeach; ?>
+                                        <?php  } ?>
 
-                                    <?php else : ?>
+                                    <?php }else{  ?>
 
                                         <!-- Pesan data kosong -->
                                         <tr>
@@ -210,7 +215,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                             </td>
                                         </tr>
 
-                                    <?php endif; ?>
+                                    <?php } ?>
                                 </tbody>
 
                                 <!-- Footer pagination -->

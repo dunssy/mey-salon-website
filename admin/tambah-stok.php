@@ -116,9 +116,10 @@ if (isset($_POST['submit'])) {
                                 </label>
 
                                 <input 
+            
                                     type="number" 
-                                    name="jumlah_barang" 
-                                    id="jumlah_barang" 
+                                    name="jumlah_barang_botol" 
+                                    id="jumlah_barang_botol" 
                                     required
                                     min="0"
                                     placeholder="Contoh: 10"
@@ -143,17 +144,30 @@ if (isset($_POST['submit'])) {
                                     <option value="ml">Ml</option>
                                 </select>
                             </div>
+                            <div>
+                                <label for="jumlah_barang_perbotol" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Jumlah Barang per Botol
+                                </label>
+                                <input 
+                                    type="number" 
+                                    name="jumlah_barang_perbotol" 
+                                    id="jumlah_barang_perbotol" 
+                                    required
+                                    min="0"
+                                    placeholder="Contoh: 100"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                            </div>
 
                             <!-- Input minimal stok -->
                             <div>
                                 <label for="minimal_stok" class="block text-sm font-medium text-gray-700 mb-1">
                                     Minimal Stok
                                 </label>
-
+                                
                                 <input 
                                     type="number" 
-                                    name="minimal_stok" 
-                                    id="minimal_stok" 
+                                    name="minimal_stok_awal" 
+                                    id="minimal_stok_awal" 
                                     required
                                     min="0"
                                     placeholder="Contoh: 3"

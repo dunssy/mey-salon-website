@@ -208,9 +208,7 @@ $query_notif_stok = mysqli_query(
                             <div class="w-14 h-14 bg-pink-50 text-pink-200 rounded-2xl flex items-center justify-center mx-auto mb-3">
                                 <i class="fa-solid fa-bell-slash text-2xl"></i>
                             </div>
-
                             <p class="text-sm font-bold text-gray-600">Tidak ada notifikasi</p>
-                            <p class="text-xs text-gray-400 mt-1">Semua booking dan stok aman.</p>
                         </div>
 
                     <?php endif; ?>

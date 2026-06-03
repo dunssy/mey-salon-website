@@ -1,12 +1,9 @@
 <?php
-
 // Mencegah controller dipanggil lebih dari satu kali
 if (defined('CONTROLLER_INCLUDED')) {
     return;
 }
-
 define('CONTROLLER_INCLUDED', true);
-
 
 // ======================================================
 // HELPER UMUM
@@ -143,6 +140,18 @@ function hitung_total_halaman_layanan($jumlah_per_halaman)
     return ceil($data['total'] / $jumlah_per_halaman);
 }
 
+// Mencari Layanan Berdasrkan Keyword dengan nama_layanan, harga_min, atau durasi_layanan 
+function cari_layanan($keyword){
+   global $koneksi;
+
+   $cari = mysqli_query($koneksi,"SELECT * FROM layanan WHERE nama_layanan 
+   LIKE '%$keyword%' OR harga_min 
+   LIKE '%$keyword%' OR durasi_layanan 
+   LIKE '%$keyword%' ORDER BY id_layanan DESC");
+    
+   $hasil = mysqli_fetch_all($cari, MYSQLI_ASSOC);
+    mysqli_close($koneksi);
+}
 
 // ======================================================
 // CRUD USER
@@ -246,15 +255,18 @@ function tambah_barang($post)
 
     $nama_barang = clean_input($post['nama_barang']);
     $jenis_barang = clean_input($post['jenis_barang']);
-    $jumlah_barang = clean_number($post['jumlah_barang']);
+    $jumlah_barang_botol = clean_number($post['jumlah_barang_botol']);
+    $jumlah_barang_perbotol = clean_number($post['jumlah_barang_perbotol']);
+    $jumlah_barang = $jumlah_barang_botol * $jumlah_barang_perbotol;
     $satuan_barang = clean_input($post['satuan_barang']);
-    $minimal_stok = clean_number($post['minimal_stok']);
+    $minimal_stok_awal = clean_number($post['minimal_stok_awal']);
+    $minimal_stok = $minimal_stok_awal * $jumlah_barang_perbotol;
     $harga_beli = clean_number($post['harga_beli']);
 
     $query = "INSERT INTO stok_barang 
-                (nama_barang, jenis_barang, jumlah_barang, satuan_barang, minimal_stok, harga_beli) 
+                (nama_barang, jenis_barang, jumlah_barang, satuan_barang, jumlah_satuan, minimal_stok, harga_beli) 
               VALUES 
-                ('$nama_barang', '$jenis_barang', '$jumlah_barang', '$satuan_barang', '$minimal_stok', '$harga_beli')";
+                ('$nama_barang', '$jenis_barang', '$jumlah_barang', '$satuan_barang', '$jumlah_barang_perbotol', '$minimal_stok', '$harga_beli')";
 
     mysqli_query($koneksi, $query);
 
@@ -271,6 +283,7 @@ function edit_barang($post)
     $jenis_barang = clean_input($post['jenis_barang']);
     $jumlah_barang = clean_number($post['jumlah_barang']);
     $satuan_barang = clean_input($post['satuan_barang']);
+    $jumlah_barang_perbotol = clean_number($post['jumlah_barang_perbotol']);
     $minimal_stok = clean_number($post['minimal_stok']);
     $harga_beli = clean_number($post['harga_beli']);
 
@@ -279,6 +292,7 @@ function edit_barang($post)
                 jenis_barang = '$jenis_barang',
                 jumlah_barang = '$jumlah_barang',
                 satuan_barang = '$satuan_barang',
+                jumlah_satuan = '$jumlah_barang_perbotol',
                 minimal_stok = '$minimal_stok',
                 harga_beli = '$harga_beli'
               WHERE id_barang = $id_barang";

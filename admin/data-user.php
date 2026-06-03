@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['hapus'])) {
     }
 }
 
+
 // Mengatur jumlah data per halaman
 $jumlah_per_halaman = 5;
 
@@ -95,11 +96,10 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                             <input 
                                 type="text" 
-                                name="search" 
+                                name="cari" 
                                 placeholder="Cari user..." 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
                             >
-
                             <button 
                                 type="submit" 
                                 class="px-4 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 transition-colors"
