@@ -1,6 +1,5 @@
 <?php 
-// Memulai session
-session_start();
+
 
 // Mengatur judul halaman
 $page_title = "Profil";
