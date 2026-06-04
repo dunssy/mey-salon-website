@@ -95,7 +95,7 @@ if (isset($_POST['login'])) {
 <body class="min-h-screen overflow-hidden flex items-center justify-center p-4">
 
     <!-- Container utama halaman login -->
-    <div class="w-full max-w-md glass-effect rounded-[2rem] shadow-2xl overflow-hidden relative">
+    <div class="w-full max-w-md glass-effect rounded-[2:rem] shadow-2xl overflow-hidden relative">
 
         <!-- Bagian form login -->
         <div class="w-full px-8 py-7 bg-white relative">

@@ -205,7 +205,7 @@ $total_estimasi_modal = 0;
 
                             <!-- Tabel paket stok -->
                             <div class="overflow-x-auto">
-                                <table class="w-full text-left min-w-[800px]">
+                                <table class="w-full text-left min-w-[800:px]">
 
                                     <!-- Header tabel -->
                                     <thead class="bg-pink-50/40 text-gray-400 text-[10px] uppercase font-bold tracking-widest">
@@ -330,10 +330,11 @@ $total_estimasi_modal = 0;
                                     <p class="text-[11px] font-bold text-yellow-600 uppercase tracking-widest">
                                         Tambahan Bahan
                                     </p>
+                                        <!-- modal tambah layanan  -->
+                                         <button 
+                                            id="tambahBahanBtn"
+                                            class="mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 bg-yellow-600 text-white text-sm font-bold rounded-xl hover:bg-yellow-700 transition"
 
-                                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">
-                                        Jika rambut panjang atau bahan kurang, admin bisa menambahkan bahan tambahan saat menyelesaikan booking.
-                                    </p>
                                 </div>
                             </div>
                         </div>
