@@ -31,7 +31,6 @@ $query_booking = mysqli_query(
         b.tanggal_saran,
         b.jam_saran,
         b.catatan_admin,
-        b.total_dp,
         b.bukti_pembayaran,
         u.nama,
         u.no_hp,
@@ -115,7 +114,7 @@ function statusBadgeClass($status)
                                 </h3>
 
                                 <p class="text-xs text-gray-400 mt-1">
-                                    Kelola semua booking pelanggan, cek DP QRIS, dan proses layanan salon.
+                                    Kelola semua booking pelanggan, cek bukti pembayaran QRIS, dan proses layanan salon.
                                 </p>
                             </div>
 
@@ -322,7 +321,7 @@ function statusBadgeClass($status)
                         </div>
 
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left min-w-[1180px] text-sm">
+                            <table class="w-full text-left min-w-[1080px] text-sm">
 
                                 <thead class="bg-pink-50/40 text-gray-400 text-[10px] uppercase font-bold tracking-widest">
                                     <tr>
@@ -331,7 +330,6 @@ function statusBadgeClass($status)
                                         <th class="px-5 py-3">Pelanggan</th>
                                         <th class="px-5 py-3">Layanan</th>
                                         <th class="px-5 py-3">Total</th>
-                                        <th class="px-5 py-3">DP</th>
                                         <th class="px-5 py-3 text-center">Bukti</th>
                                         <th class="px-5 py-3 text-center">Status</th>
                                         <th class="px-5 py-3 text-center">Aksi</th>
@@ -398,10 +396,6 @@ function statusBadgeClass($status)
                                                     </span>
                                                 </td>
 
-                                                <td class="px-5 py-3 font-bold text-pink-600 whitespace-nowrap">
-                                                    Rp <?= number_format($booking['total_dp'] ?? 0, 0, ',', '.'); ?>
-                                                </td>
-
                                                 <td class="px-5 py-3 text-center">
                                                     <?php if (!empty($booking['bukti_pembayaran'])) : ?>
                                                         <a 
@@ -441,7 +435,7 @@ function statusBadgeClass($status)
                                     <?php else : ?>
 
                                         <tr>
-                                            <td colspan="9" class="px-5 py-10 text-center text-gray-400 italic">
+                                            <td colspan="8" class="px-5 py-10 text-center text-gray-400 italic">
                                                 Belum ada data booking pada filter ini.
                                             </td>
                                         </tr>

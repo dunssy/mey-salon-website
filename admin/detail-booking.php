@@ -12,6 +12,10 @@ include "../config/app.php";
 // Menggunakan koneksi database
 global $koneksi;
 
+// Mengecek tabel stok yang digunakan
+$cek_tabel_stok_barang = mysqli_query($koneksi, "SHOW TABLES LIKE 'stok_barang'");
+$tabel_stok = mysqli_num_rows($cek_tabel_stok_barang) > 0 ? 'stok_barang' : 'stok';
+
 // Mengambil id booking dari URL
 $id_booking = isset($_GET['id_booking']) ? (int) $_GET['id_booking'] : 0;
 
@@ -51,11 +55,30 @@ if (isset($_POST['konfirmasi_booking'])) {
 
 // CEK JADWAL SUGGESTION DAN MASUKKAN KE PENDING JIKA ADA
 if (isset($_POST['pending_booking'])) {
-    $tanggal_saran = mysqli_real_escape_string($koneksi, $_POST['tanggal_saran']);
-    $jam_saran = mysqli_real_escape_string($koneksi, $_POST['jam_saran']);
-    $catatan_admin = mysqli_real_escape_string($koneksi, $_POST['catatan_admin']);
-// Mengecek jika kolom saran sudah tersedia maka update dengan
-// saran jadwal, jika tidak update hanya status booking saja
+    // Mengambil input saran jadwal
+    $tanggal_saran = mysqli_real_escape_string($koneksi, $_POST['tanggal_saran'] ?? '');
+    $jam_saran = mysqli_real_escape_string($koneksi, $_POST['jam_saran'] ?? '');
+    $catatan_admin = mysqli_real_escape_string($koneksi, strip_tags($_POST['catatan_admin'] ?? ''));
+
+    // Mengecek input saran wajib diisi
+    if (empty($tanggal_saran) || empty($jam_saran) || empty($catatan_admin)) {
+        echo "<script>
+                alert('Tanggal saran, jam saran, dan catatan admin wajib diisi!');
+                window.location.href = 'detail-booking.php?id_booking=$id_booking';
+              </script>";
+        exit;
+    }
+
+    // Mengecek salon libur hari Rabu
+    if (date('w', strtotime($tanggal_saran)) == 3) {
+        echo "<script>
+                alert('Salon libur setiap hari Rabu. Pilih tanggal saran lain!');
+                window.location.href = 'detail-booking.php?id_booking=$id_booking';
+              </script>";
+        exit;
+    }
+
+    // Mengecek jika kolom saran sudah tersedia
     if ($kolom_saran_ada) {
         mysqli_query(
             $koneksi,"UPDATE booking SET status_booking = 'Pending', 
@@ -187,7 +210,7 @@ if (isset($_POST['done_booking'])) {
 
                 mysqli_query(
                     $koneksi,
-                    "UPDATE stok_barang 
+                    "UPDATE $tabel_stok 
                      SET jumlah_barang = jumlah_barang - $jumlah_pemakaian
                      WHERE id_barang = $id_barang"
                 );
@@ -210,7 +233,7 @@ if (isset($_POST['done_booking'])) {
 
                 mysqli_query(
                     $koneksi,
-                    "UPDATE stok_barang 
+                    "UPDATE $tabel_stok 
                      SET jumlah_barang = jumlah_barang - $jumlah
                      WHERE id_barang = $id_barang"
                 );
@@ -273,6 +296,7 @@ if (!$booking) {
 $query_layanan = mysqli_query(
     $koneksi,
     "SELECT 
+        layanan.id_layanan,
         layanan.nama_layanan,
         layanan.harga_min AS harga_layanan,
         layanan.durasi_layanan
@@ -285,10 +309,12 @@ $query_layanan = mysqli_query(
 $total_harga = 0;
 $total_durasi = 0;
 $layanan_booking = [];
+$id_layanan_booking = [];
 
 // Menghitung total layanan
 while ($layanan = mysqli_fetch_assoc($query_layanan)) {
     $layanan_booking[] = $layanan;
+    $id_layanan_booking[] = (int) $layanan['id_layanan'];
     $total_harga += (int) $layanan['harga_layanan'];
     $total_durasi += (int) $layanan['durasi_layanan'];
 }
@@ -320,10 +346,84 @@ function badge_status_booking($status)
 }
 
 // Mengambil stok barang untuk tambahan bahan
-$data_stok_barang = select("
-    SELECT * FROM stok_barang
-    ORDER BY nama_barang ASC
-");
+$data_stok_barang = select("\n    SELECT * FROM $tabel_stok\n    ORDER BY nama_barang ASC\n");
+
+// Mengambil kalender booking aktif untuk admin
+$query_kalender_admin = mysqli_query(
+    $koneksi,
+    "SELECT 
+        b.id_booking,
+        b.tanggal_booking,
+        b.jam_mulai,
+        b.jam_selesai,
+        b.status_booking,
+        u.nama,
+        GROUP_CONCAT(l.nama_layanan SEPARATOR ', ') AS nama_layanan
+     FROM booking b
+     JOIN user u ON b.id_user = u.id_user
+     LEFT JOIN booking_detail bd ON b.id_booking = bd.id_booking
+     LEFT JOIN layanan l ON bd.id_layanan = l.id_layanan
+     WHERE b.status_booking IN ('Waiting', 'Pending', 'On-going')
+     GROUP BY b.id_booking
+     ORDER BY b.tanggal_booking ASC, b.jam_mulai ASC"
+);
+
+// Menyiapkan data kalender admin
+$jadwal_admin = [];
+
+// Mengisi data kalender admin
+while ($jadwal = mysqli_fetch_assoc($query_kalender_admin)) {
+    $tanggal = $jadwal['tanggal_booking'];
+
+    if (!isset($jadwal_admin[$tanggal])) {
+        $jadwal_admin[$tanggal] = [];
+    }
+
+    $jadwal_admin[$tanggal][] = [
+        'id_booking' => $jadwal['id_booking'],
+        'jam_mulai' => substr($jadwal['jam_mulai'], 0, 5),
+        'jam_selesai' => substr($jadwal['jam_selesai'], 0, 5),
+        'nama' => $jadwal['nama'],
+        'layanan' => $jadwal['nama_layanan'] ?: 'Booking',
+        'status' => $jadwal['status_booking'],
+    ];
+}
+
+// Mengambil stok paket yang dipakai layanan booking
+$stok_paket_booking = [];
+
+// Menjalankan query stok paket jika layanan tersedia
+if (!empty($id_layanan_booking)) {
+    $id_layanan_string = implode(',', $id_layanan_booking);
+
+    $query_stok_paket = mysqli_query(
+        $koneksi,
+        "SELECT 
+            ps.id_layanan,
+            ps.id_barang,
+            ps.jumlah_stok,
+            l.nama_layanan,
+            s.nama_barang,
+            s.jenis_barang,
+            s.jumlah_barang,
+            s.satuan_barang,
+            s.minimal_stok
+         FROM paket_stok ps
+         JOIN layanan l ON ps.id_layanan = l.id_layanan
+         JOIN $tabel_stok s ON ps.id_barang = s.id_barang
+         WHERE ps.id_layanan IN ($id_layanan_string)
+         ORDER BY l.nama_layanan ASC, s.nama_barang ASC"
+    );
+
+    if ($query_stok_paket) {
+        while ($stok_paket = mysqli_fetch_assoc($query_stok_paket)) {
+            $stok_paket_booking[] = $stok_paket;
+        }
+    }
+}
+
+// Mengubah data kalender ke JSON
+$jadwal_admin_json = json_encode($jadwal_admin);
 
 ?>
 
@@ -553,6 +653,69 @@ $data_stok_barang = select("
                                     </div>
                                 </div>
                             </div>
+
+
+                            <!-- Card stok paket layanan -->
+                            <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+
+                                <!-- Header stok paket -->
+                                <div class="p-6 border-b border-pink-100">
+                                    <h4 class="font-bold text-gray-800">
+                                        Stok Barang yang Dipakai
+                                    </h4>
+
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        Paket stok otomatis berdasarkan layanan yang dibooking customer.
+                                    </p>
+                                </div>
+
+                                <!-- Isi stok paket -->
+                                <div class="p-6 space-y-3">
+                                    <?php if (!empty($stok_paket_booking)) : ?>
+                                        <?php foreach ($stok_paket_booking as $stok_paket) : ?>
+                                            <div class="p-4 bg-gray-50 border border-gray-100 rounded-2xl">
+                                                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                                                    <div>
+                                                        <p class="text-xs font-bold text-pink-600">
+                                                            <?= htmlspecialchars($stok_paket['nama_layanan']); ?>
+                                                        </p>
+
+                                                        <h5 class="text-sm font-bold text-gray-800 mt-1">
+                                                            <?= htmlspecialchars($stok_paket['nama_barang']); ?>
+                                                        </h5>
+
+                                                        <p class="text-xs text-gray-400 mt-1">
+                                                            Jenis: <?= htmlspecialchars($stok_paket['jenis_barang']); ?>
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="text-left sm:text-right">
+                                                        <p class="text-sm font-bold text-gray-800">
+                                                            Pakai: <?= (int) $stok_paket['jumlah_stok']; ?> <?= htmlspecialchars($stok_paket['satuan_barang']); ?>
+                                                        </p>
+
+                                                        <p class="text-xs text-gray-400 mt-1">
+                                                            Stok saat ini: <?= (int) $stok_paket['jumlah_barang']; ?> <?= htmlspecialchars($stok_paket['satuan_barang']); ?>
+                                                        </p>
+
+                                                        <?php if ((int) $stok_paket['jumlah_barang'] <= (int) $stok_paket['minimal_stok']) : ?>
+                                                            <p class="text-xs font-bold text-red-500 mt-1">
+                                                                Stok menipis
+                                                            </p>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php else : ?>
+                                        <p class="text-sm text-gray-400 text-center py-4">
+                                            Belum ada paket stok untuk layanan ini.
+                                        </p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
+                            
                         </div>
 
                         <!-- Panel aksi admin -->
@@ -589,6 +752,16 @@ $data_stok_barang = select("
                                                 <span>Konfirmasi Booking</span>
                                             </button>
                                         </form>
+
+                                        <!-- Tombol tampil popup pending -->
+                                        <button 
+                                            type="button"
+                                            onclick="openPendingModal()"
+                                            class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 text-white text-sm font-bold rounded-xl hover:bg-orange-600 transition-colors"
+                                        >
+                                            <i class="fa-solid fa-clock"></i>
+                                            <span>Pending & Beri Saran</span>
+                                        </button>
 
                                         <!-- Tombol batal -->
                                         <form action="" method="POST">
@@ -696,87 +869,67 @@ $data_stok_barang = select("
                                 </div>
                             </div>
 
-                            <!-- Card pending dan saran jadwal -->
-                            <?php if ($booking['status_booking'] == 'Waiting' || $booking['status_booking'] == 'Pending') : ?>
 
-                                <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                            <!-- Card kalender admin compact -->
+                            <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
 
-                                    <!-- Header pending -->
-                                    <div class="p-6 border-b border-pink-100">
-                                        <h4 class="font-bold text-gray-800">
-                                            Pending & Saran Jam
+                                <!-- Header kalender admin -->
+                                <div class="p-4 border-b border-pink-100 flex items-center justify-between gap-3">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-800">
+                                            Kalender Booking
                                         </h4>
 
-                                        <p class="text-xs text-gray-400 mt-1">
-                                            Gunakan jika jadwal bentrok dengan pelanggan datang langsung.
+                                        <p class="text-[11px] text-gray-400 mt-1">
+                                            Cek tanggal booking aktif.
                                         </p>
                                     </div>
 
-                                    <!-- Form pending -->
-                                    <form action="" method="POST" class="p-6 space-y-4">
-
-                                        <!-- Input tanggal saran -->
-                                        <div>
-                                            <label for="tanggal_saran" class="block text-sm font-medium text-gray-700 mb-1">
-                                                Tanggal Saran
-                                            </label>
-
-                                            <input 
-                                                type="date" 
-                                                name="tanggal_saran" 
-                                                id="tanggal_saran"
-                                                required
-                                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
-                                            >
-                                        </div>
-
-                                        <!-- Input jam saran -->
-                                        <div>
-                                            <label for="jam_saran" class="block text-sm font-medium text-gray-700 mb-1">
-                                                Jam Saran
-                                            </label>
-
-                                            <input 
-                                                type="time" 
-                                                name="jam_saran" 
-                                                id="jam_saran"
-                                                required
-                                                min="10:00"
-                                                max="21:00"
-                                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
-                                            >
-                                        </div>
-
-                                        <!-- Input catatan admin -->
-                                        <div>
-                                            <label for="catatan_admin" class="block text-sm font-medium text-gray-700 mb-1">
-                                                Catatan Admin
-                                            </label>
-
-                                            <textarea 
-                                                name="catatan_admin" 
-                                                id="catatan_admin"
-                                                rows="4"
-                                                required
-                                                placeholder="Contoh: Mohon datang jam 15:00 karena jam sebelumnya ada pelanggan datang langsung."
-                                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200 resize-none"
-                                            ></textarea>
-                                        </div>
-
-                                        <!-- Tombol pending -->
+                                    <div class="flex items-center gap-2">
                                         <button 
-                                            type="submit" 
-                                            name="pending_booking"
-                                            onclick="return confirm('Jadikan booking ini pending dan kirim saran jadwal?')"
-                                            class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 text-white text-sm font-bold rounded-xl hover:bg-orange-600 transition-colors"
+                                            type="button"
+                                            onclick="adminPrevMonth()"
+                                            class="w-8 h-8 rounded-lg bg-pink-50 text-pink-600 hover:bg-pink-100 transition"
                                         >
-                                            <i class="fa-solid fa-clock"></i>
-                                            <span>Pending & Simpan Saran</span>
+                                            <i class="fa-solid fa-chevron-left text-xs"></i>
                                         </button>
-                                    </form>
+
+                                        <button 
+                                            type="button"
+                                            onclick="adminNextMonth()"
+                                            class="w-8 h-8 rounded-lg bg-pink-50 text-pink-600 hover:bg-pink-100 transition"
+                                        >
+                                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
-                            <?php endif; ?>
+                                <!-- Isi kalender admin -->
+                                <div class="p-4">
+                                    <div class="flex items-center justify-between gap-3 mb-4">
+                                        <h5 id="admin-calendar-title" class="text-xs font-bold text-gray-800"></h5>
+
+                                        <p class="text-[10px] text-gray-400">
+                                            Pink: booking
+                                        </p>
+                                    </div>
+
+                                    <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] font-bold text-gray-400 mb-2">
+                                        <div>Min</div>
+                                        <div>Sen</div>
+                                        <div>Sel</div>
+                                        <div>Rab</div>
+                                        <div>Kam</div>
+                                        <div>Jum</div>
+                                        <div>Sab</div>
+                                    </div>
+
+                                    <div id="admin-calendar-days" class="grid grid-cols-7 gap-1.5"></div>
+
+                                    <div id="admin-calendar-detail" class="mt-4 space-y-2"></div>
+                                </div>
+                            </div>
+
 
                             <!-- Card saran jadwal tersimpan -->
                             <?php if ($kolom_saran_ada && !empty($booking['tanggal_saran']) && !empty($booking['jam_saran'])) : ?>
@@ -844,6 +997,114 @@ $data_stok_barang = select("
         </main>
     </div>
 
+
+<!-- Modal pending dan saran jadwal -->
+<div id="pending-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/50 px-4">
+
+    <!-- Card modal pending -->
+    <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
+
+        <!-- Header modal -->
+        <div class="p-5 border-b border-orange-100 flex items-start justify-between gap-4">
+            <div>
+                <h4 class="text-lg font-bold text-gray-800">
+                    Pending & Saran Jadwal
+                </h4>
+
+                <p class="text-xs text-gray-400 mt-1">
+                    Isi tanggal, jam, dan catatan saran untuk customer.
+                </p>
+            </div>
+
+            <!-- Tombol tutup modal -->
+            <button 
+                type="button"
+                onclick="closePendingModal()"
+                class="w-9 h-9 rounded-xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Form pending -->
+        <form action="" method="POST" class="p-5 space-y-4">
+
+            <!-- Input tanggal saran -->
+            <div>
+                <label for="tanggal_saran" class="block text-sm font-medium text-gray-700 mb-1">
+                    Tanggal Saran
+                </label>
+
+                <input 
+                    type="date" 
+                    name="tanggal_saran" 
+                    id="tanggal_saran"
+                    required
+                    class="w-full px-3 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-200"
+                >
+
+                <p class="text-[11px] text-gray-400 mt-1">
+                    Jangan pilih hari Rabu karena salon libur.
+                </p>
+            </div>
+
+            <!-- Input jam saran -->
+            <div>
+                <label for="jam_saran" class="block text-sm font-medium text-gray-700 mb-1">
+                    Jam Saran
+                </label>
+
+                <input 
+                    type="time" 
+                    name="jam_saran" 
+                    id="jam_saran"
+                    required
+                    min="10:00"
+                    max="21:00"
+                    class="w-full px-3 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-200"
+                >
+            </div>
+
+            <!-- Input catatan admin -->
+            <div>
+                <label for="catatan_admin" class="block text-sm font-medium text-gray-700 mb-1">
+                    Catatan Admin
+                </label>
+
+                <textarea 
+                    name="catatan_admin" 
+                    id="catatan_admin"
+                    rows="4"
+                    required
+                    placeholder="Contoh: Mohon datang jam 15:00 karena jadwal sebelumnya penuh."
+                    class="w-full px-3 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-200 resize-none"
+                ></textarea>
+            </div>
+
+            <!-- Aksi modal -->
+            <div class="flex flex-col sm:flex-row gap-2 pt-2">
+                <button 
+                    type="button"
+                    onclick="closePendingModal()"
+                    class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-gray-50 text-gray-500 text-sm font-bold rounded-xl hover:bg-gray-100 transition-colors"
+                >
+                    Batal
+                </button>
+
+                <button 
+                    type="submit" 
+                    name="pending_booking"
+                    onclick="return confirm('Jadikan booking ini pending dan kirim saran jadwal?')"
+                    class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 text-white text-sm font-bold rounded-xl hover:bg-orange-600 transition-colors"
+                >
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Simpan Saran</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     // Menyimpan pilihan stok barang dari database
     const stokBarangOptions = `
@@ -855,6 +1116,32 @@ $data_stok_barang = select("
             </option>
         <?php endforeach; ?>
     `;
+
+    // Menyimpan data kalender booking admin
+    const jadwalAdmin = <?= $jadwal_admin_json ?: '{}'; ?>;
+
+    // Menyimpan bulan kalender admin
+    let adminCalendarDate = new Date();
+
+    // Membuka popup pending
+    function openPendingModal() {
+        const modal = document.getElementById('pending-modal');
+
+        if (!modal) return;
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    // Menutup popup pending
+    function closePendingModal() {
+        const modal = document.getElementById('pending-modal');
+
+        if (!modal) return;
+
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
 
     // Menambahkan baris tambahan bahan
     function tambahBahan() {
@@ -890,6 +1177,132 @@ $data_stok_barang = select("
 
         wrapper.appendChild(row);
     }
+
+
+    // Membuat key tanggal format YYYY-MM-DD
+    function makeDateKey(year, month, day) {
+        const monthText = String(month + 1).padStart(2, '0');
+        const dayText = String(day).padStart(2, '0');
+
+        return `${year}-${monthText}-${dayText}`;
+    }
+
+    // Render kalender booking admin
+    function renderAdminCalendar() {
+        const title = document.getElementById('admin-calendar-title');
+        const daysContainer = document.getElementById('admin-calendar-days');
+        const detailContainer = document.getElementById('admin-calendar-detail');
+
+        if (!title || !daysContainer || !detailContainer) return;
+
+        const year = adminCalendarDate.getFullYear();
+        const month = adminCalendarDate.getMonth();
+        const firstDay = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        title.textContent = `${monthNames[month]} ${year}`;
+        daysContainer.innerHTML = '';
+
+        for (let blank = 0; blank < firstDay; blank++) {
+            daysContainer.innerHTML += `<div></div>`;
+        }
+
+        for (let day = 1; day <= totalDays; day++) {
+            const dateKey = makeDateKey(year, month, day);
+            const dateObject = new Date(dateKey + 'T00:00:00');
+            const isWednesday = dateObject.getDay() === 3;
+            const hasBooking = !!jadwalAdmin[dateKey];
+
+            let className = 'min-h-[34px] rounded-lg text-[11px] font-bold border transition flex flex-col items-center justify-center gap-0.5 ';
+
+            if (isWednesday) {
+                className += 'bg-red-50 text-red-400 border-red-100 line-through';
+            } else if (hasBooking) {
+                className += 'bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100';
+            } else {
+                className += 'bg-white text-gray-600 border-gray-100 hover:bg-gray-50';
+            }
+
+            daysContainer.innerHTML += `
+                <button type="button" onclick="showAdminCalendarDetail('${dateKey}')" class="${className}">
+                    <span>${day}</span>
+                    ${hasBooking ? '<span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span>' : ''}
+                </button>
+            `;
+        }
+
+        detailContainer.innerHTML = `
+            <div class="text-[11px] text-gray-400 bg-gray-50 border border-gray-100 rounded-xl p-3 text-center">
+                Klik tanggal berwarna pink untuk melihat booking.
+            </div>
+        `;
+    }
+
+    // Menampilkan detail booking berdasarkan tanggal
+    function showAdminCalendarDetail(dateKey) {
+        const detailContainer = document.getElementById('admin-calendar-detail');
+
+        if (!detailContainer) return;
+
+        const list = jadwalAdmin[dateKey] || [];
+
+        if (list.length === 0) {
+            detailContainer.innerHTML = `
+                <div class="text-[11px] text-gray-400 bg-gray-50 border border-gray-100 rounded-xl p-3 text-center">
+                    Tidak ada booking aktif pada tanggal ini.
+                </div>
+            `;
+            return;
+        }
+
+        detailContainer.innerHTML = list.map(item => `
+            <a href="detail-booking.php?id_booking=${item.id_booking}" class="block p-3 bg-pink-50/50 border border-pink-100 rounded-xl hover:bg-pink-50 transition">
+                <div class="flex items-center justify-between gap-3">
+                    <p class="text-xs font-bold text-gray-800">${item.jam_mulai} - ${item.jam_selesai}</p>
+                    <span class="text-[10px] font-bold text-pink-600 bg-white px-2 py-1 rounded-lg">${item.status}</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">${item.nama}</p>
+                <p class="text-xs text-gray-400 mt-1">${item.layanan}</p>
+            </a>
+        `).join('');
+    }
+
+    // Kalender admin bulan sebelumnya
+    function adminPrevMonth() {
+        adminCalendarDate.setMonth(adminCalendarDate.getMonth() - 1);
+        renderAdminCalendar();
+    }
+
+    // Kalender admin bulan berikutnya
+    function adminNextMonth() {
+        adminCalendarDate.setMonth(adminCalendarDate.getMonth() + 1);
+        renderAdminCalendar();
+    }
+
+    // Menutup popup pending saat klik area luar
+    document.addEventListener('click', function (event) {
+        const modal = document.getElementById('pending-modal');
+
+        if (!modal || modal.classList.contains('hidden')) return;
+
+        if (event.target === modal) {
+            closePendingModal();
+        }
+    });
+
+    // Menutup popup pending saat tombol escape ditekan
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closePendingModal();
+        }
+    });
+
+    // Menjalankan kalender saat halaman siap
+    document.addEventListener('DOMContentLoaded', function () {
+        renderAdminCalendar();
+    });
+
 </script>
 
 <?php

@@ -148,7 +148,7 @@ if (isset($_POST['submit'])) {
                                 </select>
                             </div>
 
-                            <!-- Input jumlah barang -->
+                            <!-- Input jumlah barang hanya untuk dilihat -->
                             <div>
                                 <label for="jumlah_barang" class="block text-sm font-medium text-gray-700 mb-1">
                                     Jumlah Barang
@@ -158,10 +158,10 @@ if (isset($_POST['submit'])) {
                                     type="number" 
                                     name="jumlah_barang" 
                                     id="jumlah_barang" 
-                                    value="<?= htmlspecialchars($barang['jumlah_barang']); ?>" 
-                                    required 
+                                    value="<?= htmlspecialchars($barang['jumlah_barang']); ?>"  
                                     min="0"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed focus:outline-none"
+                                    readonly
                                 >
                             </div>
 

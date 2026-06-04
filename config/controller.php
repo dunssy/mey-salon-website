@@ -281,7 +281,6 @@ function edit_barang($post)
     $id_barang = (int) $post['id_barang'];
     $nama_barang = clean_input($post['nama_barang']);
     $jenis_barang = clean_input($post['jenis_barang']);
-    $jumlah_barang = clean_number($post['jumlah_barang']);
     $satuan_barang = clean_input($post['satuan_barang']);
     $jumlah_barang_perbotol = clean_number($post['jumlah_barang_perbotol']);
     $minimal_stok = clean_number($post['minimal_stok']);
@@ -290,7 +289,6 @@ function edit_barang($post)
     $query = "UPDATE stok_barang SET 
                 nama_barang = '$nama_barang',
                 jenis_barang = '$jenis_barang',
-                jumlah_barang = '$jumlah_barang',
                 satuan_barang = '$satuan_barang',
                 jumlah_satuan = '$jumlah_barang_perbotol',
                 minimal_stok = '$minimal_stok',
