@@ -1,9 +1,7 @@
 <!-- Footer informatif dashboard -->
 <footer class="mt-12 bg-white border-t border-pink-100 px-4 md:px-8 py-8">
-
     <!-- Kontainer footer -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
         <!-- Informasi aplikasi -->
         <div class="text-center md:text-left">
             <h5 class="text-pink-600 font-bold italic text-lg">
@@ -14,7 +12,6 @@
                 Mey Salon adalah platform pemesanan layanan salon yang memudahkan pelanggan untuk menemukan dan memesan layanan kecantikan.
             </p>
         </div>
-
         <!-- Link dan kontak -->
         <div class="flex justify-center md:justify-start gap-12">
 

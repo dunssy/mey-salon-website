@@ -590,18 +590,33 @@ $data_stok_barang = select("
                                             </button>
                                         </form>
 
+<<<<<<< Updated upstream
                                         <!-- Tombol batal -->
                                         <form action="" method="POST">
+=======
+                                            <!-- Tombol tampil popup pending -->
+>>>>>>> Stashed changes
                                             <button 
-                                                type="submit" 
-                                                name="cancel_booking"
-                                                onclick="return confirm('Batalkan booking pelanggan ini?')"
-                                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors"
+                                                type="button"
+                                                onclick="openPendingModal()"
+                                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 text-white text-sm font-bold rounded-xl hover:bg-orange-600 transition-colors"
                                             >
-                                                <i class="fa-solid fa-ban"></i>
-                                                <span>Batalkan Booking</span>
+                                                <i class="fa-solid fa-clock"></i>
+                                                <span>Pending & Beri Saran</span>
                                             </button>
-                                        </form>
+
+                                            <!-- Tombol batal -->
+                                            <form action="" method="POST">
+                                                <button 
+                                                    type="submit" 
+                                                    name="cancel_booking"
+                                                    onclick="return confirm('Batalkan booking pelanggan ini?')"
+                                                    class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors"
+                                                >
+                                                    <i class="fa-solid fa-ban"></i>
+                                                    <span>Batalkan Booking</span>
+                                                </button>
+                                            </form>
 
                                     <?php endif; ?>
 

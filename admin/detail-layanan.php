@@ -333,8 +333,100 @@ $total_estimasi_modal = 0;
                                     
                                   
 
+
                                     
                                 </div>                                        
+                                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                                        Jika rambut panjang atau bahan kurang, admin bisa menambahkan bahan tambahan saat menyelesaikan booking.
+                                    </p>
+                                            <!-- Tombol tampil popup pending -->
+                                        <button 
+                                            type="button"
+                                            onclick="openPendingModal()"
+                                            class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 text-white text-sm font-bold rounded-xl hover:bg-orange-600 transition-colors"
+                                        >
+                                            <i class="fa-solid fa-clock"></i>
+                                            <span>Tambah Bahan</span>
+                                        </button>
+
+                                                                                
+                                        <!-- Modal pending dan saran jadwal -->
+                                        <div id="layanan-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/50 px-4">
+
+                                            <!-- Card modal pending -->
+                                            <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
+
+                                                <!-- Header modal -->
+                                                <div class="p-5 border-b border-orange-100 flex items-start justify-between gap-4">
+                                                    <div class="flex flex-col gap-1">
+                                                        <h4 class="text-lg font-bold text-gray-800">
+                                                            Tambah Bahan
+                                                        </h4>
+
+                                                        <p class="text-xs text-gray-400 mt-1">
+                                                            Isi tanggal, jam, dan catatan saran untuk customer.
+                                                        </p>
+                                                    </div>
+
+                                                    <!-- Tombol tutup modal -->
+                                                    <button 
+                                                        type="button"
+                                                        onclick="closePendingModal()"
+                                                        class="w-9 h-9 rounded-xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition"
+                                                    >
+                                                        <i class="fa-solid fa-xmark"></i>
+                                                    </button>
+                                                </div>
+
+                                                <!-- Form pending -->
+                                                <form action="" method="POST" class="p-5 space-y-4">
+
+                                                    <!-- Input tanggal saran -->
+                                                    <div>
+                                                        <label for="tanggal_saran" class="block text-sm font-medium text-gray-700 mb-1">
+                                                            Tanggal Saran
+                                                        </label>
+
+                                                        <input 
+                                                            type="text" 
+                                                            name="tanggal_saran" 
+                                                            id="tanggal_saran"
+                                                            required
+                                                            class="w-full px-3 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-200"
+                                                        >
+
+                                                        <p class="text-[11px] text-gray-400 mt-1">
+                                                        Masukan bahan dari layanan yang digunakan.
+                                                        </p>
+                                                    </div>
+
+
+                                                    <!-- Aksi modal -->
+                                                    <div class="flex flex-col sm:flex-row gap-2 pt-2">
+                                                        <button 
+                                                            type="button"
+                                                            onclick="closePendingModal()"
+                                                            class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-gray-50 text-gray-500 text-sm font-bold rounded-xl hover:bg-gray-100 transition-colors"
+                                                        >
+                                                            Batal
+                                                        </button>
+
+                                                        <button 
+                                                            type="submit" 
+                                                            name="simpan-bahan"
+                                                            onclick="return confirm('Jadikan booking ini pending dan kirim saran jadwal?')"
+                                                            class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 text-white text-sm font-bold rounded-xl hover:bg-orange-600 transition-colors"
+                                                        >
+                                                            <i class="fa-solid fa-paper-plane"></i>
+                                                            <span>Simpan Saran</span>
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -345,6 +437,44 @@ $total_estimasi_modal = 0;
             <?php include "../layout/footer-component.php"; ?>
         </main>
     </div>
+
+    <!-- Script Modal Tambah Layanan -->
+    <script>
+        // Fungsi membuka modal
+        function openPendingModal() {
+            const modal = document.getElementById('layanan-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Fungsi menutup modal
+        function closePendingModal() {
+            const modal = document.getElementById('layanan-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+            // Reset form
+            document.querySelector('#layanan-modal form').reset();
+        }
+
+        // Close modal saat klik di luar modal (backdrop)
+        document.getElementById('layanan-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePendingModal();
+            }
+        });
+
+        // Close modal saat tekan tombol ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('layanan-modal');
+                if (!modal.classList.contains('hidden')) {
+                    closePendingModal();
+                }
+            }
+        });
+    </script>
 
 <?php
 // Memanggil footer utama
