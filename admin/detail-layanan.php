@@ -330,12 +330,11 @@ $total_estimasi_modal = 0;
                                     <p class="text-[11px] font-bold text-yellow-600 uppercase tracking-widest">
                                         Tambahan Bahan
                                     </p>
-                                        <!-- modal tambah layanan  -->
-                                         <button 
-                                            id="tambahBahanBtn"
-                                            class="mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 bg-yellow-600 text-white text-sm font-bold rounded-xl hover:bg-yellow-700 transition"
+                                    
+                                  
 
-                                </div>
+                                    
+                                </div>                                        
                             </div>
                         </div>
                     </div>

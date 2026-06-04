@@ -7,11 +7,9 @@ if (defined('CONTROLLER_INCLUDED')) {
 
 define('CONTROLLER_INCLUDED', true);
 
-
 // ======================================================
 // HELPER UMUM
 // ======================================================
-
 // Menjalankan query SELECT dan mengembalikan array data
 function select($query)
 {
