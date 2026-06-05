@@ -55,6 +55,24 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 
 <body class="text-gray-800 overflow-x-hidden">
 
+    <!-- SweetAlert Success Notification -->
+    <script>
+        /* global URLSearchParams */
+        // Menampilkan alert success setelah hapus
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('status') === 'success') {
+            Swal.fire({
+                title: "Terhapus!",
+                text: "Layanan berhasil dihapus.",
+                icon: "success",
+                confirmButtonColor: "#db2777"
+            });
+
+            // Hapus parameter status dari URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    </script>
+
     <!-- Wrapper utama halaman admin -->
     <div class="flex h-screen overflow-hidden">
 
@@ -184,18 +202,15 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                     </a>
 
                                                     <!-- Tombol hapus -->
-                                                    <form method="POST" class="inline">
+                                                    <form method="POST" class="inline delete-form" data-id="<?= $data_layanan['id_layanan']; ?>">
                                                         <button 
-                                                            type="submit" 
-                                                            name="hapus" 
-                                                            value="<?= $data_layanan['id_layanan']; ?>" 
-                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus layanan ini?')" 
+                                                            type="button" 
+                                                            onclick="confirmDelete(this, <?= $data_layanan['id_layanan']; ?>)" 
                                                             class="inline-flex px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                                                         >
                                                             Hapus
                                                         </button>
-                                                        
-                                                            
+                                                        <input type="hidden" name="hapus" value="<?= $data_layanan['id_layanan']; ?>">
                                                     </form>
                                                     <a href = "detail-layanan.php?id_layanan=<?= $data_layanan['id_layanan']; ?>" class="inline-flex px-3 py-1.5 text-xs font-medium bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
                                                         Detail
@@ -277,6 +292,27 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
             <?php include "../layout/footer-component.php"; ?>
         </main>
     </div>
+
+<script>
+// Fungsi untuk konfirmasi hapus dengan SweetAlert2
+function confirmDelete(button, id) {
+    Swal.fire({
+        title: "Apakah Anda yakin?",
+        text: "Anda tidak akan bisa mengembalikan layanan yang telah dihapus!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#dc2626",
+        cancelButtonColor: "#6b7280",
+        confirmButtonText: "Ya, hapus layanan!",
+        cancelButtonText: "Batal"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Submit form jika user confirm
+            button.closest('form').submit();
+        }
+    });
+}
+</script>
 
 <?php
 // Memanggil footer utama
