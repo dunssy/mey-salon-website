@@ -144,13 +144,11 @@ function hitung_total_halaman_layanan($jumlah_per_halaman)
 function cari_layanan($keyword){
    global $koneksi;
 
-   $cari = mysqli_query($koneksi,"SELECT * FROM layanan WHERE nama_layanan 
-   LIKE '%$keyword%' OR harga_min 
-   LIKE '%$keyword%' OR durasi_layanan 
-   LIKE '%$keyword%' ORDER BY id_layanan DESC");
-    
+   $keyword = mysqli_real_escape_string($koneksi, $keyword);
+   $cari = mysqli_query($koneksi, "SELECT * FROM layanan WHERE nama_layanan LIKE '%$keyword%' OR harga_min LIKE '%$keyword%' OR durasi_layanan LIKE '%$keyword%' ORDER BY id_layanan DESC");
+   
    $hasil = mysqli_fetch_all($cari, MYSQLI_ASSOC);
-    mysqli_close($koneksi);
+   return $hasil;
 }
 
 // ======================================================
@@ -243,11 +241,21 @@ function hitung_total_halaman_user($jumlah_per_halaman)
     return ceil($data['total'] / $jumlah_per_halaman);
 }
 
+// Fungsi pencarian user berdasarkan nama, email, atau no_hp
+function cari_user($keyword){
+   global $koneksi;
+
+   $keyword = mysqli_real_escape_string($koneksi, $keyword);
+   $cari = mysqli_query($koneksi, "SELECT * FROM user WHERE nama LIKE '%$keyword%' OR email LIKE '%$keyword%' OR no_hp LIKE '%$keyword%' ORDER BY id_user DESC");
+   
+   $hasil = mysqli_fetch_all($cari, MYSQLI_ASSOC);
+   return $hasil;
+}
+
 
 // ======================================================
 // CRUD STOK BARANG
 // ======================================================
-
 // Menambah data barang
 function tambah_barang($post)
 {
@@ -262,6 +270,7 @@ function tambah_barang($post)
     $minimal_stok_awal = clean_number($post['minimal_stok_awal']);
     $minimal_stok = $minimal_stok_awal * $jumlah_barang_perbotol;
     $harga_beli = clean_number($post['harga_beli']);
+    $total_harga_restok = $jumlah_barang_botol * $harga_beli;
 
     $query = "INSERT INTO stok_barang 
                 (nama_barang, jenis_barang, jumlah_barang, satuan_barang, jumlah_satuan, minimal_stok, harga_beli) 
@@ -269,9 +278,19 @@ function tambah_barang($post)
                 ('$nama_barang', '$jenis_barang', '$jumlah_barang', '$satuan_barang', '$jumlah_barang_perbotol', '$minimal_stok', '$harga_beli')";
 
     mysqli_query($koneksi, $query);
+    $id_barang = mysqli_insert_id($koneksi);
+
+    // Menyimpan data ke tabel restok untuk laporan pengeluaran
+    $query_restok = "INSERT INTO restok
+                (id_barang, jumlah_tambah, harga_restok, total_harga_restok)
+              VALUES 
+                ('$id_barang', '$jumlah_barang_botol', '$harga_beli', '$total_harga_restok')";
+    
+    mysqli_query($koneksi, $query_restok);
 
     return mysqli_affected_rows($koneksi);
 }
+
 
 // Mengubah data barang
 function edit_barang($post)
@@ -338,6 +357,18 @@ function hitung_total_halaman_barang($jumlah_per_halaman)
 
     return ceil($data['total'] / $jumlah_per_halaman);
 }
+
+// Fungsi pencarian barang berdasarkan nama
+function cari_barang($keyword){
+   global $koneksi;
+
+   $keyword = mysqli_real_escape_string($koneksi, $keyword);
+   $cari = mysqli_query($koneksi, "SELECT * FROM stok_barang WHERE nama_barang LIKE '%$keyword%' OR jenis_barang LIKE '%$keyword%' ORDER BY id_barang DESC");
+   
+   $hasil = mysqli_fetch_all($cari, MYSQLI_ASSOC);
+   return $hasil;
+}
+
 function tambah_pengeluaran($data) {
     global $koneksi; 
 

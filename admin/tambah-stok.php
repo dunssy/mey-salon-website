@@ -154,7 +154,7 @@ if (isset($_POST['submit'])) {
                                     class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                 >
                                     <option value="">Pilih Satuan Barang</option>
-                                    <option value="pcs">Pcs</option>
+                                    <option value="gram">gram</option>
                                     <option value="ml">Ml</option>
                                 </select>
                             </div>

@@ -37,11 +37,25 @@ if ($halaman_aktif < 1) {
     $halaman_aktif = 1;
 }
 
-// Mengambil data barang sesuai halaman
-$barang = tampil_barang_per_halaman($halaman_aktif, $jumlah_per_halaman);
+// METODE PENCARIAN BARANG 
+if(isset($_GET['search']) && !empty($_GET['search'])){
+    $keyword = clean_input($_GET['search']);
+    $all_barang = cari_barang($keyword);
+    $total_barang = count($all_barang);
+} else {
+    // Jika tidak ada pencarian, ambil semua data barang
+    $all_barang = select("SELECT * FROM stok_barang ORDER BY id_barang DESC");
+    $total_barang = count($all_barang);
+}
 
 // Menghitung total halaman barang
-$total_halaman = hitung_total_halaman_barang($jumlah_per_halaman);
+$total_halaman = ceil($total_barang / $jumlah_per_halaman);
+
+// Menghitung offset untuk pagination
+$offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
+
+// Mengambil data barang sesuai halaman (dari array yang sudah diambil)
+$barang = array_slice($all_barang, $offset, $jumlah_per_halaman);
 
 // Menghitung nomor awal tabel
 $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
@@ -250,12 +264,16 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 
                                             <!-- Navigasi pagination -->
                                             <div class="flex flex-wrap justify-end gap-2">
+                                                <?php 
+                                                    // Build pagination URL dengan search parameter jika ada
+                                                    $search_param = isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '';
+                                                ?>
 
                                                 <!-- Tombol sebelumnya -->
                                                 <?php if ($halaman_aktif > 1) : ?>
                                                     <a 
-                                                        href="?halaman=<?= $halaman_aktif - 1; ?>" 
-                                                        class="px-3 py-1.5 text-xs font-medium bg-white border border-[#EAD8D0] rounded-lg text-[#6F5E64] hover:bg-[#FDEAF1] hover:text-[#C75C7A] transition-colors"
+                                                        href="?halaman=<?= $halaman_aktif - 1; ?><?= $search_param; ?>" 
+                                                        class="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors"
                                                     >
                                                         &laquo; Prev
                                                     </a>
@@ -268,8 +286,8 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                 <!-- Nomor halaman -->
                                                 <?php for ($i = 1; $i <= $total_halaman; $i++) : ?>
                                                     <a 
-                                                        href="?halaman=<?= $i; ?>" 
-                                                        class="px-3 py-1.5 text-xs font-medium border rounded-lg transition-colors <?= $i === $halaman_aktif ? 'bg-[#C75C7A] border-[#C75C7A] text-white' : 'bg-white border-[#EAD8D0] text-[#6F5E64] hover:bg-[#FDEAF1] hover:text-[#C75C7A]'; ?>"
+                                                        href="?halaman=<?= $i; ?><?= $search_param; ?>" 
+                                                        class="px-3 py-1.5 text-xs font-medium border rounded-lg transition-colors <?= $i === $halaman_aktif ? 'bg-pink-600 border-pink-600 text-white' : 'bg-white border-gray-200 text-gray-600 hover:bg-pink-50 hover:text-pink-600'; ?>"
                                                     >
                                                         <?= $i; ?>
                                                     </a>
@@ -278,8 +296,8 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                 <!-- Tombol berikutnya -->
                                                 <?php if ($halaman_aktif < $total_halaman) : ?>
                                                     <a 
-                                                        href="?halaman=<?= $halaman_aktif + 1; ?>" 
-                                                        class="px-3 py-1.5 text-xs font-medium bg-white border border-[#EAD8D0] rounded-lg text-[#6F5E64] hover:bg-[#FDEAF1] hover:text-[#C75C7A] transition-colors"
+                                                        href="?halaman=<?= $halaman_aktif + 1; ?><?= $search_param; ?>" 
+                                                        class="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors"
                                                     >
                                                         Next &raquo;
                                                     </a>

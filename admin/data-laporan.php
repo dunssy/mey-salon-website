@@ -112,6 +112,7 @@ if ($query_restok) {
         $total_restok += (int) $row['total_harga_restok'];
     }
 }
+// menyiapkan data penambahan barang
 
 // Menyiapkan data pengeluaran manual
 $data_pengeluaran = [];

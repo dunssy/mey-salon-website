@@ -214,6 +214,38 @@ if (isset($_POST['submit'])) {
                             </form>
                         </div>
 
+                        <!-- Card informasi laporan -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-pink-100 p-6">
+
+                            <!-- Icon info -->
+                            <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-money-bill-wave text-xl"></i>
+                            </div>
+
+                            <h4 class="font-bold text-gray-800">
+                                Masuk ke Laporan
+                            </h4>
+
+                            <p class="text-sm text-gray-500 mt-2 leading-relaxed">
+                                Pengeluaran manual akan ditampilkan di laporan bersama pengeluaran restok barang.
+                            </p>
+
+                            <div class="mt-5 p-4 bg-pink-50/50 border border-pink-100 rounded-xl">
+                                <p class="text-xs text-gray-500 leading-relaxed">
+                                    Total pengeluaran laporan dihitung dari:
+                                    <br>
+                                    <b>Restok Barang + Pengeluaran Manual</b>
+                                </p>
+                            </div>
+                         
+                            <a 
+                                href="data-laporan.php" 
+                                class="mt-5 inline-flex w-full items-center justify-center gap-2 px-4 py-3 text-sm font-bold text-pink-600 bg-pink-50 rounded-xl hover:bg-pink-100 transition-colors"
+                            >
+                                <i class="fa-solid fa-chart-line"></i>
+                                <span>Lihat Laporan</span>
+                            </a>
+                        </div>
                     </div>
                 </section>
             </div>
