@@ -53,7 +53,7 @@ $total_halaman = hitung_total_halaman_layanan($jumlah_per_halaman);
 $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 ?>
 
-<body class="text-gray-800 overflow-x-hidden">
+<body class="text-[#2B2424] overflow-x-hidden bg-[#FFF7FA]">
 
     <!-- SweetAlert Success Notification -->
     <script>
@@ -65,7 +65,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                 title: "Terhapus!",
                 text: "Layanan berhasil dihapus.",
                 icon: "success",
-                confirmButtonColor: "#db2777"
+                confirmButtonColor: "#C75C7A"
             });
 
             // Hapus parameter status dari URL
@@ -80,13 +80,13 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
         <?php include "../layout/sidebar.php"; ?>
 
         <!-- Konten utama -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-[#FFF7FA]">
 
             <!-- Memanggil navbar -->
             <?php include "../layout/navbar.php"; ?>
 
             <!-- Isi halaman -->
-            <div class="p-4 md:p-8 flex-1">
+            <div class="p-4 sm:p-5 md:p-8 flex-1">
 
                 <!-- Section data layanan -->
                 <section id="section-layanan" class="space-y-6">
@@ -96,11 +96,11 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 
                         <!-- Judul halaman -->
                         <div>
-                            <h3 class="text-xl font-bold text-gray-800">
+                            <h3 class="text-xl font-bold text-[#2B2424]">
                                 <?= $sub_title; ?>
                             </h3>
 
-                            <p class="text-xs text-gray-400">
+                            <p class="text-xs text-[#B77B8E]">
                                 Kelola data layanan yang tersedia di Mey Salon.
                             </p>
                         </div>
@@ -108,33 +108,12 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                         <!-- Tombol tambah layanan -->
                         <a 
                             href="tambah-layanan.php" 
-                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-[#C75C7A] rounded-xl hover:bg-[#B14F6C] shadow-sm shadow-[#FAD7E5] transition-colors"
                         >
                             <i class="fa-solid fa-plus"></i>
                             <span>Tambah Layanan</span>
                         </a>
                     </div>
-
-                    <!-- Form pencarian layanan -->
-                    <form action="" method="GET" class="bg-white p-4 rounded-2xl border border-pink-100 shadow-sm">
-
-                        <!-- Input pencarian -->
-                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                            <input 
-                                type="text" 
-                                name="cari" 
-                                placeholder="Cari layanan..." 
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
-                            >
-
-                            <button 
-                                type="submit" 
-                                class="px-4 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 transition-colors"
-                            >
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </button>
-                        </div>
-                    </form>
 
                     <!-- Pesan error hapus layanan -->
                     <?php if (isset($error_message)) : ?>
@@ -144,7 +123,25 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                     <?php endif; ?>
 
                     <!-- Card tabel layanan -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                    <div class="bg-white rounded-2xl shadow-sm border border-[#F7D6E4] overflow-hidden">
+
+                        <!-- Header tabel layanan -->
+                        <div class="px-5 py-4 border-b border-[#F7D6E4] bg-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <div>
+                                <h4 class="font-bold text-[#3D3134]">
+                                    Daftar Layanan
+                                </h4>
+
+                                <p class="text-xs text-[#B77B8E] mt-1">
+                                    Data layanan yang tersedia untuk customer.
+                                </p>
+                            </div>
+
+                            <span class="inline-flex items-center gap-2 text-[11px] font-bold text-[#C75C7A] bg-[#FDEAF1] px-3 py-1.5 rounded-lg w-fit">
+                                <i class="fa-solid fa-scissors"></i>
+                                <span><?= count($layanan); ?> Layanan</span>
+                            </span>
+                        </div>
 
                         <!-- Tabel responsive -->
                         <div class="overflow-x-auto">
@@ -152,7 +149,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 
                                 <!-- Header tabel -->
                                 <thead>
-                                    <tr class="bg-pink-50/50 border-b border-pink-100 text-gray-700 font-semibold">
+                                    <tr class="bg-[#EFA9BF] border-b border-[#EFA9BF] text-white font-semibold">
                                         <th class="p-4 w-16">No</th>
                                         <th class="p-4">Nama Layanan</th>
                                         <th class="p-4">Harga</th>
@@ -162,13 +159,13 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                 </thead>
 
                                 <!-- Isi tabel -->
-                                <tbody class="divide-y divide-pink-50">
+                                <tbody class="divide-y divide-[#F7D6E4]">
                             
                                     <?php if (!empty($layanan)){ ?>
                                         <!-- Perulangan data layanan -->
                                         <?php foreach ($layanan as $data_layanan  ){ ?>
 
-                                            <tr class="hover:bg-pink-50/20 transition-colors">
+                                            <tr class="hover:bg-[#FDEAF1]/60 transition-colors">
 
                                                 <!-- Nomor urut -->
                                                 <td class="p-4">
@@ -176,7 +173,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                 </td>
 
                                                 <!-- Nama layanan -->
-                                                <td class="p-4 font-medium text-gray-800">
+                                                <td class="p-4 font-medium text-[#2B2424]">
                                                     <?= htmlspecialchars($data_layanan['nama_layanan']); ?>
                                                 </td>
 
@@ -196,7 +193,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                     <!-- Tombol edit -->
                                                     <a 
                                                         href="edit-layanan.php?id_layanan=<?= $data_layanan['id_layanan']; ?>" 
-                                                        class="inline-flex px-3 py-1.5 text-xs font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                                                        class="inline-flex px-3 py-1.5 text-xs font-bold bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                                                     >
                                                         Edit
                                                     </a>
@@ -206,13 +203,13 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                         <button 
                                                             type="button" 
                                                             onclick="confirmDelete(this, <?= $data_layanan['id_layanan']; ?>)" 
-                                                            class="inline-flex px-3 py-1.5 text-xs font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                                                            class="inline-flex px-3 py-1.5 text-xs font-bold bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                                                         >
                                                             Hapus
                                                         </button>
                                                         <input type="hidden" name="hapus" value="<?= $data_layanan['id_layanan']; ?>">
                                                     </form>
-                                                    <a href = "detail-layanan.php?id_layanan=<?= $data_layanan['id_layanan']; ?>" class="inline-flex px-3 py-1.5 text-xs font-medium bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                                                    <a href = "detail-layanan.php?id_layanan=<?= $data_layanan['id_layanan']; ?>" class="inline-flex px-3 py-1.5 text-xs font-bold bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
                                                         Detail
                                                     </a>
 
@@ -225,7 +222,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 
                                         <!-- Pesan data kosong -->
                                         <tr>
-                                            <td colspan="5" class="p-8 text-center text-gray-400">
+                                            <td colspan="5" class="p-8 text-center text-[#B77B8E]">
                                                 Belum ada data layanan.
                                             </td>
                                         </tr>
@@ -234,7 +231,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                 </tbody>
 
                                 <!-- Footer pagination -->
-                                <tfoot class="bg-gray-50/50 border-t border-pink-100">
+                                <tfoot class="bg-[#FFF7FA] border-t border-[#F7D6E4]">
                                     <tr>
                                         <td colspan="5" class="p-4">
 
@@ -245,12 +242,12 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                 <?php if ($halaman_aktif > 1) : ?>
                                                     <a 
                                                         href="?halaman=<?= $halaman_aktif - 1; ?>" 
-                                                        class="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors"
+                                                        class="px-3 py-1.5 text-xs font-medium bg-white border border-[#EAD8D0] rounded-lg text-[#6F5E64] hover:bg-[#FDEAF1] hover:text-[#C75C7A] transition-colors"
                                                     >
                                                         &laquo; Prev
                                                     </a>
                                                 <?php else : ?>
-                                                    <span class="px-3 py-1.5 text-xs font-medium bg-gray-50 border border-gray-200 rounded-lg text-gray-300 cursor-not-allowed">
+                                                    <span class="px-3 py-1.5 text-xs font-medium bg-[#F8F4F2] border border-[#EAD8D0] rounded-lg text-gray-300 cursor-not-allowed">
                                                         &laquo; Prev
                                                     </span>
                                                 <?php endif; ?>
@@ -259,7 +256,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                 <?php for ($i = 1; $i <= $total_halaman; $i++) : ?>
                                                     <a 
                                                         href="?halaman=<?= $i; ?>" 
-                                                        class="px-3 py-1.5 text-xs font-medium border rounded-lg transition-colors <?= $i === $halaman_aktif ? 'bg-pink-600 border-pink-600 text-white' : 'bg-white border-gray-200 text-gray-600 hover:bg-pink-50 hover:text-pink-600'; ?>"
+                                                        class="px-3 py-1.5 text-xs font-medium border rounded-lg transition-colors <?= $i === $halaman_aktif ? 'bg-[#C75C7A] border-[#C75C7A] text-white' : 'bg-white border-[#EAD8D0] text-[#6F5E64] hover:bg-[#FDEAF1] hover:text-[#C75C7A]'; ?>"
                                                     >
                                                         <?= $i; ?>
                                                     </a>
@@ -269,12 +266,12 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                 <?php if ($halaman_aktif < $total_halaman) : ?>
                                                     <a 
                                                         href="?halaman=<?= $halaman_aktif + 1; ?>" 
-                                                        class="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors"
+                                                        class="px-3 py-1.5 text-xs font-medium bg-white border border-[#EAD8D0] rounded-lg text-[#6F5E64] hover:bg-[#FDEAF1] hover:text-[#C75C7A] transition-colors"
                                                     >
                                                         Next &raquo;
                                                     </a>
                                                 <?php else : ?>
-                                                    <span class="px-3 py-1.5 text-xs font-medium bg-gray-50 border border-gray-200 rounded-lg text-gray-300 cursor-not-allowed">
+                                                    <span class="px-3 py-1.5 text-xs font-medium bg-[#F8F4F2] border border-[#EAD8D0] rounded-lg text-gray-300 cursor-not-allowed">
                                                         Next &raquo;
                                                     </span>
                                                 <?php endif; ?>

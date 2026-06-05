@@ -18,10 +18,6 @@ global $user;
                 <h3 class="text-xl font-bold text-gray-800">
                     Konfirmasi Booking
                 </h3>
-
-                <p class="text-xs text-gray-400 mt-1">
-                    Customer melakukan pembayaran menggunakan QRIS. Nominal pembayaran diambil dari total harga layanan.
-                </p>
             </div>
 
             <!-- Tombol tutup modal -->
@@ -116,7 +112,7 @@ global $user;
                         <!-- Total pembayaran -->
                         <div class="p-4 bg-pink-50/60 rounded-2xl border border-pink-100">
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                Total QRIS
+                                Total minimal
                             </p>
 
                             <p id="modal-total-price" class="text-lg font-bold text-pink-600">
@@ -216,10 +212,6 @@ global $user;
                         <h4 class="text-lg font-bold text-gray-800 mt-3">
                             Bayar via QRIS
                         </h4>
-
-                        <p class="text-xs text-gray-500 mt-1 leading-relaxed">
-                            Scan QRIS Mey Salon lalu bayar sesuai total harga layanan.
-                        </p>
                     </div>
 
                     <!-- Gambar QRIS -->
@@ -234,17 +226,17 @@ global $user;
                     <!-- Nominal total -->
                     <div class="mt-4 p-4 bg-white rounded-2xl border border-pink-100 text-center">
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                            Nominal Total
+                            Minimal DP
                         </p>
 
                         <p id="modal-total-dp-qris" class="text-2xl font-bold text-pink-600 mt-1">
-                            Rp 0
+                            Rp 50.000
                         </p>
                     </div>
 
                     <!-- Catatan admin -->
                     <div class="mt-4 p-4 bg-yellow-50 border border-yellow-100 text-yellow-700 rounded-2xl text-xs leading-relaxed">
-                        <b>Catatan:</b> Booking akan masuk sebagai <b>Waiting</b>. Admin akan mengecek bukti pembayaran QRIS terlebih dahulu sebelum mengonfirmasi jadwal.
+                        <b>Catatan:</b> Admin akan mengecek bukti pembayaran QRIS terlebih dahulu sebelum mengonfirmasi jadwal.
                     </div>
 
                     <!-- Checklist konfirmasi -->

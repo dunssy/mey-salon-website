@@ -1,476 +1,259 @@
-<?php global $user; ?>
+<?php
+global $query_booking_user;
+?>
 
-<!-- Modal konfirmasi booking dengan DP QRIS dan upload bukti pembayaran -->
-<div id="booking-modal" class="fixed inset-0 z-[100] hidden">
+<!-- Section booking saya -->
+<section id="section-booking" class="content-section hidden">
 
-    <!-- Overlay modal -->
-    <div onclick="closeBookingModal()" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+    <!-- Header halaman -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-800">
+            Booking Saya
+        </h2>
 
-    <!-- Box modal -->
-    <div class="relative max-w-4xl mx-auto mt-6 mb-6 bg-white rounded-[2rem] shadow-2xl border border-pink-100 overflow-hidden max-h-[92vh] flex flex-col">
+        <p class="text-sm text-gray-500">
+            Lacak status reservasi Anda.
+        </p>
+    </div>
 
-        <!-- Header modal -->
-        <div class="p-5 md:p-6 border-b border-pink-50 flex justify-between items-center">
-            <div>
-                <h3 class="text-xl font-bold text-gray-800">
-                    Konfirmasi Booking
-                </h3>
+    <!-- List booking user -->
+    <div class="space-y-4">
 
-                <p class="text-xs text-gray-400 mt-1">
-                    Customer melakukan DP terlebih dahulu menggunakan QRIS. Nominal DP diambil dari total harga layanan.
+        <?php if (mysqli_num_rows($query_booking_user) > 0) : ?>
+
+            <?php while ($booking_user = mysqli_fetch_assoc($query_booking_user)) : ?>
+
+                <!-- Card booking -->
+                <div class="bg-white rounded-3xl border border-pink-100 shadow-sm p-6">
+
+                    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+
+                        <!-- Info booking -->
+                        <div class="flex-1">
+                            <p class="text-[11px] font-bold text-pink-600 uppercase tracking-widest">
+                                Booking #<?= htmlspecialchars($booking_user['id_booking']); ?>
+                            </p>
+
+                            <h3 class="text-lg font-bold text-gray-800 mt-1">
+                                <?= date('d M Y', strtotime($booking_user['tanggal_booking'])); ?>,
+                                <?= substr($booking_user['jam_mulai'], 0, 5); ?> -
+                                <?= substr($booking_user['jam_selesai'], 0, 5); ?>
+                            </h3>
+
+                            <p class="text-sm text-gray-500 mt-2">
+                                <?= htmlspecialchars($booking_user['nama_layanan']); ?>
+                            </p>
+
+                            <?php if (!empty($booking_user['catatan'])) : ?>
+                                <p class="text-xs text-gray-400 mt-2 italic">
+                                    Catatan: <?= htmlspecialchars($booking_user['catatan']); ?>
+                                </p>
+                            <?php endif; ?>
+
+                            <?php if ($booking_user['status_booking'] == 'Pending' && !empty($booking_user['tanggal_saran']) && !empty($booking_user['jam_saran'])) : ?>
+
+                                <!-- Box saran jadwal admin -->
+                                <div class="mt-5 p-4 bg-orange-50 border border-orange-100 rounded-2xl">
+
+                                    <p class="text-[11px] font-bold text-orange-700 uppercase tracking-widest mb-3">
+                                        Saran Jadwal dari Admin
+                                    </p>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase">
+                                                Tanggal Saran
+                                            </p>
+
+                                            <p class="text-sm font-bold text-gray-800 mt-1">
+                                                <?= date('d M Y', strtotime($booking_user['tanggal_saran'])); ?>
+                                            </p>
+                                        </div>
+
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase">
+                                                Jam Saran
+                                            </p>
+
+                                            <p class="text-sm font-bold text-gray-800 mt-1">
+                                                <?= substr($booking_user['jam_saran'], 0, 5); ?>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <?php if (!empty($booking_user['catatan_admin'])) : ?>
+                                        <div class="mt-3">
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase">
+                                                Catatan Admin
+                                            </p>
+
+                                            <p class="text-sm text-gray-600 mt-1 leading-relaxed">
+                                                <?= htmlspecialchars($booking_user['catatan_admin']); ?>
+                                            </p>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <!-- Aksi saran jadwal -->
+                                    <div class="flex flex-col sm:flex-row gap-2 mt-4">
+
+                                        <!-- Tombol terima saran -->
+                                        <form action="" method="POST">
+                                            <input 
+                                                type="hidden" 
+                                                name="id_booking" 
+                                                value="<?= (int) $booking_user['id_booking']; ?>"
+                                            >
+
+                                            <button 
+                                                type="submit" 
+                                                name="terima_saran_booking"
+                                                onclick="return confirm('Terima saran jadwal dari admin?')"
+                                                class="w-full sm:w-auto px-4 py-2 bg-green-500 text-white text-xs font-bold rounded-xl hover:bg-green-600 transition"
+                                            >
+                                                <i class="fa-solid fa-check mr-1"></i>
+                                                Saya Bersedia
+                                            </button>
+                                        </form>
+
+                                        <!-- Tombol batal booking -->
+                                        <form action="" method="POST">
+                                            <input 
+                                                type="hidden" 
+                                                name="id_booking" 
+                                                value="<?= (int) $booking_user['id_booking']; ?>"
+                                            >
+
+                                            <button 
+                                                type="submit" 
+                                                name="batal_booking"
+                                                onclick="return confirm('Apakah Anda yakin ingin membatalkan booking ini?')"
+                                                class="w-full sm:w-auto px-4 py-2 bg-red-50 text-red-600 text-xs font-bold rounded-xl hover:bg-red-100 transition"
+                                            >
+                                                <i class="fa-solid fa-xmark mr-1"></i>
+                                                Tidak, Batalkan
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Ringkasan booking -->
+                        <div class="w-full md:w-56 text-left md:text-right">
+
+                            <p class="text-sm font-bold text-gray-800">
+                                Rp <?= number_format($booking_user['total_harga'], 0, ',', '.'); ?>
+                            </p>
+
+                            <p class="text-xs text-gray-400">
+                                <?= (int) $booking_user['total_durasi']; ?> menit
+                            </p>
+
+                            <?php if ($booking_user['status_booking'] == 'Waiting') : ?>
+
+                                <!-- Status waiting -->
+                                <span class="inline-block mt-2 px-3 py-1 bg-yellow-50 text-yellow-700 text-[10px] font-bold rounded-full uppercase">
+                                    Waiting
+                                </span>
+
+                                <!-- Tombol batal booking -->
+                                <form action="" method="POST" class="mt-3">
+                                    <input 
+                                        type="hidden" 
+                                        name="id_booking" 
+                                        value="<?= (int) $booking_user['id_booking']; ?>"
+                                    >
+
+                                    <button 
+                                        type="submit" 
+                                        name="batal_booking"
+                                        onclick="return confirm('Apakah Anda yakin ingin membatalkan booking ini?')"
+                                        class="px-3 py-2 bg-red-50 text-red-600 text-[11px] font-bold rounded-xl hover:bg-red-100 transition"
+                                    >
+                                        Batalkan Booking
+                                    </button>
+                                </form>
+
+                            <?php elseif ($booking_user['status_booking'] == 'Pending') : ?>
+
+                                <!-- Status pending -->
+                                <span class="inline-block mt-2 px-3 py-1 bg-orange-50 text-orange-700 text-[10px] font-bold rounded-full uppercase">
+                                    Pending
+                                </span>
+
+                                <?php if (empty($booking_user['tanggal_saran']) || empty($booking_user['jam_saran'])) : ?>
+
+                                    <!-- Tombol batal jika belum ada saran jadwal -->
+                                    <form action="" method="POST" class="mt-3">
+                                        <input 
+                                            type="hidden" 
+                                            name="id_booking" 
+                                            value="<?= (int) $booking_user['id_booking']; ?>"
+                                        >
+
+                                        <button 
+                                            type="submit" 
+                                            name="batal_booking"
+                                            onclick="return confirm('Apakah Anda yakin ingin membatalkan booking ini?')"
+                                            class="px-3 py-2 bg-red-50 text-red-600 text-[11px] font-bold rounded-xl hover:bg-red-100 transition"
+                                        >
+                                            Batalkan Booking
+                                        </button>
+                                    </form>
+
+                                <?php endif; ?>
+
+                            <?php elseif ($booking_user['status_booking'] == 'On-going') : ?>
+
+                                <!-- Status on-going -->
+                                <span class="inline-block mt-2 px-3 py-1 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-full uppercase">
+                                    On-going
+                                </span>
+
+                            <?php elseif ($booking_user['status_booking'] == 'Cancel') : ?>
+
+                                <!-- Status cancel -->
+                                <span class="inline-block mt-2 px-3 py-1 bg-red-50 text-red-700 text-[10px] font-bold rounded-full uppercase">
+                                    Cancel
+                                </span>
+
+                            <?php elseif ($booking_user['status_booking'] == 'Done') : ?>
+
+                                <!-- Status done -->
+                                <span class="inline-block mt-2 px-3 py-1 bg-green-50 text-green-700 text-[10px] font-bold rounded-full uppercase">
+                                    Done
+                                </span>
+
+                            <?php else : ?>
+
+                                <!-- Status lainnya -->
+                                <span class="inline-block mt-2 px-3 py-1 bg-gray-50 text-gray-700 text-[10px] font-bold rounded-full uppercase">
+                                    <?= htmlspecialchars($booking_user['status_booking']); ?>
+                                </span>
+
+                            <?php endif; ?>
+
+                            <p class="text-[10px] text-gray-400 mt-2">
+                                Pembayaran: Cash
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            <?php endwhile; ?>
+
+        <?php else : ?>
+
+            <!-- Pesan booking kosong -->
+            <div class="text-center py-20 bg-white rounded-3xl border border-dashed border-pink-200">
+                <i class="fa-solid fa-calendar-xmark text-4xl text-pink-100 mb-4"></i>
+
+                <p class="text-sm text-gray-400 font-medium">
+                    Belum ada riwayat booking.
                 </p>
             </div>
 
-            <button 
-                type="button"
-                onclick="closeBookingModal()" 
-                class="w-10 h-10 bg-pink-50 text-pink-600 rounded-full hover:bg-pink-100 transition"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <!-- Form wajib multipart agar file bukti pembayaran terkirim -->
-        <form action="" method="POST" enctype="multipart/form-data" class="overflow-y-auto p-5 md:p-6">
-
-            <!-- Input tersembunyi -->
-            <input type="hidden" name="tanggal_booking" id="form-tanggal-booking">
-            <input type="hidden" name="jam_mulai" id="form-jam-mulai">
-            <input type="hidden" name="layanan_terpilih" id="form-layanan-terpilih">
-            <input type="hidden" name="total_dp" id="form-total-dp">
-
-            <!-- Layout modal -->
-            <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
-
-                <!-- Kolom kiri detail booking -->
-                <div class="space-y-5">
-
-                    <!-- Data pelanggan -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <div class="p-4 bg-pink-50/50 rounded-2xl border border-pink-100">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                Nama
-                            </p>
-
-                            <p class="text-sm font-bold text-gray-800">
-                                <?= htmlspecialchars($user['nama']); ?>
-                            </p>
-                        </div>
-
-                        <div class="p-4 bg-pink-50/50 rounded-2xl border border-pink-100">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                No HP
-                            </p>
-
-                            <p class="text-sm font-bold text-gray-800">
-                                <?= htmlspecialchars($user['no_hp']); ?>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Data jadwal -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <div class="p-4 bg-white rounded-2xl border border-pink-100">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                Tanggal Booking
-                            </p>
-
-                            <p id="modal-date" class="text-sm font-bold text-gray-800">
-                                -
-                            </p>
-                        </div>
-
-                        <div class="p-4 bg-white rounded-2xl border border-pink-100">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                Jam Booking
-                            </p>
-
-                            <p id="modal-time" class="text-sm font-bold text-gray-800">
-                                -
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Layanan dipilih -->
-                    <div>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">
-                            Layanan Dipilih
-                        </p>
-
-                        <div id="modal-service-list" class="space-y-3"></div>
-                    </div>
-
-                    <!-- Ringkasan pembayaran -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-                        <div class="p-4 bg-pink-50/60 rounded-2xl border border-pink-100">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                Total DP QRIS
-                            </p>
-
-                            <p id="modal-total-price" class="text-lg font-bold text-pink-600">
-                                Rp 0
-                            </p>
-
-                            <p class="text-[10px] text-gray-400 mt-1">
-                                Dari total harga layanan.
-                            </p>
-                        </div>
-
-                        <div class="p-4 bg-pink-50/60 rounded-2xl border border-pink-100">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                Estimasi
-                            </p>
-
-                            <p id="modal-total-duration" class="text-lg font-bold text-gray-800">
-                                0 Menit
-                            </p>
-                        </div>
-
-                        <div class="p-4 bg-pink-50/60 rounded-2xl border border-pink-100">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                Pembayaran
-                            </p>
-
-                            <p class="text-lg font-bold text-gray-800">
-                                QRIS
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Upload bukti pembayaran -->
-                    <div class="p-4 bg-white rounded-2xl border border-pink-100">
-                        <label for="bukti_pembayaran" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                            Upload Bukti Pembayaran DP
-                        </label>
-
-                        <input 
-                            type="file"
-                            name="bukti_pembayaran"
-                            id="bukti_pembayaran"
-                            accept=".jpg,.jpeg,.png,.webp,.pdf"
-                            required
-                            onchange="previewBuktiPembayaran(this); toggleBookingSubmitQris();"
-                            class="mt-3 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-pink-50 file:text-pink-600 hover:file:bg-pink-100"
-                        >
-
-                        <p class="text-[11px] text-gray-400 mt-2">
-                            Format JPG, JPEG, PNG, WEBP, atau PDF. Maksimal 2MB.
-                        </p>
-
-                        <div id="preview-bukti-wrapper" class="hidden mt-4">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
-                                Preview Bukti
-                            </p>
-
-                            <img 
-                                id="preview-bukti-image"
-                                src=""
-                                alt="Preview Bukti Pembayaran"
-                                class="hidden max-h-52 rounded-2xl border border-pink-100 object-contain bg-pink-50/30"
-                            >
-
-                            <div id="preview-bukti-file" class="hidden p-3 rounded-2xl bg-pink-50 text-pink-600 text-xs font-bold border border-pink-100"></div>
-                        </div>
-                    </div>
-
-                    <!-- Catatan opsional -->
-                    <div>
-                        <label for="catatan" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                            Catatan Opsional
-                        </label>
-
-                        <textarea 
-                            name="catatan" 
-                            id="catatan" 
-                            rows="3" 
-                            placeholder="Contoh: rambut panjang, ingin warna tertentu, atau request model..."
-                            class="mt-2 w-full px-4 py-3 bg-pink-50/20 border border-pink-100 rounded-2xl text-sm outline-none focus:border-pink-400 resize-none"
-                        ></textarea>
-                    </div>
-                </div>
-
-                <!-- Kolom kanan QRIS -->
-                <aside class="bg-pink-50/50 border border-pink-100 rounded-[1.8rem] p-5 lg:sticky lg:top-0">
-
-                    <div class="text-center mb-4">
-                        <div class="w-12 h-12 mx-auto bg-white text-pink-600 rounded-2xl flex items-center justify-center border border-pink-100">
-                            <i class="fa-solid fa-qrcode text-xl"></i>
-                        </div>
-
-                        <h4 class="text-lg font-bold text-gray-800 mt-3">
-                            Bayar DP via QRIS
-                        </h4>
-
-                        <p class="text-xs text-gray-500 mt-1 leading-relaxed">
-                            Scan QRIS Mey Salon lalu bayar sesuai total DP.
-                        </p>
-                    </div>
-
-                    <div class="bg-white rounded-2xl p-3 border border-pink-100">
-                        <img 
-                            src="../layout/images/qris.jpeg" 
-                            alt="QRIS Mey Salon"
-                            class="w-full rounded-xl border border-gray-100"
-                        >
-                    </div>
-
-                    <div class="mt-4 p-4 bg-white rounded-2xl border border-pink-100 text-center">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                            Nominal DP
-                        </p>
-
-                        <p id="modal-total-dp-qris" class="text-2xl font-bold text-pink-600 mt-1">
-                            Rp 0
-                        </p>
-                    </div>
-
-                    <div class="mt-4 p-4 bg-yellow-50 border border-yellow-100 text-yellow-700 rounded-2xl text-xs leading-relaxed">
-                        <b>Catatan:</b> Booking akan masuk sebagai <b>Waiting</b>. Admin akan mengecek bukti pembayaran QRIS terlebih dahulu sebelum mengonfirmasi jadwal.
-                    </div>
-
-                    <label class="mt-4 flex items-start gap-3 text-xs text-gray-500 cursor-pointer">
-                        <input 
-                            type="checkbox" 
-                            id="qris-confirm-check"
-                            class="mt-0.5 w-4 h-4 accent-pink-600"
-                            onchange="toggleBookingSubmitQris()"
-                        >
-
-                        <span>
-                            Saya sudah membayar DP sesuai nominal QRIS dan mengupload bukti pembayaran yang benar.
-                        </span>
-                    </label>
-                </aside>
-            </div>
-
-            <button 
-                id="btn-submit-booking-qris"
-                type="submit" 
-                name="konfirmasi_booking"
-                disabled
-                class="mt-6 w-full py-4 bg-pink-600 text-white font-bold rounded-2xl hover:bg-pink-700 transition-all shadow-lg shadow-pink-100 disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-                Konfirmasi Booking & Kirim Bukti DP
-            </button>
-        </form>
+        <?php endif; ?>
     </div>
-</div>
-
-<script>
-    function formatRupiahModalQris(number) {
-        return 'Rp ' + new Intl.NumberFormat('id-ID').format(Number(number || 0));
-    }
-
-    function formatTanggalModalQris(dateKey) {
-        if (!dateKey) return '-';
-
-        if (typeof formatTanggalIndonesia === 'function') {
-            return formatTanggalIndonesia(dateKey);
-        }
-
-        const date = new Date(dateKey + 'T00:00:00');
-
-        if (isNaN(date.getTime())) return dateKey;
-
-        return date.toLocaleDateString('id-ID', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
-    }
-
-    function previewBuktiPembayaran(input) {
-        const wrapper = document.getElementById('preview-bukti-wrapper');
-        const image = document.getElementById('preview-bukti-image');
-        const fileBox = document.getElementById('preview-bukti-file');
-
-        if (!wrapper || !image || !fileBox) return;
-
-        image.classList.add('hidden');
-        fileBox.classList.add('hidden');
-        image.src = '';
-        fileBox.innerText = '';
-
-        if (!input.files || !input.files[0]) {
-            wrapper.classList.add('hidden');
-            return;
-        }
-
-        const file = input.files[0];
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-
-        if (!allowedTypes.includes(file.type)) {
-            alert('Format bukti pembayaran harus JPG, JPEG, PNG, WEBP, atau PDF.');
-            input.value = '';
-            wrapper.classList.add('hidden');
-            return;
-        }
-
-        if (file.size > 2 * 1024 * 1024) {
-            alert('Ukuran bukti pembayaran maksimal 2MB.');
-            input.value = '';
-            wrapper.classList.add('hidden');
-            return;
-        }
-
-        wrapper.classList.remove('hidden');
-
-        if (file.type.startsWith('image/')) {
-            image.src = URL.createObjectURL(file);
-            image.classList.remove('hidden');
-        } else {
-            fileBox.innerText = 'File PDF dipilih: ' + file.name;
-            fileBox.classList.remove('hidden');
-        }
-    }
-
-    function getSelectedServicesQris() {
-        if (typeof cart !== 'undefined' && Array.isArray(cart)) return cart;
-        if (Array.isArray(window.selectedServices)) return window.selectedServices;
-        if (Array.isArray(window.cartItems)) return window.cartItems;
-        if (Array.isArray(window.selectedLayanan)) return window.selectedLayanan;
-
-        return [];
-    }
-
-    function getSelectedDateQris() {
-        if (typeof selectedBookingDate !== 'undefined' && selectedBookingDate) return selectedBookingDate;
-
-        const formDate = document.getElementById('form-tanggal-booking')?.value;
-        return formDate || '';
-    }
-
-    function getSelectedTimeQris() {
-        if (typeof selectedBookingTime !== 'undefined' && selectedBookingTime) return selectedBookingTime;
-
-        const formTime = document.getElementById('form-jam-mulai')?.value;
-        return formTime || '';
-    }
-
-    function getTotalDpQris(services) {
-        if (typeof getTotalPrice === 'function') {
-            return Number(getTotalPrice() || 0);
-        }
-
-        return services.reduce((total, item) => {
-            return total + Number(item.price || item.harga || item.harga_min || item.harga_layanan || 0);
-        }, 0);
-    }
-
-    function getTotalDurationQris(services) {
-        if (typeof getTotalDuration === 'function') {
-            return Number(getTotalDuration() || 0);
-        }
-
-        return services.reduce((total, item) => {
-            return total + Number(item.duration || item.durasi || item.durasi_layanan || 0);
-        }, 0);
-    }
-
-    function toggleBookingSubmitQris() {
-        const check = document.getElementById('qris-confirm-check');
-        const btn = document.getElementById('btn-submit-booking-qris');
-        const bukti = document.getElementById('bukti_pembayaran');
-
-        if (!check || !btn || !bukti) return;
-
-        btn.disabled = !(check.checked && bukti.files.length > 0);
-    }
-
-    function openBookingModal() {
-        const modal = document.getElementById('booking-modal');
-        const services = getSelectedServicesQris();
-        const tanggalBooking = getSelectedDateQris();
-        const jamMulai = getSelectedTimeQris();
-
-        if (!services || services.length === 0) {
-            if (typeof showToast === 'function') showToast('Pilih layanan terlebih dahulu');
-            else alert('Silakan pilih layanan terlebih dahulu.');
-            return;
-        }
-
-        if (!tanggalBooking) {
-            if (typeof showToast === 'function') showToast('Pilih tanggal booking');
-            else alert('Silakan pilih tanggal booking terlebih dahulu.');
-            return;
-        }
-
-        if (!jamMulai) {
-            if (typeof showToast === 'function') showToast('Pilih jam booking');
-            else alert('Silakan pilih jam booking terlebih dahulu.');
-            return;
-        }
-
-        const totalDp = getTotalDpQris(services);
-        const totalDurasi = getTotalDurationQris(services);
-        const layananIds = services.map(item => Number(item.id || item.id_layanan || item.service_id)).filter(Boolean);
-        const jamForm = String(jamMulai).length === 5 ? jamMulai + ':00' : jamMulai;
-
-        document.getElementById('form-tanggal-booking').value = tanggalBooking;
-        document.getElementById('form-jam-mulai').value = jamForm;
-        document.getElementById('form-layanan-terpilih').value = JSON.stringify(layananIds);
-        document.getElementById('form-total-dp').value = totalDp;
-
-        document.getElementById('modal-date').innerText = formatTanggalModalQris(tanggalBooking);
-        document.getElementById('modal-time').innerText = jamMulai;
-
-        const serviceList = document.getElementById('modal-service-list');
-
-        serviceList.innerHTML = services.map(item => {
-            const nama = item.name || item.nama || item.nama_layanan || 'Layanan';
-            const harga = Number(item.price || item.harga || item.harga_min || item.harga_layanan || 0);
-            const durasi = Number(item.duration || item.durasi || item.durasi_layanan || 0);
-
-            return `
-                <div class="flex justify-between gap-4 p-4 bg-white border border-pink-100 rounded-2xl">
-                    <div>
-                        <p class="text-sm font-bold text-gray-800">${nama}</p>
-                        <p class="text-xs text-gray-400 mt-1">Estimasi ${durasi} menit</p>
-                    </div>
-
-                    <p class="text-sm font-bold text-pink-600 whitespace-nowrap">
-                        ${formatRupiahModalQris(harga)}
-                    </p>
-                </div>
-            `;
-        }).join('');
-
-        document.getElementById('modal-total-price').innerText = formatRupiahModalQris(totalDp);
-        document.getElementById('modal-total-dp-qris').innerText = formatRupiahModalQris(totalDp);
-        document.getElementById('modal-total-duration').innerText = totalDurasi + ' Menit';
-
-        const check = document.getElementById('qris-confirm-check');
-        const btn = document.getElementById('btn-submit-booking-qris');
-        const bukti = document.getElementById('bukti_pembayaran');
-        const previewWrapper = document.getElementById('preview-bukti-wrapper');
-        const previewImage = document.getElementById('preview-bukti-image');
-        const previewFile = document.getElementById('preview-bukti-file');
-
-        if (check) check.checked = false;
-        if (btn) btn.disabled = true;
-        if (bukti) bukti.value = '';
-        if (previewWrapper) previewWrapper.classList.add('hidden');
-        if (previewImage) {
-            previewImage.src = '';
-            previewImage.classList.add('hidden');
-        }
-        if (previewFile) {
-            previewFile.innerText = '';
-            previewFile.classList.add('hidden');
-        }
-
-        modal.classList.remove('hidden');
-    }
-
-    function closeBookingModal() {
-        const modal = document.getElementById('booking-modal');
-
-        if (modal) {
-            modal.classList.add('hidden');
-        }
-    }
-</script>
+</section>

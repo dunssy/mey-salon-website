@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
 }
 ?>
 
-<body class="text-gray-800 overflow-x-hidden">
+<body class="text-[#2B2424] overflow-x-hidden bg-[#FFF7FA]">
 
     <!-- Wrapper utama halaman admin -->
     <div class="flex h-screen overflow-hidden">
@@ -34,13 +34,13 @@ if (isset($_POST['submit'])) {
         <?php include "../layout/sidebar.php"; ?>
 
         <!-- Konten utama -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-[#FFF7FA]">
 
             <!-- Memanggil navbar -->
             <?php include "../layout/navbar.php"; ?>
 
             <!-- Isi halaman -->
-            <div class="p-4 md:p-8 flex-1">
+            <div class="p-4 sm:p-5 md:p-8 flex-1">
 
                 <!-- Section tambah user -->
                 <section id="section-tambah-user" class="space-y-6">
@@ -50,19 +50,19 @@ if (isset($_POST['submit'])) {
 
                         <!-- Judul halaman -->
                         <div>
-                            <h3 class="text-xl font-bold text-gray-800">
-                                <?= $sub_title; ?>
+                            <h3 class="text-xl font-bold text-[#2B2424]">
+                                <?= htmlspecialchars($sub_title); ?>
                             </h3>
 
-                            <p class="text-xs text-gray-400">
-                                Tambahkan data user baru untuk sistem Mey Salon.
+                            <p class="text-xs text-[#B77B8E] mt-1">
+                                Tambahkan data administrator baru untuk sistem Mey Salon.
                             </p>
                         </div>
 
                         <!-- Tombol kembali -->
                         <a 
                             href="data-user.php" 
-                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-gray-400 bg-gray-50 rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-colors"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-[#C75C7A] bg-white border border-[#F7D6E4] rounded-xl hover:bg-[#FDEAF1] transition-colors"
                         >
                             <i class="fa-solid fa-arrow-left"></i>
                             <span>Kembali</span>
@@ -70,111 +70,150 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <!-- Card form tambah user -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                    <div class="bg-white rounded-2xl shadow-sm border border-[#F7D6E4] overflow-hidden">
+
+                        <!-- Header form tambah user -->
+                        <div class="px-5 py-4 border-b border-[#F7D6E4] bg-[#FDEAF1]/60">
+                            <h4 class="font-bold text-[#3D3134]">
+                                Form Tambah Admin
+                            </h4>
+
+                            <p class="text-xs text-[#B77B8E] mt-1">
+                                Role dikunci sebagai Administrator agar halaman ini khusus untuk menambah admin.
+                            </p>
+                        </div>
 
                         <!-- Form tambah user -->
-                        <form action="" method="POST" class="p-6 space-y-4">
+                        <form action="" method="POST" class="p-5 sm:p-6 space-y-5">
 
-                            <!-- Input nama user -->
-                            <div>
-                                <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Nama User
-                                </label>
-                                <input type="text" name="nama" id="nama" required placeholder="Masukkan nama user"class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200">
+                            <!-- Grid input user -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                                <!-- Input nama user -->
+                                <div>
+                                    <label for="nama" class="block text-sm font-bold text-[#3D3134] mb-2">
+                                        Nama User
+                                    </label>
+
+                                    <input 
+                                        type="text" 
+                                        name="nama" 
+                                        id="nama" 
+                                        required 
+                                        placeholder="Masukkan nama user"
+                                        class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
+                                    >
+                                </div>
+
+                                <!-- Input nomor telepon -->
+                                <div>
+                                    <label for="no_hp" class="block text-sm font-bold text-[#3D3134] mb-2">
+                                        Nomor Telepon
+                                    </label>
+
+                                    <input 
+                                        type="text" 
+                                        name="no_hp" 
+                                        id="no_hp" 
+                                        required 
+                                        placeholder="Contoh: 081234567890"
+                                        class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
+                                    >
+                                </div>
+
+                                <!-- Input email -->
+                                <div>
+                                    <label for="email" class="block text-sm font-bold text-[#3D3134] mb-2">
+                                        Email
+                                    </label>
+
+                                    <input 
+                                        type="email" 
+                                        name="email" 
+                                        id="email" 
+                                        required 
+                                        placeholder="Masukkan email user"
+                                        class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
+                                    >
+                                </div>
+
+                                <!-- Input password -->
+                                <div>
+                                    <label for="password" class="block text-sm font-bold text-[#3D3134] mb-2">
+                                        Password
+                                    </label>
+
+                                    <input 
+                                        type="password" 
+                                        name="password" 
+                                        id="password" 
+                                        required 
+                                        placeholder="Masukkan password"
+                                        class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
+                                    >
+                                </div>
+
+                                <!-- Input alamat -->
+                                <div class="md:col-span-2">
+                                    <label for="alamat" class="block text-sm font-bold text-[#3D3134] mb-2">
+                                        Alamat
+                                    </label>
+
+                                    <textarea 
+                                        name="alamat" 
+                                        id="alamat" 
+                                        rows="3"
+                                        required 
+                                        placeholder="Masukkan alamat user"
+                                        class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
+                                    ></textarea>
+                                </div>
+
+                                <!-- Role terkunci sebagai admin -->
+                                <div class="md:col-span-2">
+                                    <label for="role_tampil" class="block text-sm font-bold text-[#3D3134] mb-2">
+                                        Role
+                                    </label>
+
+                                    <!-- Input role asli untuk dikirim ke database -->
+                                    <input 
+                                        type="hidden" 
+                                        name="role" 
+                                        id="role" 
+                                        value="Administrator"
+                                    >
+
+                                    <!-- Tampilan role readonly -->
+                                    <input 
+                                        type="text" 
+                                        id="role_tampil" 
+                                        value="Administrator" 
+                                        readonly
+                                        class="w-full px-4 py-3 border border-[#EAD8D0] rounded-xl bg-[#F8F4F2] text-[#7A6F6F] text-sm cursor-not-allowed focus:outline-none"
+                                    >
+
+                                    <p class="text-[11px] text-[#B77B8E] mt-2">
+                                        Role dikunci sebagai Administrator dan tidak bisa diubah dari form ini.
+                                    </p>
+                                </div>
                             </div>
 
-                            <!-- Input nomor telepon -->
-                            <div>
-                                <label for="no_hp" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Nomor Telepon
-                                </label>
-
-                                <input 
-                                    type="text" 
-                                    name="no_hp" 
-                                    id="no_hp" 
-                                    required 
-                                    placeholder="Contoh: 081234567890"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
-                                >
-                            </div>
-
-                            <!-- Input alamat -->
-                            <div>
-                                <label for="alamat" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Alamat
-                                </label>
-
-                                <input 
-                                    type="text" 
-                                    name="alamat" 
-                                    id="alamat" 
-                                    required 
-                                    placeholder="Masukkan alamat user"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
-                                >
-                            </div>
-
-                            <!-- Input email -->
-                            <div>
-                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Email
-                                </label>
-
-                                <input 
-                                    type="email" 
-                                    name="email" 
-                                    id="email" 
-                                    required 
-                                    placeholder="Masukkan email user"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
-                                >
-                            </div>
-
-                            <!-- Input role -->
-                            <div>
-                                <label for="role" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Role
-                                </label>
-
-                                <select 
-                                    name="role" 
-                                    id="role" 
-                                    required 
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
-                                >
-                                    <option value="">Pilih Role</option>
-                                    <option value="Administrator">Administrator</option>
-                                    <option value="Customer">Customer</option>
-                                </select>
-                            </div>
-
-                            <!-- Input password -->
-                            <div>
-                                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Password
-                                </label>
-
-                                <input 
-                                    type="password" 
-                                    name="password" 
-                                    id="password" 
-                                    required 
-                                    placeholder="Masukkan password"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
-                                >
+                            <!-- Info user -->
+                            <div class="p-4 rounded-2xl bg-[#FDEAF1]/60 border border-[#F7D6E4] text-xs text-[#6F5E64] leading-relaxed">
+                                <b class="text-[#C75C7A]">Catatan:</b>
+                                User yang dibuat dari halaman ini otomatis menjadi admin. Untuk customer, gunakan halaman registrasi customer.
                             </div>
 
                             <!-- Tombol submit -->
-                            <div class="pt-2">
+                            <div class="pt-2 flex justify-end">
                                 <button 
                                     type="submit" 
                                     name="submit" 
                                     id="submit-button"
-                                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 transition-colors"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#C75C7A] text-white font-bold rounded-xl hover:bg-[#B14F6C] shadow-sm shadow-[#FAD7E5] transition-colors"
                                 >
                                     <i class="fa-solid fa-plus"></i>
-                                    <span>Tambah User</span>
+                                    <span>Tambah Admin</span>
                                 </button>
                             </div>
                         </form>

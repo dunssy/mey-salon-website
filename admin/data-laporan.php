@@ -164,7 +164,7 @@ if (!$layanan_favorit) {
 }
 ?>
 
-<body class="text-gray-800 overflow-x-hidden">
+<body class="text-[#2B2424] overflow-x-hidden bg-[#FFF7FA]">
 
     <!-- Wrapper utama halaman admin -->
     <div class="flex h-screen overflow-hidden">
@@ -173,245 +173,199 @@ if (!$layanan_favorit) {
         <?php include "../layout/sidebar.php"; ?>
 
         <!-- Konten utama -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-[#FFF7FA]">
 
             <!-- Memanggil navbar -->
             <?php include "../layout/navbar.php"; ?>
 
             <!-- Isi halaman -->
-            <div class="p-4 md:p-8 flex-1">
+            <div class="p-4 sm:p-5 md:p-8 flex-1">
 
                 <!-- Section laporan -->
                 <section id="section-laporan" class="space-y-6">
 
-                    <!-- Header laporan -->
-                    <div class="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-4">
+                    <!-- Header laporan minimalis -->
+                        <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
 
-                        <!-- Judul laporan -->
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800 tracking-tight">
-                                <?= htmlspecialchars($page_title); ?>
-                            </h3>
+                            <!-- Judul laporan -->
+                            <div>
+                                <h3 class="text-xl font-bold text-[#2B2424] tracking-tight">
+                                    <?= htmlspecialchars($page_title); ?>
+                                </h3>
 
-                            <p class="text-xs text-gray-400 mt-1">
-                                Pantau pendapatan, pengeluaran, dan laba Mey Salon.
-                            </p>
-
-                            <!-- Tombol tambah pengeluaran -->
-                            <div class="mt-4">
-                                <a 
-                                    href="pengeluaran.php" 
-                                    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors"
-                                >
-                                    <i class="fa-solid fa-plus"></i>
-                                    <span>Tambah Pengeluaran</span>
-                                </a>
+                                <p class="text-xs text-[#B77B8E] mt-1">
+                                    Periode:
+                                    <span class="font-bold text-[#C75C7A]">
+                                        <?= htmlspecialchars($label_periode); ?>
+                                    </span>
+                                </p>
                             </div>
-                        </div>
 
-                        <!-- Filter laporan -->
-                        <form action="" method="GET" class="bg-white p-4 rounded-2xl border border-pink-100 shadow-sm">
-                            <div class="flex flex-col sm:flex-row sm:items-end gap-3">
+                            <!-- Filter laporan minimalis -->
+                            <form action="" method="GET" class="flex flex-col sm:flex-row sm:items-center gap-2">
 
                                 <!-- Pilih jenis laporan -->
-                                <div>
-                                    <label for="jenis_laporan" class="block text-[11px] font-bold text-gray-400 uppercase mb-1">
-                                        Jenis
-                                    </label>
-
-                                    <select 
-                                        name="jenis" 
-                                        id="jenis_laporan"
-                                        onchange="toggleFilterInput()"
-                                        class="w-full px-3 py-2 text-sm bg-white border border-pink-100 rounded-xl focus:outline-none focus:border-pink-300 text-gray-600"
-                                    >
-                                        <option value="harian" <?= $jenis_laporan === 'harian' ? 'selected' : ''; ?>>
-                                            Harian
-                                        </option>
-                                        <option value="bulanan" <?= $jenis_laporan === 'bulanan' ? 'selected' : ''; ?>>
-                                            Bulanan
-                                        </option>
-                                    </select>
-                                </div>
+                                <select 
+                                    name="jenis" 
+                                    id="jenis_laporan"
+                                    onchange="toggleFilterInput()"
+                                    class="px-3 py-2 text-sm bg-[#FFF7FA] border border-[#F7D6E4] rounded-xl focus:outline-none focus:border-[#C75C7A] text-[#6F5E64]"
+                                >
+                                    <option value="harian" <?= $jenis_laporan === 'harian' ? 'selected' : ''; ?>>
+                                        Harian
+                                    </option>
+                                    <option value="bulanan" <?= $jenis_laporan === 'bulanan' ? 'selected' : ''; ?>>
+                                        Bulanan
+                                    </option>
+                                </select>
 
                                 <!-- Input tanggal harian -->
                                 <div id="filter_harian">
-                                    <label for="tanggal" class="block text-[11px] font-bold text-gray-400 uppercase mb-1">
-                                        Tanggal
-                                    </label>
-
                                     <input 
                                         type="date" 
                                         name="tanggal" 
                                         id="tanggal"
                                         value="<?= htmlspecialchars($tanggal); ?>"
-                                        class="w-full px-3 py-2 text-sm bg-white border border-pink-100 rounded-xl focus:outline-none focus:border-pink-300 text-gray-600"
+                                        class="w-full px-3 py-2 text-sm bg-[#FFF7FA] border border-[#F7D6E4] rounded-xl focus:outline-none focus:border-[#C75C7A] text-[#6F5E64]"
                                     >
                                 </div>
 
                                 <!-- Input bulan -->
                                 <div id="filter_bulanan">
-                                    <label for="bulan" class="block text-[11px] font-bold text-gray-400 uppercase mb-1">
-                                        Bulan
-                                    </label>
-
                                     <input 
                                         type="month" 
                                         name="bulan" 
                                         id="bulan"
                                         value="<?= htmlspecialchars($bulan); ?>"
-                                        class="w-full px-3 py-2 text-sm bg-white border border-pink-100 rounded-xl focus:outline-none focus:border-pink-300 text-gray-600"
+                                        class="w-full px-3 py-2 text-sm bg-[#FFF7FA] border border-[#F7D6E4] rounded-xl focus:outline-none focus:border-[#C75C7A] text-[#6F5E64]"
                                     >
                                 </div>
 
                                 <!-- Tombol filter -->
                                 <button 
                                     type="submit"
-                                    class="px-4 py-2 text-sm font-semibold text-white bg-pink-600 hover:bg-pink-700 rounded-xl shadow-sm shadow-pink-100 transition-colors flex items-center justify-center gap-2"
+                                    class="px-4 py-2 text-sm font-bold text-white bg-[#C75C7A] hover:bg-[#B14F6C] rounded-xl transition-colors flex items-center justify-center gap-2"
                                 >
                                     <i class="fa-solid fa-filter"></i>
                                     <span>Filter</span>
                                 </button>
 
+                                <!-- Tombol tambah pengeluaran -->
+                                <a 
+                                    href="pengeluaran.php" 
+                                    class="px-4 py-2 text-sm font-bold text-[#C75C7A] bg-[#FDEAF1] hover:bg-[#FAD7E5] rounded-xl transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span class="hidden sm:inline">Pengeluaran</span>
+                                </a>
+
                                 <!-- Tombol export PDF -->
                                 <a 
                                     href="export-laporan.php?jenis=<?= urlencode($jenis_laporan); ?>&tanggal=<?= urlencode($tanggal); ?>&bulan=<?= urlencode($bulan); ?>&format=pdf"
                                     target="_blank"
-                                    class="px-4 py-2 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors flex items-center justify-center gap-2"
+                                    class="px-3 py-2 text-sm font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors flex items-center justify-center"
+                                    title="Export PDF"
                                 >
                                     <i class="fa-solid fa-file-pdf"></i>
-                                    <span>PDF</span>
                                 </a>
 
                                 <!-- Tombol export Excel -->
                                 <a 
                                     href="export-laporan.php?jenis=<?= urlencode($jenis_laporan); ?>&tanggal=<?= urlencode($tanggal); ?>&bulan=<?= urlencode($bulan); ?>&format=excel"
-                                    class="px-4 py-2 text-sm font-semibold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-colors flex items-center justify-center gap-2"
+                                    class="px-3 py-2 text-sm font-bold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-colors flex items-center justify-center"
+                                    title="Export Excel"
                                 >
                                     <i class="fa-solid fa-file-excel"></i>
-                                    <span>Excel</span>
                                 </a>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Info periode laporan -->
-                    <div class="bg-white border border-pink-100 rounded-2xl p-4 shadow-sm">
-                        <p class="text-sm text-gray-500">
-                            Periode laporan:
-                            <span class="font-bold text-pink-600">
-                                <?= htmlspecialchars($label_periode); ?>
-                            </span>
-                        </p>
-                    </div>
+                            </form>
+                        </div>
 
                     <!-- Ringkasan laporan -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
 
                         <!-- Card pendapatan -->
-                        <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm">
+                        <div class="bg-white p-4 rounded-2xl border border-[#F7D6E4] shadow-sm">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                    <p class="text-xs font-semibold text-[#B77B8E] uppercase tracking-wider">
                                         Total Pendapatan
                                     </p>
 
-                                    <h4 class="text-2xl font-bold text-gray-800 mt-1">
+                                    <h4 class="text-xl font-bold text-[#2B2424] mt-1">
                                         Rp <?= number_format($total_pendapatan, 0, ',', '.'); ?>
                                     </h4>
                                 </div>
 
-                                <div class="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-lg">
+                                <div class="w-9 h-9 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-base">
                                     <i class="fa-solid fa-wallet"></i>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Card pengeluaran -->
-                        <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm">
+                        <div class="bg-white p-4 rounded-2xl border border-[#F7D6E4] shadow-sm">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                    <p class="text-xs font-semibold text-[#B77B8E] uppercase tracking-wider">
                                         Total Pengeluaran
                                     </p>
 
-                                    <h4 class="text-2xl font-bold text-gray-800 mt-1">
+                                    <h4 class="text-xl font-bold text-[#2B2424] mt-1">
                                         Rp <?= number_format($total_pengeluaran, 0, ',', '.'); ?>
                                     </h4>
                                 </div>
 
-                                <div class="w-10 h-10 bg-red-50 text-red-600 rounded-xl flex items-center justify-center text-lg">
+                                <div class="w-9 h-9 bg-red-50 text-red-600 rounded-xl flex items-center justify-center text-base">
                                     <i class="fa-solid fa-money-bill-wave"></i>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Card laba bersih -->
-                        <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm">
+                        <div class="bg-white p-4 rounded-2xl border border-[#F7D6E4] shadow-sm">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                    <p class="text-xs font-semibold text-[#B77B8E] uppercase tracking-wider">
                                         Laba Bersih
                                     </p>
 
-                                    <h4 class="text-2xl font-bold <?= $laba_bersih >= 0 ? 'text-green-600' : 'text-red-600'; ?> mt-1">
+                                    <h4 class="text-xl font-bold <?= $laba_bersih >= 0 ? 'text-green-600' : 'text-red-600'; ?> mt-1">
                                         Rp <?= number_format($laba_bersih, 0, ',', '.'); ?>
                                     </h4>
                                 </div>
 
-                                <div class="w-10 h-10 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center text-lg">
+                                <div class="w-9 h-9 bg-[#FDEAF1] text-[#C75C7A] rounded-xl flex items-center justify-center text-base">
                                     <i class="fa-solid fa-chart-line"></i>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Card transaksi -->
-                        <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm">
+                        <div class="bg-white p-4 rounded-2xl border border-[#F7D6E4] shadow-sm">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                    <p class="text-xs font-semibold text-[#B77B8E] uppercase tracking-wider">
                                         Total Transaksi
                                     </p>
 
-                                    <h4 class="text-2xl font-bold text-gray-800 mt-1">
+                                    <h4 class="text-xl font-bold text-[#2B2424] mt-1">
                                         <?= $total_transaksi; ?>
                                     </h4>
                                 </div>
 
-                                <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-lg">
+                                <div class="w-9 h-9 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-base">
                                     <i class="fa-solid fa-receipt"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card layanan favorit -->
-                    <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm">
-                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                            Layanan Terfavorit
-                        </p>
-
-                        <?php if ($layanan_favorit) : ?>
-                            <h4 class="text-lg font-bold text-gray-800 mt-1">
-                                <?= htmlspecialchars($layanan_favorit['nama_layanan']); ?>
-                            </h4>
-
-                            <p class="text-xs text-purple-600 font-medium mt-2">
-                                Dipilih sebanyak <?= (int) $layanan_favorit['total_dipilih']; ?> kali
-                            </p>
-                        <?php else : ?>
-                            <h4 class="text-lg font-bold text-gray-400 mt-1">
-                                Belum ada data layanan.
-                            </h4>
-                        <?php endif; ?>
-                    </div>
-
                     <!-- Tabel pendapatan -->
-                    <div class="bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+                    <div class="bg-white rounded-2xl border border-[#F7D6E4] shadow-sm overflow-hidden">
 
                         <!-- Header tabel pendapatan -->
-                        <div class="p-5 border-b border-pink-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                            <h4 class="font-bold text-gray-800 text-sm">
+                        <div class="px-5 py-4 border-b border-[#F7D6E4] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-white">
+                            <h4 class="font-bold text-[#2B2424] text-sm">
                                 Riwayat Pendapatan Transaksi
                             </h4>
 
@@ -426,49 +380,49 @@ if (!$layanan_favorit) {
 
                                 <!-- Header tabel -->
                                 <thead>
-                                    <tr class="bg-pink-50/40 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-pink-50">
-                                        <th class="py-3 px-6">Invoice</th>
-                                        <th class="py-3 px-6">Pelanggan</th>
-                                        <th class="py-3 px-6">Jenis</th>
-                                        <th class="py-3 px-6">Layanan</th>
-                                        <th class="py-3 px-6">Tanggal</th>
-                                        <th class="py-3 px-6">Total Bayar</th>
+                                    <tr class="bg-[#EFA9BF] text-[11px] font-bold text-white uppercase tracking-wider border-b border-[#EFA9BF]">
+                                        <th class="py-3 px-5">Invoice</th>
+                                        <th class="py-3 px-5">Pelanggan</th>
+                                        <th class="py-3 px-5">Jenis</th>
+                                        <th class="py-3 px-5">Layanan</th>
+                                        <th class="py-3 px-5">Tanggal</th>
+                                        <th class="py-3 px-5">Total Bayar</th>
                                     </tr>
                                 </thead>
 
                                 <!-- Isi tabel -->
-                                <tbody class="text-xs text-gray-600 divide-y divide-pink-50">
+                                <tbody class="text-xs text-[#6F5E64] divide-y divide-[#F7D6E4]">
                                     <?php if (!empty($data_pendapatan)) : ?>
                                         <?php foreach ($data_pendapatan as $pendapatan) : ?>
-                                            <tr class="hover:bg-pink-50/10 transition-colors">
-                                                <td class="py-4 px-6 font-semibold text-pink-600">
+                                            <tr class="hover:bg-[#FDEAF1]/40 transition-colors">
+                                                <td class="py-4 px-5 font-semibold text-[#C75C7A]">
                                                     #TRX-<?= str_pad($pendapatan['id_transaksi'], 4, '0', STR_PAD_LEFT); ?>
                                                 </td>
 
-                                                <td class="py-4 px-6 font-medium text-gray-800">
+                                                <td class="py-4 px-5 font-medium text-[#2B2424]">
                                                     <?= htmlspecialchars($pendapatan['nama_pelanggan']); ?>
                                                 </td>
 
-                                                <td class="py-4 px-6">
+                                                <td class="py-4 px-5">
                                                     <?= htmlspecialchars($pendapatan['jenis_pelanggan']); ?>
                                                 </td>
 
-                                                <td class="py-4 px-6">
+                                                <td class="py-4 px-5">
                                                     <?= htmlspecialchars($pendapatan['nama_layanan']); ?>
                                                 </td>
 
-                                                <td class="py-4 px-6 text-gray-400">
+                                                <td class="py-4 px-5 text-[#B77B8E]">
                                                     <?= date('d M Y H:i', strtotime($pendapatan['tanggal_transaksi'])); ?>
                                                 </td>
 
-                                                <td class="py-4 px-6 font-bold text-gray-800">
+                                                <td class="py-4 px-5 font-bold text-[#2B2424]">
                                                     Rp <?= number_format($pendapatan['total_bayar'], 0, ',', '.'); ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else : ?>
                                         <tr>
-                                            <td colspan="6" class="py-6 px-6 text-center text-gray-400">
+                                            <td colspan="6" class="py-6 px-5 text-center text-[#B77B8E]">
                                                 Belum ada pendapatan pada periode ini.
                                             </td>
                                         </tr>
@@ -479,11 +433,11 @@ if (!$layanan_favorit) {
                     </div>
 
                     <!-- Tabel pengeluaran -->
-                    <div class="bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+                    <div class="bg-white rounded-2xl border border-[#F7D6E4] shadow-sm overflow-hidden">
 
                         <!-- Header tabel pengeluaran -->
-                        <div class="p-5 border-b border-pink-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                            <h4 class="font-bold text-gray-800 text-sm">
+                        <div class="px-5 py-4 border-b border-[#F7D6E4] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-white">
+                            <h4 class="font-bold text-[#2B2424] text-sm">
                                 Riwayat Pengeluaran
                             </h4>
 
@@ -498,61 +452,61 @@ if (!$layanan_favorit) {
 
                                 <!-- Header tabel -->
                                 <thead>
-                                    <tr class="bg-pink-50/40 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-pink-50">
-                                        <th class="py-3 px-6">Jenis</th>
-                                        <th class="py-3 px-6">Keterangan</th>
-                                        <th class="py-3 px-6">Tanggal</th>
-                                        <th class="py-3 px-6">Total</th>
+                                    <tr class="bg-[#EFA9BF] text-[11px] font-bold text-white uppercase tracking-wider border-b border-[#EFA9BF]">
+                                        <th class="py-3 px-5">Jenis</th>
+                                        <th class="py-3 px-5">Keterangan</th>
+                                        <th class="py-3 px-5">Tanggal</th>
+                                        <th class="py-3 px-5">Total</th>
                                     </tr>
                                 </thead>
 
                                 <!-- Isi tabel -->
-                                <tbody class="text-xs text-gray-600 divide-y divide-pink-50">
+                                <tbody class="text-xs text-[#6F5E64] divide-y divide-[#F7D6E4]">
 
                                     <?php foreach ($data_restok as $restok) : ?>
-                                        <tr class="hover:bg-pink-50/10 transition-colors">
-                                            <td class="py-4 px-6 font-semibold text-red-600">
+                                        <tr class="hover:bg-[#FDEAF1]/40 transition-colors">
+                                            <td class="py-4 px-5 font-semibold text-red-600">
                                                 Restok
                                             </td>
 
-                                            <td class="py-4 px-6 font-medium text-gray-800">
+                                            <td class="py-4 px-5 font-medium text-[#2B2424]">
                                                 <?= htmlspecialchars($restok['nama_barang']); ?>
-                                                <span class="block text-[11px] text-gray-400 mt-1">
+                                                <span class="block text-[11px] text-[#B77B8E] mt-1">
                                                     Jumlah tambah: <?= (int) $restok['jumlah_tambah']; ?>
                                                 </span>
                                             </td>
 
-                                            <td class="py-4 px-6 text-gray-400">
+                                            <td class="py-4 px-5 text-[#B77B8E]">
                                                 <?= date('d M Y H:i', strtotime($restok['tanggal_restok'])); ?>
                                             </td>
 
-                                            <td class="py-4 px-6 font-bold text-gray-800">
+                                            <td class="py-4 px-5 font-bold text-[#2B2424]">
                                                 Rp <?= number_format($restok['total_harga_restok'], 0, ',', '.'); ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
 
                                     <?php foreach ($data_pengeluaran as $pengeluaran) : ?>
-                                        <tr class="hover:bg-pink-50/10 transition-colors">
-                                            <td class="py-4 px-6 font-semibold text-orange-600">
+                                        <tr class="hover:bg-[#FDEAF1]/40 transition-colors">
+                                            <td class="py-4 px-5 font-semibold text-orange-600">
                                                 Manual
                                             </td>
 
-                                            <td class="py-4 px-6 font-medium text-gray-800">
+                                            <td class="py-4 px-5 font-medium text-[#2B2424]">
                                                 <?= htmlspecialchars($pengeluaran['jenis_pengeluaran']); ?>
 
                                                 <?php if (!empty($pengeluaran['keterangan_pengeluaran'])) : ?>
-                                                    <span class="block text-[11px] text-gray-400 mt-1">
+                                                    <span class="block text-[11px] text-[#B77B8E] mt-1">
                                                         <?= htmlspecialchars($pengeluaran['keterangan_pengeluaran']); ?>
                                                     </span>
                                                 <?php endif; ?>
                                             </td>
 
-                                            <td class="py-4 px-6 text-gray-400">
+                                            <td class="py-4 px-5 text-[#B77B8E]">
                                                 <?= date('d M Y H:i', strtotime($pengeluaran['tanggal_pengeluaran'])); ?>
                                             </td>
 
-                                            <td class="py-4 px-6 font-bold text-gray-800">
+                                            <td class="py-4 px-5 font-bold text-[#2B2424]">
                                                 Rp <?= number_format($pengeluaran['jumlah_pengeluaran'], 0, ',', '.'); ?>
                                             </td>
                                         </tr>
@@ -560,7 +514,7 @@ if (!$layanan_favorit) {
 
                                     <?php if (empty($data_restok) && empty($data_pengeluaran)) : ?>
                                         <tr>
-                                            <td colspan="4" class="py-6 px-6 text-center text-gray-400">
+                                            <td colspan="4" class="py-6 px-5 text-center text-[#B77B8E]">
                                                 Belum ada pengeluaran pada periode ini.
                                             </td>
                                         </tr>

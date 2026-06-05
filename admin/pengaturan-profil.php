@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
 }
 ?>
 
-<body class="text-gray-800 overflow-x-hidden">
+<body class="text-[#2B2424] overflow-x-hidden bg-[#FFF7FA]">
 
     <!-- Wrapper utama halaman admin -->
     <div class="flex h-screen overflow-hidden">
@@ -76,66 +76,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
         <?php include "../layout/sidebar.php"; ?>
 
         <!-- Konten utama -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-[#FFF7FA]">
 
             <!-- Memanggil navbar -->
             <?php include "../layout/navbar.php"; ?>
 
             <!-- Isi halaman -->
-            <div class="p-4 md:p-8 flex-1">
+            <div class="p-4 sm:p-5 md:p-8 flex-1">
 
                 <!-- Section pengaturan profil -->
                 <section id="section-profil" class="space-y-6">
 
                     <!-- Header halaman -->
-                    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-                        <!-- Judul halaman -->
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">
-                                <?= htmlspecialchars($sub_title); ?>
-                            </h3>
+                            <!-- Judul halaman -->
+                            <div>
+                                <h3 class="text-xl font-bold text-[#2B2424]">
+                                    <?= htmlspecialchars($sub_title); ?>
+                                </h3>
 
-                            <p class="text-xs text-gray-400 mt-1">
-                                Kelola informasi profil akun Mey Salon Anda.
-                            </p>
+                                <p class="text-xs text-[#B77B8E] mt-1">
+                                    Kelola informasi profil akun Mey Salon Anda.
+                                </p>
+                            </div>
+
+                            <!-- Tombol kembali -->
+                            <a 
+                                href="dashboard-admin.php" 
+                                class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-[#C75C7A] bg-[#FDEAF1] rounded-xl hover:bg-[#FAD7E5] transition-colors w-fit"
+                            >
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Kembali</span>
+                            </a>
                         </div>
 
-                        <!-- Tombol kembali -->
-                        <a 
-                            href="dashboard-admin.php" 
-                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-gray-400 bg-white border border-pink-100 rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-colors"
-                        >
-                            <i class="fa-solid fa-arrow-left"></i>
-                            <span>Kembali</span>
-                        </a>
-                    </div>
-
                     <!-- Card profil -->
-                    <div class="max-w-2xl mx-auto bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+                    <div class="w-full bg-white rounded-2xl border border-[#F7D6E4] shadow-sm overflow-hidden">
 
                         <!-- Header card profil -->
-                        <div class="p-6 border-b border-pink-100 bg-pink-50/30">
+                        <div class="p-5 sm:p-6 border-b border-[#F7D6E4] bg-[#FDEAF1]/60">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
 
                                 <!-- Foto profil placeholder -->
                                 <img 
                                     src="https://placehold.co/100x100/fbcfe8/db2777?text=<?= urlencode(substr($user['nama'], 0, 1)); ?>" 
                                     alt="Foto Profil"
-                                    class="w-20 h-20 rounded-3xl border-4 border-white shadow-sm"
+                                    class="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl border-4 border-white shadow-sm"
                                 >
 
                                 <!-- Info profil -->
                                 <div>
-                                    <h3 class="font-bold text-xl text-gray-800">
+                                    <h3 class="font-bold text-xl text-[#2B2424]">
                                         <?= htmlspecialchars($user['nama']); ?>
                                     </h3>
 
-                                    <p class="text-xs text-pink-500 font-semibold uppercase mt-1">
+                                    <p class="text-xs text-[#C75C7A] font-semibold uppercase mt-1">
                                         <?= htmlspecialchars($user['role']); ?>
                                     </p>
 
-                                    <p class="text-xs text-gray-400 mt-2">
+                                    <p class="text-xs text-[#B77B8E] mt-2">
                                         Email dan role hanya bisa dilihat, tidak bisa diubah dari halaman ini.
                                     </p>
                                 </div>
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                         </div>
 
                         <!-- Isi card profil -->
-                        <div class="p-6 md:p-8 space-y-6">
+                        <div class="p-5 sm:p-6 space-y-6">
 
                             <!-- Pesan sukses -->
                             <?php if ($success_message) : ?>
@@ -160,11 +160,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                             <?php endif; ?>
 
                             <!-- Form update profil -->
-                            <form action="" method="POST" class="space-y-4">
+                            <form action="" method="POST" class="space-y-5">
+
+                                <!-- Grid input profil -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                                 <!-- Input nama lengkap -->
                                 <div>
-                                    <label for="nama" class="text-[11px] font-bold text-gray-400 uppercase ml-1">
+                                    <label for="nama" class="block text-[11px] font-bold text-[#B77B8E] uppercase tracking-wider mb-2">
                                         Nama Lengkap
                                     </label>
 
@@ -174,13 +177,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                                         id="nama"
                                         value="<?= htmlspecialchars($user['nama']); ?>" 
                                         required
-                                        class="w-full px-4 py-3 bg-pink-50/20 border border-pink-100 rounded-2xl text-sm outline-none focus:border-pink-400"
+                                        class="w-full px-4 py-3 bg-[#FFF7FA] border border-[#EAD8D0] rounded-xl text-sm outline-none focus:border-[#C75C7A] focus:ring-2 focus:ring-[#FAD7E5]"
                                     >
                                 </div>
 
                                 <!-- Input email -->
                                 <div>
-                                    <label for="email" class="text-[11px] font-bold text-gray-400 uppercase ml-1">
+                                    <label for="email" class="block text-[11px] font-bold text-[#B77B8E] uppercase tracking-wider mb-2">
                                         Email
                                     </label>
 
@@ -189,13 +192,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                                         id="email"
                                         value="<?= htmlspecialchars($user['email']); ?>" 
                                         disabled
-                                        class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-2xl text-sm text-gray-400 outline-none cursor-not-allowed"
+                                        class="w-full px-4 py-3 bg-[#F8F4F2] border border-[#EAD8D0] rounded-xl text-sm text-[#7A6F6F] outline-none cursor-not-allowed"
                                     >
                                 </div>
 
                                 <!-- Input nomor WhatsApp -->
                                 <div>
-                                    <label for="no_hp" class="text-[11px] font-bold text-gray-400 uppercase ml-1">
+                                    <label for="no_hp" class="block text-[11px] font-bold text-[#B77B8E] uppercase tracking-wider mb-2">
                                         No. WhatsApp
                                     </label>
 
@@ -205,28 +208,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                                         id="no_hp"
                                         value="<?= htmlspecialchars($user['no_hp']); ?>" 
                                         required
-                                        class="w-full px-4 py-3 bg-pink-50/20 border border-pink-100 rounded-2xl text-sm outline-none focus:border-pink-400"
+                                        class="w-full px-4 py-3 bg-[#FFF7FA] border border-[#EAD8D0] rounded-xl text-sm outline-none focus:border-[#C75C7A] focus:ring-2 focus:ring-[#FAD7E5]"
                                     >
                                 </div>
 
-                                <!-- Input alamat -->
+                                                                <!-- Input role -->
                                 <div>
-                                    <label for="alamat" class="text-[11px] font-bold text-gray-400 uppercase ml-1">
-                                        Alamat
-                                    </label>
-
-                                    <textarea 
-                                        name="alamat" 
-                                        id="alamat"
-                                        rows="3" 
-                                        required
-                                        class="w-full px-4 py-3 bg-pink-50/20 border border-pink-100 rounded-2xl text-sm outline-none focus:border-pink-400 resize-none"
-                                    ><?= htmlspecialchars($user['alamat']); ?></textarea>
-                                </div>
-
-                                <!-- Input role -->
-                                <div>
-                                    <label for="role" class="text-[11px] font-bold text-gray-400 uppercase ml-1">
+                                    <label for="role" class="block text-[11px] font-bold text-[#B77B8E] uppercase tracking-wider mb-2">
                                         Role
                                     </label>
 
@@ -235,18 +223,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                                         id="role"
                                         value="<?= htmlspecialchars($user['role']); ?>" 
                                         disabled
-                                        class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-2xl text-sm text-gray-400 outline-none cursor-not-allowed"
+                                        class="w-full px-4 py-3 bg-[#F8F4F2] border border-[#EAD8D0] rounded-xl text-sm text-[#7A6F6F] outline-none cursor-not-allowed"
                                     >
                                 </div>
 
+                                <!-- Input alamat -->
+                                <div class="md:col-span-2">
+                                    <label for="alamat" class="block text-[11px] font-bold text-[#B77B8E] uppercase tracking-wider mb-2">
+                                        Alamat
+                                    </label>
+
+                                    <textarea 
+                                        name="alamat" 
+                                        id="alamat"
+                                        rows="3" 
+                                        required
+                                        class="w-full px-4 py-3 bg-[#FDEAF1]/50 border border-[#F7D6E4] rounded-2xl text-sm outline-none focus:border-pink-400 resize-none"
+                                    ><?= htmlspecialchars($user['alamat']); ?></textarea>
+                                </div>
+
+                                </div>
+
                                 <!-- Tombol aksi -->
-                                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                                <div class="flex flex-col sm:flex-row justify-end gap-3 pt-2">
 
                                     <!-- Tombol simpan -->
                                     <button 
                                         type="submit" 
                                         name="update_profil" 
-                                        class="flex-1 py-4 bg-pink-600 text-white font-bold rounded-2xl hover:bg-pink-700 transition-all shadow-lg shadow-pink-100"
+                                        class="w-full sm:w-auto px-5 py-3 bg-[#C75C7A] text-white font-bold rounded-xl hover:bg-[#B14F6C] transition-all shadow-sm shadow-[#FAD7E5]"
                                     >
                                         Simpan Perubahan
                                     </button>
@@ -254,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profil'])) {
                                     <!-- Tombol kembali bawah -->
                                     <a 
                                         href="dashboard-admin.php"
-                                        class="flex-1 py-4 bg-gray-50 text-gray-500 font-bold rounded-2xl hover:bg-pink-50 hover:text-pink-600 transition-all text-center"
+                                        class="w-full sm:w-auto px-5 py-3 bg-[#F8F4F2] text-[#7A6F6F] font-bold rounded-xl hover:bg-[#FDEAF1] hover:text-[#C75C7A] transition-all text-center"
                                     >
                                         Kembali
                                     </a>

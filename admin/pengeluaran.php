@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
     if (mysqli_affected_rows($koneksi) > 0) {
         echo "<script>
                 alert('Pengeluaran berhasil ditambahkan dan masuk ke laporan!');
-                window.location.href = 'data-laporan.php';
+                window.location.href = 'laporan.php';
               </script>";
         exit;
     } else {
@@ -66,7 +66,7 @@ if (isset($_POST['submit'])) {
 }
 ?>
 
-<body class="text-gray-800 overflow-x-hidden">
+<body class="text-[#2B2424] overflow-x-hidden bg-[#FFF7FA]">
 
     <!-- Wrapper utama halaman admin -->
     <div class="flex h-screen overflow-hidden">
@@ -75,64 +75,67 @@ if (isset($_POST['submit'])) {
         <?php include "../layout/sidebar.php"; ?>
 
         <!-- Konten utama -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-[#FFF7FA]">
 
             <!-- Memanggil navbar -->
             <?php include "../layout/navbar.php"; ?>
 
             <!-- Isi halaman -->
-            <div class="p-4 md:p-8 flex-1">
+            <div class="p-4 sm:p-5 md:p-8 flex-1">
 
                 <!-- Section tambah pengeluaran -->
                 <section id="section-tambah-pengeluaran" class="space-y-6">
 
                     <!-- Header halaman -->
-                    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-                        <!-- Judul halaman -->
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">
-                                <?= htmlspecialchars($sub_title); ?>
-                            </h3>
+                            <!-- Judul halaman -->
+                            <div>
+                                <h3 class="text-xl font-bold text-[#2B2424]">
+                                    <?= htmlspecialchars($sub_title); ?>
+                                </h3>
 
-                            <p class="text-xs text-gray-400 mt-1">
-                                Tambahkan pengeluaran manual seperti listrik, sewa, gaji, atau kebutuhan operasional.
-                            </p>
+                                <p class="text-xs text-[#B77B8E] mt-1">
+                                    Tambahkan pengeluaran manual seperti listrik, sewa, gaji, atau kebutuhan operasional.
+                                </p>
+                            </div>
+
+                            <!-- Tombol kembali -->
+                            <a 
+                                href="data-laporan.php" 
+                                class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-[#C75C7A] bg-[#FDEAF1] rounded-xl hover:bg-[#FAD7E5] transition-colors w-fit"
+                            >
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Kembali</span>
+                            </a>
                         </div>
 
-                        <!-- Tombol kembali -->
-                        <a 
-                            href="data-laporan.php" 
-                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-gray-400 bg-white border border-pink-100 rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-colors"
-                        >
-                            <i class="fa-solid fa-arrow-left"></i>
-                            <span>Kembali</span>
-                        </a>
-                    </div>
-
                     <!-- Layout form -->
-                    <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
+                    <div class="w-full">
 
                         <!-- Card form pengeluaran -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                        <div class="bg-white rounded-2xl shadow-sm border border-[#F7D6E4] overflow-hidden w-full">
 
                             <!-- Header card -->
-                            <div class="p-6 border-b border-pink-100">
-                                <h4 class="font-bold text-gray-700">
+                            <div class="px-5 py-4 border-b border-[#F7D6E4] bg-[#FDEAF1]/60">
+                                <h4 class="font-bold text-[#3D3134]">
                                     Form Pengeluaran
                                 </h4>
 
-                                <p class="text-xs text-gray-400 mt-1">
+                                <p class="text-xs text-[#B77B8E] mt-1">
                                     Data yang disimpan akan otomatis masuk sebagai pengeluaran di laporan.
                                 </p>
                             </div>
 
                             <!-- Form tambah pengeluaran -->
-                            <form action="" method="POST" class="p-6 space-y-4">
+                            <form action="" method="POST" class="p-5 sm:p-6 space-y-5">
+
+                                <!-- Grid input pengeluaran -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                                 <!-- Input jenis pengeluaran -->
                                 <div>
-                                    <label for="jenis_pengeluaran" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <label for="jenis_pengeluaran" class="block text-sm font-bold text-[#3D3134] mb-2">
                                         Jenis Pengeluaran
                                     </label>
 
@@ -142,13 +145,13 @@ if (isset($_POST['submit'])) {
                                         id="jenis_pengeluaran" 
                                         required
                                         placeholder="Contoh: Listrik, Sewa, Gaji, Peralatan"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                        class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                     >
                                 </div>
 
                                 <!-- Input jumlah pengeluaran -->
                                 <div>
-                                    <label for="jumlah_pengeluaran" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <label for="jumlah_pengeluaran" class="block text-sm font-bold text-[#3D3134] mb-2">
                                         Jumlah Pengeluaran
                                     </label>
 
@@ -159,13 +162,13 @@ if (isset($_POST['submit'])) {
                                         required
                                         min="1"
                                         placeholder="Contoh: 100000"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                        class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                     >
                                 </div>
 
                                 <!-- Input tanggal pengeluaran -->
                                 <div>
-                                    <label for="tanggal_pengeluaran" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <label for="tanggal_pengeluaran" class="block text-sm font-bold text-[#3D3134] mb-2">
                                         Tanggal Pengeluaran
                                     </label>
 
@@ -175,13 +178,13 @@ if (isset($_POST['submit'])) {
                                         id="tanggal_pengeluaran" 
                                         required
                                         value="<?= date('Y-m-d'); ?>"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                        class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                     >
                                 </div>
 
                                 <!-- Input keterangan -->
-                                <div>
-                                    <label for="keterangan_pengeluaran" class="block text-sm font-medium text-gray-700 mb-1">
+                                <div class="md:col-span-2">
+                                    <label for="keterangan_pengeluaran" class="block text-sm font-bold text-[#3D3134] mb-2">
                                         Keterangan
                                     </label>
 
@@ -191,54 +194,26 @@ if (isset($_POST['submit'])) {
                                         rows="4"
                                         required
                                         placeholder="Contoh: Pembayaran listrik bulan Januari"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200 resize-none"
+                                        class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A] resize-none"
                                     ></textarea>
                                 </div>
 
+                                </div>
+
                                 <!-- Tombol submit -->
-                                <button 
+                                <div class="flex justify-end">
+                                    <button 
                                     type="submit" 
                                     name="submit" 
-                                    class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-pink-600 text-white font-bold rounded-xl hover:bg-pink-700 transition-colors"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#C75C7A] text-white font-bold rounded-xl hover:bg-[#B14F6C] shadow-sm shadow-[#FAD7E5] transition-colors"
                                 >
                                     <i class="fa-solid fa-plus"></i>
                                     <span>Tambah Pengeluaran</span>
-                                </button>
+                                    </button>
+                                </div>
                             </form>
                         </div>
 
-                        <!-- Card informasi laporan -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-pink-100 p-6">
-
-                            <!-- Icon info -->
-                            <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-4">
-                                <i class="fa-solid fa-money-bill-wave text-xl"></i>
-                            </div>
-
-                            <h4 class="font-bold text-gray-800">
-                                Masuk ke Laporan
-                            </h4>
-
-                            <p class="text-sm text-gray-500 mt-2 leading-relaxed">
-                                Pengeluaran manual akan ditampilkan di laporan bersama pengeluaran restok barang.
-                            </p>
-
-                            <div class="mt-5 p-4 bg-pink-50/50 border border-pink-100 rounded-xl">
-                                <p class="text-xs text-gray-500 leading-relaxed">
-                                    Total pengeluaran laporan dihitung dari:
-                                    <br>
-                                    <b>Restok Barang + Pengeluaran Manual</b>
-                                </p>
-                            </div>
-
-                            <a 
-                                href="data-laporan.php" 
-                                class="mt-5 inline-flex w-full items-center justify-center gap-2 px-4 py-3 text-sm font-bold text-pink-600 bg-pink-50 rounded-xl hover:bg-pink-100 transition-colors"
-                            >
-                                <i class="fa-solid fa-chart-line"></i>
-                                <span>Lihat Laporan</span>
-                            </a>
-                        </div>
                     </div>
                 </section>
             </div>

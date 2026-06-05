@@ -87,17 +87,17 @@ function statusBadgeClass($status)
     if ($status == 'On-going') return 'bg-blue-100 text-blue-700';
     if ($status == 'Done') return 'bg-green-100 text-green-700';
     if ($status == 'Cancel') return 'bg-red-100 text-red-700';
-    return 'bg-gray-100 text-gray-700';
+    return 'bg-gray-100 text-[#3D3134]';
 }
 ?>
 
-<body class="text-gray-800 overflow-x-hidden">
+<body class="text-[#2B2424] overflow-x-hidden bg-[#FFF7FA]">
 
     <div class="flex h-screen overflow-hidden">
 
         <?php include "../layout/sidebar.php"; ?>
 
-        <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-[#FFF7FA]">
 
             <?php include "../layout/navbar.php"; ?>
 
@@ -105,74 +105,47 @@ function statusBadgeClass($status)
 
                 <section id="section-booking" class="space-y-5">
 
-                    <div class="bg-white rounded-2xl border border-pink-100 shadow-sm px-5 py-4">
                         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
                             <div>
-                                <h3 class="text-xl font-bold text-gray-800">
+                                <h3 class="text-xl font-bold text-[#2B2424]">
                                     Data Booking
                                 </h3>
 
-                                <p class="text-xs text-gray-400 mt-1">
+                                <p class="text-xs text-[#B77B8E] mt-1">
                                     Kelola semua booking pelanggan, cek bukti pembayaran QRIS, dan proses layanan salon.
                                 </p>
                             </div>
-
-                            <div class="flex flex-wrap items-center gap-2">
-                                <a 
-                                    href="data-booking.php?tampil=semua" 
-                                    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold text-pink-600 bg-pink-50 rounded-xl hover:bg-pink-100 transition"
-                                >
-                                    <i class="fa-solid fa-list"></i>
-                                    <span>Semua Data</span>
-                                </a>
-
-                                <a 
-                                    href="data-booking.php?tanggal=<?= date('Y-m-d'); ?>" 
-                                    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold text-gray-600 bg-gray-50 rounded-xl hover:bg-gray-100 transition"
-                                >
-                                    <i class="fa-solid fa-calendar-day"></i>
-                                    <span>Hari Ini</span>
-                                </a>
-
-                                <a 
-                                    href="data-booking.php" 
-                                    class="inline-flex items-center justify-center w-10 h-10 text-pink-600 bg-white border border-pink-100 rounded-xl hover:bg-pink-50 transition"
-                                >
-                                    <i class="fa-solid fa-rotate"></i>
-                                </a>
-                            </div>
                         </div>
-                    </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
 
-                        <div class="bg-white p-4 rounded-xl border border-pink-100 shadow-sm hover:shadow-md transition">
+                        <div class="bg-white p-4 rounded-2xl border border-[#F7D6E4] shadow-sm hover:shadow-md hover:shadow-[#FAD7E5]/60 transition">
                             <div class="flex items-start justify-between gap-3">
                                 <div>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                    <p class="text-[10px] font-bold text-[#B77B8E] uppercase tracking-wider">
                                         Total Booking
                                     </p>
 
-                                    <h4 class="text-2xl font-extrabold text-gray-800 mt-1">
+                                    <h4 class="text-2xl font-extrabold text-[#2B2424] mt-1">
                                         <?= (int) $total_booking; ?>
                                     </h4>
                                 </div>
 
-                                <div class="w-9 h-9 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center shrink-0">
+                                <div class="w-9 h-9 bg-[#FDEAF1] text-[#C75C7A] rounded-xl flex items-center justify-center shrink-0">
                                     <i class="fa-solid fa-calendar-check text-sm"></i>
                                 </div>
                             </div>
 
-                            <p class="text-[11px] text-gray-400 mt-2">
+                            <p class="text-[11px] text-[#B77B8E] mt-2">
                                 <?= htmlspecialchars($label_data); ?>
                             </p>
                         </div>
 
-                        <div class="bg-white p-4 rounded-xl border border-pink-100 shadow-sm hover:shadow-md transition">
+                        <div class="bg-white p-4 rounded-2xl border border-[#F7D6E4] shadow-sm hover:shadow-md hover:shadow-[#FAD7E5]/60 transition">
                             <div class="flex items-start justify-between gap-3">
                                 <div>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                    <p class="text-[10px] font-bold text-[#B77B8E] uppercase tracking-wider">
                                         Waiting
                                     </p>
 
@@ -186,15 +159,15 @@ function statusBadgeClass($status)
                                 </div>
                             </div>
 
-                            <p class="text-[11px] text-gray-400 mt-2">
+                            <p class="text-[11px] text-[#B77B8E] mt-2">
                                 Menunggu konfirmasi.
                             </p>
                         </div>
 
-                        <div class="bg-white p-4 rounded-xl border border-pink-100 shadow-sm hover:shadow-md transition">
+                        <div class="bg-white p-4 rounded-2xl border border-[#F7D6E4] shadow-sm hover:shadow-md hover:shadow-[#FAD7E5]/60 transition">
                             <div class="flex items-start justify-between gap-3">
                                 <div>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                    <p class="text-[10px] font-bold text-[#B77B8E] uppercase tracking-wider">
                                         Pending
                                     </p>
 
@@ -208,15 +181,15 @@ function statusBadgeClass($status)
                                 </div>
                             </div>
 
-                            <p class="text-[11px] text-gray-400 mt-2">
+                            <p class="text-[11px] text-[#B77B8E] mt-2">
                                 Menunggu persetujuan.
                             </p>
                         </div>
 
-                        <div class="bg-white p-4 rounded-xl border border-pink-100 shadow-sm hover:shadow-md transition">
+                        <div class="bg-white p-4 rounded-2xl border border-[#F7D6E4] shadow-sm hover:shadow-md hover:shadow-[#FAD7E5]/60 transition">
                             <div class="flex items-start justify-between gap-3">
                                 <div>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                    <p class="text-[10px] font-bold text-[#B77B8E] uppercase tracking-wider">
                                         On-going
                                     </p>
 
@@ -230,91 +203,47 @@ function statusBadgeClass($status)
                                 </div>
                             </div>
 
-                            <p class="text-[11px] text-gray-400 mt-2">
+                            <p class="text-[11px] text-[#B77B8E] mt-2">
                                 Sedang diproses.
                             </p>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-sm border border-pink-100 p-4">
-                        <form action="" method="GET" class="grid grid-cols-1 md:grid-cols-[220px_220px_1fr] gap-3 items-end">
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-[#F7D6E4]">
 
+                        <div class="px-5 py-4 border-b border-[#F7D6E4] bg-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                             <div>
-                                <label for="tanggal" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">
-                                    Tanggal
-                                </label>
-
-                                <input 
-                                    type="date" 
-                                    name="tanggal" 
-                                    id="tanggal"
-                                    value="<?= htmlspecialchars($tanggal_filter); ?>"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-pink-100 bg-pink-50/20 text-sm outline-none focus:border-pink-400"
-                                >
-                            </div>
-
-                            <div>
-                                <label for="status" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">
-                                    Status
-                                </label>
-
-                                <select 
-                                    name="status" 
-                                    id="status"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-pink-100 bg-pink-50/20 text-sm outline-none focus:border-pink-400"
-                                >
-                                    <option value="">Semua Status</option>
-                                    <option value="Waiting" <?= $status_filter == 'Waiting' ? 'selected' : ''; ?>>Waiting</option>
-                                    <option value="Pending" <?= $status_filter == 'Pending' ? 'selected' : ''; ?>>Pending</option>
-                                    <option value="On-going" <?= $status_filter == 'On-going' ? 'selected' : ''; ?>>On-going</option>
-                                    <option value="Done" <?= $status_filter == 'Done' ? 'selected' : ''; ?>>Done</option>
-                                    <option value="Cancel" <?= $status_filter == 'Cancel' ? 'selected' : ''; ?>>Cancel</option>
-                                </select>
-                            </div>
-
-                            <div class="flex flex-wrap items-center gap-2">
-                                <button 
-                                    type="submit"
-                                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-pink-600 text-white text-xs font-bold rounded-xl hover:bg-pink-700 transition"
-                                >
-                                    <i class="fa-solid fa-filter"></i>
-                                    <span>Filter</span>
-                                </button>
-
-                                <a 
-                                    href="data-booking.php?tampil=semua"
-                                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-50 text-gray-500 text-xs font-bold rounded-xl hover:bg-gray-100 transition"
-                                >
-                                    <i class="fa-solid fa-xmark"></i>
-                                    <span>Reset</span>
-                                </a>
-
-                                <span class="text-[11px] text-gray-400">
-                                    Menampilkan: <b class="text-pink-600"><?= htmlspecialchars($label_data); ?></b>
-                                </span>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100">
-
-                        <div class="px-5 py-4 border-b border-pink-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                            <div>
-                                <h4 class="font-bold text-gray-700">
+                                <h4 class="font-bold text-[#3D3134]">
                                     Antrean Booking
                                 </h4>
 
-                                <p class="text-xs text-gray-400 mt-1">
+                                <p class="text-xs text-[#B77B8E] mt-1">
                                     Tabel dibuat lebar dan padat agar pas di layar desktop.
                                 </p>
                             </div>
 
-                            <div class="flex items-center gap-2">
-                                <span class="text-[11px] font-bold text-pink-600 bg-pink-50 px-3 py-1.5 rounded-lg">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="text-[11px] font-bold text-[#C75C7A] bg-[#FDEAF1] px-3 py-1.5 rounded-lg">
                                     <?= (int) $total_booking; ?> Data
                                 </span>
 
-                                <a href="data-booking.php?tampil=semua" class="w-9 h-9 inline-flex items-center justify-center text-pink-600 hover:bg-pink-50 rounded-lg transition">
+                                <a 
+                                    href="data-booking.php?tampil=semua"
+                                    class="inline-flex items-center gap-1.5 px-3 py-2 text-[11px] font-bold text-[#C75C7A] bg-[#FDEAF1] rounded-lg hover:bg-[#FAD7E5] transition"
+                                >
+                                    <i class="fa-solid fa-list"></i>
+                                    <span>Semua</span>
+                                </a>
+
+                                <a 
+                                    href="data-booking.php?tanggal=<?= date('Y-m-d'); ?>"
+                                    class="inline-flex items-center gap-1.5 px-3 py-2 text-[11px] font-bold text-[#6F5E64] bg-white border border-[#F7D6E4] rounded-lg hover:bg-[#FDEAF1] transition"
+                                >
+                                    <i class="fa-solid fa-calendar-day"></i>
+                                    <span>Hari Ini</span>
+                                </a>
+
+                                <a href="data-booking.php?tampil=semua" class="w-9 h-9 inline-flex items-center justify-center text-[#C75C7A] hover:bg-[#FDEAF1] rounded-lg transition">
                                     <i class="fa-solid fa-rotate"></i>
                                 </a>
                             </div>
@@ -323,7 +252,7 @@ function statusBadgeClass($status)
                         <div class="overflow-x-auto">
                             <table class="w-full text-left min-w-[1080px] text-sm">
 
-                                <thead class="bg-pink-50/40 text-gray-400 text-[10px] uppercase font-bold tracking-widest">
+                                <thead class="bg-[#EFA9BF] text-white text-[10px] uppercase font-bold tracking-widest">
                                     <tr>
                                         <th class="px-5 py-3">Tanggal</th>
                                         <th class="px-5 py-3">Jam</th>
@@ -336,19 +265,19 @@ function statusBadgeClass($status)
                                     </tr>
                                 </thead>
 
-                                <tbody class="divide-y divide-pink-50">
+                                <tbody class="divide-y divide-[#F7D6E4]">
 
                                     <?php if (mysqli_num_rows($query_booking) > 0) : ?>
 
                                         <?php while ($booking = mysqli_fetch_assoc($query_booking)) : ?>
 
-                                            <tr class="hover:bg-pink-50/20 transition">
+                                            <tr class="hover:bg-[#FDEAF1]/50 transition">
 
-                                                <td class="px-5 py-3 font-bold text-pink-600 whitespace-nowrap">
+                                                <td class="px-5 py-3 font-bold text-[#C75C7A] whitespace-nowrap">
                                                     <?= date('d M Y', strtotime($booking['tanggal_booking'])); ?>
                                                 </td>
 
-                                                <td class="px-5 py-3 text-gray-600 whitespace-nowrap">
+                                                <td class="px-5 py-3 text-[#6F5E64] whitespace-nowrap">
                                                     <span class="font-bold">
                                                         <?= substr($booking['jam_mulai'], 0, 5); ?>
                                                     </span>
@@ -367,31 +296,31 @@ function statusBadgeClass($status)
                                                 </td>
 
                                                 <td class="px-5 py-3">
-                                                    <p class="font-semibold text-gray-700 whitespace-nowrap">
+                                                    <p class="font-semibold text-[#3D3134] whitespace-nowrap">
                                                         <?= htmlspecialchars($booking['nama']); ?>
                                                     </p>
 
-                                                    <p class="text-xs text-gray-400 mt-1 whitespace-nowrap">
+                                                    <p class="text-xs text-[#B77B8E] mt-1 whitespace-nowrap">
                                                         <?= htmlspecialchars($booking['no_hp']); ?>
                                                     </p>
                                                 </td>
 
-                                                <td class="px-5 py-3 text-gray-600 max-w-[280px]">
+                                                <td class="px-5 py-3 text-[#6F5E64] max-w-[280px]">
                                                     <p class="line-clamp-2">
                                                         <?= htmlspecialchars($booking['nama_layanan'] ?: '-'); ?>
                                                     </p>
 
                                                     <?php if (!empty($booking['catatan_admin'])) : ?>
-                                                        <span class="block text-[11px] text-gray-400 mt-1 italic line-clamp-1">
+                                                        <span class="block text-[11px] text-[#B77B8E] mt-1 italic line-clamp-1">
                                                             Admin: <?= htmlspecialchars($booking['catatan_admin']); ?>
                                                         </span>
                                                     <?php endif; ?>
                                                 </td>
 
-                                                <td class="px-5 py-3 font-bold text-gray-800 whitespace-nowrap">
+                                                <td class="px-5 py-3 font-bold text-[#2B2424] whitespace-nowrap">
                                                     Rp <?= number_format($booking['total_harga'] ?? 0, 0, ',', '.'); ?>
 
-                                                    <span class="block text-[11px] font-normal text-gray-400 mt-1">
+                                                    <span class="block text-[11px] font-normal text-[#B77B8E] mt-1">
                                                         <?= (int) ($booking['total_durasi'] ?? 0); ?> menit
                                                     </span>
                                                 </td>
@@ -422,7 +351,7 @@ function statusBadgeClass($status)
                                                 <td class="px-5 py-3 text-center">
                                                     <a 
                                                         href="detail-booking.php?id_booking=<?= (int) $booking['id_booking']; ?>" 
-                                                        class="inline-flex items-center justify-center gap-2 bg-pink-600 text-white px-3 py-2 text-[10px] font-bold rounded-lg hover:bg-pink-700 transition whitespace-nowrap"
+                                                        class="inline-flex items-center justify-center gap-2 bg-[#C75C7A] text-white px-3 py-2 text-[10px] font-bold rounded-lg hover:bg-[#B14F6C] transition whitespace-nowrap"
                                                     >
                                                         <i class="fa-solid fa-eye"></i>
                                                         <span>Detail</span>
@@ -435,7 +364,7 @@ function statusBadgeClass($status)
                                     <?php else : ?>
 
                                         <tr>
-                                            <td colspan="8" class="px-5 py-10 text-center text-gray-400 italic">
+                                            <td colspan="8" class="px-5 py-10 text-center text-[#B77B8E] italic">
                                                 Belum ada data booking pada filter ini.
                                             </td>
                                         </tr>

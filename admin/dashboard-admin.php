@@ -110,11 +110,11 @@ function statusBadgeClass($status)
         return 'bg-red-100 text-red-700';
     }
 
-    return 'bg-gray-100 text-gray-700';
+    return 'bg-gray-100 text-[#3D3134]';
 }
 ?>
 
-<body class="text-gray-800 overflow-x-hidden">
+<body class="text-[#2B2424] overflow-x-hidden bg-[#FFF7FA]">
 
     <!-- Wrapper utama halaman admin -->
     <div class="flex h-screen overflow-hidden">
@@ -123,13 +123,13 @@ function statusBadgeClass($status)
         <?php include "../layout/sidebar.php"; ?>
 
         <!-- Konten utama dashboard -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-[#FDEAF1]/40">
 
             <!-- Memanggil navbar admin -->
             <?php include "../layout/navbar.php"; ?>
 
             <!-- Isi halaman dashboard -->
-            <div class="p-4 md:p-8 flex-1">
+            <div class="p-4 sm:p-5 md:p-8 flex-1">
 
                 <!-- Section dashboard -->
                 <section id="section-dashboard" class="space-y-6 md:space-y-8">
@@ -137,18 +137,18 @@ function statusBadgeClass($status)
                     <!-- Header dashboard -->
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div>
-                            <h3 class="text-xl font-bold text-gray-800">
+                            <h3 class="text-xl font-bold text-[#2B2424]">
                                 Dashboard
                             </h3>
 
-                            <p class="text-xs text-gray-400 mt-1">
+                            <p class="text-xs text-[#B77B8E] mt-1">
                                 Ringkasan data Mey Salon hari ini.
                             </p>
                         </div>
 
                         <a 
                             href="dashboard-admin.php" 
-                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-pink-600 bg-white border border-pink-100 rounded-xl hover:bg-pink-50 transition"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-[#C75C7A] bg-white border border-[#F7D6E4] rounded-xl hover:bg-[#FDEAF1] shadow-sm transition"
                         >
                             <i class="fa-solid fa-rotate"></i>
                             <span>Refresh</span>
@@ -156,101 +156,101 @@ function statusBadgeClass($status)
                     </div>
 
                     <!-- Grid statistik dashboard -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-1 md:gap-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-5">
 
                         <!-- Card booking hari ini -->
-                        <div class="glass-card p-5 md:p-6 rounded-2xl shadow-sm border border-white">
+                        <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-[#F7D6E4] hover:shadow-md hover:shadow-[#FAD7E5]/60 transition">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs font-semibold text-gray-500">
+                                    <p class="text-xs font-semibold text-[#7A6F6F]">
                                         Booking Hari Ini
                                     </p>
 
-                                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mt-1">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-[#2B2424] mt-1">
                                         <!-- Total Booking Hari Ini -->
                                         <?= (int) $total_booking_today; ?>
                                     </h3>
                                 </div>
 
-                                <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+                                <div class="w-10 h-10 bg-[#EEF6FF] text-[#3B82F6] rounded-xl flex items-center justify-center">
                                     <i class="fa-solid fa-calendar-day"></i>
                                 </div>
                             </div>
 
-                            <div class="mt-3 text-[10px] text-blue-600 font-bold bg-blue-50 inline-block px-2 py-0.5 rounded">
+                            <div class="mt-3 text-[10px] text-[#3B82F6] font-bold bg-blue-50 inline-block px-2 py-0.5 rounded">
                                 Hari Ini
                             </div>
                         </div>
 
                         <!-- Card booking butuh respon -->
-                        <div class="glass-card p-5 md:p-6 rounded-2xl shadow-sm border border-white">
+                        <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-[#F7D6E4] hover:shadow-md hover:shadow-[#FAD7E5]/60 transition">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs font-semibold text-gray-500">
+                                    <p class="text-xs font-semibold text-[#7A6F6F]">
                                         Butuh Respon
                                     </p>
 
-                                    <h3 class="text-2xl md:text-3xl font-bold text-pink-600 mt-1">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-[#C75C7A] mt-1">
                                         <!-- Total Booking Butuh Respon -->
                                         <?= (int) $total_pending; ?>
                                     </h3>
                                 </div>
 
-                                <div class="w-10 h-10 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center">
+                                <div class="w-10 h-10 bg-[#FDEAF1] text-[#C75C7A] rounded-xl flex items-center justify-center">
                                     <i class="fa-solid fa-clock"></i>
                                 </div>
                             </div>
 
-                            <div class="mt-3 text-[10px] text-pink-600 font-bold bg-pink-50 inline-block px-2 py-0.5 rounded">
+                            <div class="mt-3 text-[10px] text-[#C75C7A] font-bold bg-[#FDEAF1] inline-block px-2 py-0.5 rounded">
                                 Waiting / Pending
                             </div>
                         </div>
 
                         <!-- Card pendapatan hari ini -->
-                        <div class="glass-card p-5 md:p-6 rounded-2xl shadow-sm border border-white">
+                        <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-[#F7D6E4] hover:shadow-md hover:shadow-[#FAD7E5]/60 transition">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs font-semibold text-gray-500">
+                                    <p class="text-xs font-semibold text-[#7A6F6F]">
                                         Pendapatan Hari Ini
                                     </p>
 
-                                    <h3 class="text-xl md:text-2xl font-bold text-gray-800 mt-1">
+                                    <h3 class="text-xl md:text-2xl font-bold text-[#2B2424] mt-1">
                                         <!-- Total Pendapatan Hari Ini -->
                                         Rp <?= number_format($total_pendapatan, 0, ',', '.'); ?>
                                     </h3>
                                 </div>
 
-                                <div class="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center">
+                                <div class="w-10 h-10 bg-[#ECFDF3] text-[#16A34A] rounded-xl flex items-center justify-center">
                                     <i class="fa-solid fa-wallet"></i>
                                 </div>
                             </div>
 
-                            <div class="mt-3 text-[10px] text-green-600 font-bold bg-green-50 inline-block px-2 py-0.5 rounded">
+                            <div class="mt-3 text-[10px] text-[#16A34A] font-bold bg-green-50 inline-block px-2 py-0.5 rounded">
                                 <!-- Total Pendapatan Hari Ini -->
                                 Dari Transaksi
                             </div>
                         </div>
 
                         <!-- Card stok menipis -->
-                        <div class="glass-card p-5 md:p-6 rounded-2xl shadow-sm border border-white">
+                        <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-[#F7D6E4] hover:shadow-md hover:shadow-[#FAD7E5]/60 transition">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs font-semibold text-gray-500">
+                                    <p class="text-xs font-semibold text-[#7A6F6F]">
                                         Stok Menipis
                                     </p>
 
-                                    <h3 class="text-2xl md:text-3xl font-bold text-red-600 mt-1">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-[#E11D48] mt-1">
                                         <!-- Total Stok Menipis -->
                                         <?= (int) $total_stok_menipis; ?>
                                     </h3>
                                 </div>
 
-                                <div class="w-10 h-10 bg-red-50 text-red-600 rounded-xl flex items-center justify-center">
+                                <div class="w-10 h-10 bg-[#FFF1F2] text-[#E11D48] rounded-xl flex items-center justify-center">
                                     <i class="fa-solid fa-box-open"></i>
                                 </div>
                             </div>
 
-                            <div class="mt-3 text-[10px] text-red-600 font-bold bg-red-50 inline-block px-2 py-0.5 rounded">
+                            <div class="mt-3 text-[10px] text-[#E11D48] font-bold bg-red-50 inline-block px-2 py-0.5 rounded">
                                 Cek Stok
                             </div>
                         </div>
@@ -260,21 +260,21 @@ function statusBadgeClass($status)
                     <div class="grid grid-cols-1 gap-6">
 
                         <!-- Card histori booking -->
-                        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-pink-100">
+                        <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-[#F7D6E4]">
 
                             <!-- Header tabel booking -->
-                            <div class="px-8 py-6 border-b border-pink-50 flex justify-between items-center">
+                            <div class="px-4 sm:px-6 md:px-8 py-5 md:py-6 border-b border-[#F7D6E4] flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                                 <div>
-                                    <h4 class="font-bold text-gray-700">
+                                    <h4 class="font-bold text-[#3D3134]">
                                         Histori Booking Terbaru
                                     </h4>
 
-                                    <p class="text-xs text-gray-400 mt-1">
+                                    <p class="text-xs text-[#B77B8E] mt-1">
                                         Menampilkan 10 booking terbaru.
                                     </p>
                                 </div>
 
-                                <a href="data-booking.php" class="text-xs font-bold text-pink-600 hover:underline">
+                                <a href="data-booking.php" class="text-xs font-bold text-[#C75C7A] hover:underline">
                                     Lihat Semua
                                 </a>
                             </div>
@@ -284,60 +284,59 @@ function statusBadgeClass($status)
                                 <table class="w-full text-left min-w-[780px]">
 
                                     <!-- Header kolom tabel -->
-                                    <thead class="bg-pink-50/30 text-gray-400 text-[10px] uppercase font-bold tracking-widest">
-                                        <tr>
-                                            <th class="px-8 py-6">Tanggal</th>
-                                            <th class="px-8 py-6">Jam</th>
-                                            <th class="px-8 py-6">Pelanggan</th>
-                                            <th class="px-8 py-6">Layanan</th>
-                                            <th class="px-8 py-6 text-center">Status</th>
-                                            <th class="px-8 py-6 text-center">Aksi</th>
+                                    <thead class="bg-[#EFA9BF] text-white text-[10px] uppercase font-bold tracking-widest">                                        <tr>
+                                            <th class="px-5 md:px-8 py-4 md:py-5">Tanggal</th>
+                                            <th class="px-5 md:px-8 py-4 md:py-5">Jam</th>
+                                            <th class="px-5 md:px-8 py-4 md:py-5">Pelanggan</th>
+                                            <th class="px-5 md:px-8 py-4 md:py-5">Layanan</th>
+                                            <th class="px-5 md:px-8 py-4 md:py-5 text-center">Status</th>
+                                            <th class="px-5 md:px-8 py-4 md:py-5 text-center">Aksi</th>
                                         </tr>
                                     </thead>
 
                                     <!-- Isi tabel booking -->
-                                    <tbody class="divide-y divide-pink-50">
+                                    <tbody class="divide-y divide-[#F7D6E4]">
                                         <!--CEK JIKA ADA DATA BOOKING MAKA TAMPILKAN DATA DARI TABLE BOOKING -->
                                         <?php if (mysqli_num_rows($query_booking) > 0) : ?> 
 
                                             <!-- Perulangan booking -->
                                             <?php while ($booking = mysqli_fetch_assoc($query_booking)) : ?>
 
-                                                <tr class="hover:bg-pink-50/20 transition">
+                                                <tr class="hover:bg-[#FDEAF1]/50 transition">
 
                                                     <!-- Tanggal booking -->
-                                                    <td class="px-8 py-6 font-bold text-pink-600">
+                                                    <td class="px-5 md:px-8 py-4 md:py-5 font-bold text-[#C75C7A]">
                                                         <?= date('d M Y', strtotime($booking['tanggal_booking'])); ?>
                                                     </td>
 
                                                     <!-- Jam booking -->
-                                                    <td class="px-8 py-6 text-gray-500">
+                                                    <td class="px-5 md:px-8 py-4 md:py-5 text-[#7A6F6F]">
                                                         <?= substr($booking['jam_mulai'], 0, 5); ?> -
                                                         <?= substr($booking['jam_selesai'], 0, 5); ?>
                                                     </td>
 
                                                     <!-- Nama pelanggan -->
-                                                    <td class="px-8 py-6 font-semibold text-gray-700">
+                                                    <td class="px-5 md:px-8 py-4 md:py-5 font-semibold text-[#3D3134]">
                                                         <?= htmlspecialchars($booking['nama']); ?>
                                                     </td>
 
                                                     <!-- Layanan booking -->
-                                                    <td class="px-8 py-6 text-gray-500">
+                                                    <td class="px-5 md:px-8 py-4 md:py-5 text-[#7A6F6F]">
                                                         <?= htmlspecialchars($booking['nama_layanan'] ?: '-'); ?>
                                                     </td>
 
                                                     <!-- Status booking -->
-                                                    <td class="px-8 py-6 text-center">
+                                                    <td class="px-5 md:px-8 py-4 md:py-5 text-center">
                                                         <span class="<?= statusBadgeClass($booking['status_booking']); ?> px-3 py-1 text-[10px] font-bold rounded-lg uppercase">
                                                             <?= htmlspecialchars($booking['status_booking']); ?>
                                                         </span>
                                                     </td>
 
                                                     <!-- Tombol detail -->
-                                                    <td class="px-8 py-6 text-center">
+                                                    <td class="px-5 md:px-8 py-4 md:py-5 text-center">
                                                         <a 
                                                             href="detail-booking.php?id_booking=<?= (int) $booking['id_booking']; ?>" 
-                                                            class="bg-pink-600 text-white px-3 py-1 text-[10px] font-bold rounded-lg hover:bg-pink-700 transition"
+                                                            class="bg-[#C75C7A] text-white px-3 py-1.5 text-[10px] font-bold rounded-lg hover:bg-[#B14F6C] shadow-sm shadow-[#FAD7E5] transition"
                                                         >
                                                             Detail
                                                         </a>
@@ -350,7 +349,7 @@ function statusBadgeClass($status)
 
                                             <!-- Pesan data kosong -->
                                             <tr>
-                                                <td colspan="6" class="px-6 py-10 text-center text-gray-400 italic">
+                                                <td colspan="6" class="px-6 py-10 text-center text-[#B77B8E] italic">
                                                     Belum ada data booking.
                                                 </td>
                                             </tr>

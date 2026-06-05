@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 // jika role bukan admin 
 if ($_SESSION['role'] !== 'Customer') {
     // redirect ke halaman login

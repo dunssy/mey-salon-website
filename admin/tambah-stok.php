@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
 }
 ?>
 
-<body class="text-gray-800 overflow-x-hidden">
+<body class="text-[#2B2424] overflow-x-hidden bg-[#FFF7FA]">
 
     <!-- Wrapper utama halaman admin -->
     <div class="flex h-screen overflow-hidden">
@@ -34,13 +34,13 @@ if (isset($_POST['submit'])) {
         <?php include "../layout/sidebar.php"; ?>
 
         <!-- Konten utama -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-[#FFF7FA]">
 
             <!-- Memanggil navbar -->
             <?php include "../layout/navbar.php"; ?>
 
             <!-- Isi halaman -->
-            <div class="p-4 md:p-8 flex-1">
+            <div class="p-4 sm:p-5 md:p-8 flex-1">
 
                 <!-- Section tambah stok -->
                 <section id="section-tambah-stok" class="space-y-6">
@@ -50,11 +50,11 @@ if (isset($_POST['submit'])) {
 
                         <!-- Judul halaman -->
                         <div>
-                            <h3 class="text-xl font-bold text-gray-800">
+                            <h3 class="text-xl font-bold text-[#2B2424]">
                                 <?= $sub_title; ?>
                             </h3>
 
-                            <p class="text-xs text-gray-400">
+                            <p class="text-xs text-[#B77B8E]">
                                 Tambahkan data barang baru ke stok Mey Salon.
                             </p>
                         </div>
@@ -62,7 +62,7 @@ if (isset($_POST['submit'])) {
                         <!-- Tombol kembali -->
                         <a 
                             href="data-stok.php" 
-                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-gray-400 bg-gray-50 rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-colors"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-[#C75C7A] bg-white border border-[#F7D6E4] rounded-xl hover:bg-[#FDEAF1] transition-colors"
                         >
                             <i class="fa-solid fa-arrow-left"></i>
                             <span>Kembali</span>
@@ -70,14 +70,28 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <!-- Card form tambah stok -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                    <div class="bg-white rounded-2xl shadow-sm border border-[#F7D6E4] overflow-hidden">
+
+                        <!-- Header form tambah stok -->
+                        <div class="px-5 py-4 border-b border-[#F7D6E4] bg-[#FDEAF1]/60">
+                            <h4 class="font-bold text-[#3D3134]">
+                                Form Tambah Stok
+                            </h4>
+
+                            <p class="text-xs text-[#B77B8E] mt-1">
+                                Total pembelian barang baru akan masuk ke laporan sebagai pengeluaran.
+                            </p>
+                        </div>
 
                         <!-- Form tambah stok -->
-                        <form action="" method="POST" class="p-6 space-y-4">
+                        <form action="" method="POST" class="p-5 sm:p-6 space-y-5">
+
+                            <!-- Grid input stok -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                             <!-- Input nama barang -->
                             <div>
-                                <label for="nama_barang" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="nama_barang" class="block text-sm font-bold text-[#3D3134] mb-2">
                                     Nama Barang
                                 </label>
 
@@ -87,13 +101,13 @@ if (isset($_POST['submit'])) {
                                     id="nama_barang" 
                                     required
                                     placeholder="Contoh: Shampoo Keratin"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                    class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                 >
                             </div>
 
                             <!-- Input jenis barang -->
                             <div>
-                                <label for="jenis_barang" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="jenis_barang" class="block text-sm font-bold text-[#3D3134] mb-2">
                                     Jenis Barang
                                 </label>
 
@@ -101,7 +115,7 @@ if (isset($_POST['submit'])) {
                                     name="jenis_barang" 
                                     id="jenis_barang" 
                                     required 
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                    class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                 >
                                     <option value="">Pilih Jenis Barang</option>
                                     <option value="Chemical">Chemical</option>
@@ -111,7 +125,7 @@ if (isset($_POST['submit'])) {
 
                             <!-- Input jumlah barang -->
                             <div>
-                                <label for="jumlah_barang" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="jumlah_barang" class="block text-sm font-bold text-[#3D3134] mb-2">
                                     Jumlah Barang
                                 </label>
 
@@ -122,14 +136,14 @@ if (isset($_POST['submit'])) {
                                     id="jumlah_barang_botol" 
                                     required
                                     min="0"
-                                    placeholder="Contoh: 10"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                    placeholder="Contoh: 5 (jumlah botol)"
+                                    class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                 >
                             </div>
 
                             <!-- Input satuan barang -->
                             <div>
-                                <label for="satuan_barang" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="satuan_barang" class="block text-sm font-bold text-[#3D3134] mb-2">
                                     Satuan Barang
                                 </label>
 
@@ -137,7 +151,7 @@ if (isset($_POST['submit'])) {
                                     name="satuan_barang" 
                                     id="satuan_barang" 
                                     required 
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                    class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                 >
                                     <option value="">Pilih Satuan Barang</option>
                                     <option value="pcs">Pcs</option>
@@ -145,7 +159,7 @@ if (isset($_POST['submit'])) {
                                 </select>
                             </div>
                             <div>
-                                <label for="jumlah_barang_perbotol" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="jumlah_barang_perbotol" class="block text-sm font-bold text-[#3D3134] mb-2">
                                     Jumlah Barang per Botol
                                 </label>
                                 <input 
@@ -154,13 +168,14 @@ if (isset($_POST['submit'])) {
                                     id="jumlah_barang_perbotol" 
                                     required
                                     min="0"
-                                    placeholder="Contoh: 100"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                    placeholder="Contoh: 100 (ml per botol)"
+                                    class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
+                                >
                             </div>
 
                             <!-- Input minimal stok -->
                             <div>
-                                <label for="minimal_stok" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="minimal_stok" class="block text-sm font-bold text-[#3D3134] mb-2">
                                     Minimal Stok
                                 </label>
                                 
@@ -170,14 +185,14 @@ if (isset($_POST['submit'])) {
                                     id="minimal_stok_awal" 
                                     required
                                     min="0"
-                                    placeholder="Contoh: 3"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                    placeholder="Contoh: 3 (botol)"
+                                    class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                 >
                             </div>
 
                             <!-- Input harga beli -->
                             <div>
-                                <label for="harga_beli" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="harga_beli" class="block text-sm font-bold text-[#3D3134] mb-2">
                                     Harga Beli
                                 </label>
 
@@ -187,17 +202,25 @@ if (isset($_POST['submit'])) {
                                     id="harga_beli" 
                                     required
                                     min="0"
-                                    placeholder="Contoh: 50000"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                    placeholder="Contoh: 50000 (harga per botol)"
+                                    class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                 >
                             </div>
 
+                            </div>
+
+                            <!-- Info perhitungan stok -->
+                            <div class="p-4 rounded-2xl bg-[#FDEAF1]/60 border border-[#F7D6E4] text-xs text-[#6F5E64] leading-relaxed">
+                                <b class="text-[#C75C7A]">Catatan:</b>
+                                Jumlah stok akan dihitung dari jumlah botol dikali jumlah per botol. Harga beli barang baru bisa dicatat ke laporan pengeluaran.
+                            </div>
+
                             <!-- Tombol submit -->
-                            <div class="pt-2">
+                            <div class="pt-2 flex justify-end">
                                 <button 
                                     type="submit" 
                                     name="submit" 
-                                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 transition-colors"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#C75C7A] text-white font-bold rounded-xl hover:bg-[#B14F6C] shadow-sm shadow-[#FAD7E5] transition-colors"
                                 >
                                     <i class="fa-solid fa-plus"></i>
                                     <span>Tambah Stok</span>

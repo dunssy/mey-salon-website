@@ -84,39 +84,39 @@ $query_notif_stok = mysqli_query(
 ?>
 
 <!-- Header utama admin -->
-<header class="bg-white/80 backdrop-blur-md border-b border-pink-100 px-4 md:px-8 py-3 flex justify-between items-center sticky top-0 z-30">
+<header class="bg-[#FFF7FA]/90 backdrop-blur-md border-b border-[#F7D6E4] px-3 sm:px-4 md:px-8 py-3 flex justify-between items-center sticky top-0 z-30">
 
     <!-- Bagian kiri navbar -->
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-3 sm:gap-4 min-w-0">
 
         <!-- Tombol buka sidebar mobile -->
-        <button onclick="toggleSidebarMobile()" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl text-gray-500 hover:bg-pink-50 hover:text-pink-600 transition" type="button">
+        <button onclick="toggleSidebarMobile()" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl text-[#7A6F6F] hover:bg-[#FDEAF1] hover:text-[#C75C7A] transition" type="button">
             <i class="fa-solid fa-bars-staggered text-xl"></i>
         </button>
 
         <!-- Tombol kecilkan sidebar desktop -->
-        <button onclick="toggleSidebarDesktop()" class="hidden md:flex w-10 h-10 items-center justify-center rounded-xl text-gray-500 hover:bg-pink-50 hover:text-pink-600 transition" type="button">
+        <button onclick="toggleSidebarDesktop()" class="hidden md:flex w-10 h-10 items-center justify-center rounded-xl text-[#7A6F6F] hover:bg-[#FDEAF1] hover:text-[#C75C7A] transition" type="button">
             <i id="navbar-sidebar-icon" class="fa-solid fa-bars-staggered text-xl"></i>
         </button>
 
         <!-- Judul halaman -->
         <div>
-            <h2 id="page-title" class="text-lg md:text-xl font-bold text-gray-800">
+            <h2 id="page-title" class="text-base sm:text-lg md:text-xl font-bold text-[#2B2424] truncate">
                 <?= htmlspecialchars($page_title ?? 'Admin'); ?>
             </h2>
 
-            <p id="current-time" class="hidden sm:block text-[10px] uppercase tracking-wider text-pink-500 font-bold"></p>
+            <p id="current-time" class="hidden sm:block text-[10px] uppercase tracking-wider text-[#C75C7A] font-bold"></p>
         </div>
     </div>
 
     <!-- Bagian kanan navbar -->
-    <div class="flex items-center space-x-2 md:space-x-4">
+    <div class="flex items-center gap-2 md:gap-4">
 
         <!-- Dropdown notifikasi -->
         <div class="relative navbar-dropdown">
 
             <!-- Tombol notifikasi -->
-            <button onclick="toggleDropdown('notif-dropdown')" class="p-2 text-gray-400 hover:text-pink-600 transition-colors relative" type="button">
+            <button onclick="toggleDropdown('notif-dropdown')" class="p-2 text-[#B77B8E] hover:text-[#C75C7A] transition-colors relative" type="button">
                 <i class="fa-solid fa-bell text-xl"></i>
 
                 <?php if ($total_notifikasi > 0) : ?>
@@ -127,16 +127,16 @@ $query_notif_stok = mysqli_query(
             </button>
 
             <!-- Isi dropdown notifikasi -->
-            <div id="notif-dropdown" class="hidden absolute right-0 mt-3 w-80 md:w-96 bg-white rounded-2xl shadow-xl border border-pink-50 overflow-hidden z-50">
+            <div id="notif-dropdown" class="hidden fixed right-3 left-3 top-16 md:absolute md:left-auto md:top-auto md:right-0 md:mt-3 md:w-96 bg-white rounded-2xl shadow-xl border border-[#F7D6E4] overflow-hidden z-50">
 
                 <!-- Header notifikasi -->
-                <div class="p-4 border-b border-pink-50 flex justify-between items-center">
+                <div class="p-4 border-b border-[#F7D6E4] flex justify-between items-center">
                     <div>
-                        <h5 class="font-bold text-gray-800">Notifikasi</h5>
-                        <p class="text-[11px] text-gray-400 mt-0.5">Booking dan stok barang yang butuh perhatian.</p>
+                        <h5 class="font-bold text-[#2B2424]">Notifikasi</h5>
+                        <p class="text-[11px] text-[#B77B8E] mt-0.5">Booking dan stok barang yang butuh perhatian.</p>
                     </div>
 
-                    <span class="text-[10px] bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full font-bold">
+                    <span class="text-[10px] bg-[#FAD7E5] text-[#C75C7A] px-2 py-0.5 rounded-full font-bold">
                         <?= (int) $total_notifikasi; ?> Baru
                     </span>
                 </div>
@@ -148,7 +148,7 @@ $query_notif_stok = mysqli_query(
                         <!-- Notifikasi booking -->
                         <?php if ($query_notif_booking && mysqli_num_rows($query_notif_booking) > 0) : ?>
                             <?php while ($booking_notif = mysqli_fetch_assoc($query_notif_booking)) : ?>
-                                <a href="detail-booking.php?id_booking=<?= (int) $booking_notif['id_booking']; ?>" class="block p-4 hover:bg-pink-50/50 border-b border-pink-50 transition-colors">
+                                <a href="detail-booking.php?id_booking=<?= (int) $booking_notif['id_booking']; ?>" class="block p-4 hover:bg-[#FDEAF1]/50 border-b border-[#F7D6E4] transition-colors">
                                     <div class="flex items-start gap-3">
                                         <div class="w-9 h-9 bg-yellow-50 text-yellow-600 rounded-xl flex items-center justify-center flex-shrink-0">
                                             <i class="fa-solid fa-calendar-check"></i>
@@ -156,18 +156,18 @@ $query_notif_stok = mysqli_query(
 
                                         <div class="min-w-0">
                                             <div class="flex items-center gap-2">
-                                                <p class="text-sm font-bold text-gray-700">Booking <?= htmlspecialchars($booking_notif['status_booking']); ?></p>
+                                                <p class="text-sm font-bold text-[#2B2424]">Booking <?= htmlspecialchars($booking_notif['status_booking']); ?></p>
 
                                                 <span class="text-[9px] px-2 py-0.5 rounded-full font-bold <?= $booking_notif['status_booking'] == 'Waiting' ? 'bg-yellow-100 text-yellow-700' : 'bg-orange-100 text-orange-700'; ?>">
                                                     <?= htmlspecialchars($booking_notif['status_booking']); ?>
                                                 </span>
                                             </div>
 
-                                            <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                                            <p class="text-xs text-[#7A6F6F] mt-1 leading-relaxed">
                                                 <?= htmlspecialchars($booking_notif['nama']); ?> booking <?= htmlspecialchars($booking_notif['nama_layanan'] ?: 'layanan salon'); ?> pukul <?= substr($booking_notif['jam_mulai'], 0, 5); ?>.
                                             </p>
 
-                                            <p class="text-[10px] text-pink-400 mt-1">
+                                            <p class="text-[10px] text-[#B77B8E] mt-1">
                                                 <?= date('d M Y', strtotime($booking_notif['tanggal_booking'])); ?>
                                             </p>
                                         </div>
@@ -179,16 +179,16 @@ $query_notif_stok = mysqli_query(
                         <!-- Notifikasi stok -->
                         <?php if ($query_notif_stok && mysqli_num_rows($query_notif_stok) > 0) : ?>
                             <?php while ($stok_notif = mysqli_fetch_assoc($query_notif_stok)) : ?>
-                                <a href="restok.php?id_barang=<?= (int) $stok_notif['id_barang']; ?>" class="block p-4 hover:bg-pink-50/50 border-b border-pink-50 transition-colors">
+                                <a href="restok.php?id_barang=<?= (int) $stok_notif['id_barang']; ?>" class="block p-4 hover:bg-[#FDEAF1]/50 border-b border-[#F7D6E4] transition-colors">
                                     <div class="flex items-start gap-3">
                                         <div class="w-9 h-9 bg-red-50 text-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
                                             <i class="fa-solid fa-box-open"></i>
                                         </div>
 
                                         <div class="min-w-0">
-                                            <p class="text-sm font-bold text-gray-700">Stok Menipis</p>
+                                            <p class="text-sm font-bold text-[#2B2424]">Stok Menipis</p>
 
-                                            <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                                            <p class="text-xs text-[#7A6F6F] mt-1 leading-relaxed">
                                                 <?= htmlspecialchars($stok_notif['nama_barang']); ?> tersisa <b><?= htmlspecialchars($stok_notif['jumlah_barang']); ?> <?= htmlspecialchars($stok_notif['satuan_barang']); ?></b>.
                                             </p>
 
@@ -205,18 +205,18 @@ $query_notif_stok = mysqli_query(
 
                         <!-- Pesan tidak ada notifikasi -->
                         <div class="p-8 text-center">
-                            <div class="w-14 h-14 bg-pink-50 text-pink-200 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <div class="w-14 h-14 bg-[#FDEAF1] text-pink-200 rounded-2xl flex items-center justify-center mx-auto mb-3">
                                 <i class="fa-solid fa-bell-slash text-2xl"></i>
                             </div>
-                            <p class="text-sm font-bold text-gray-600">Tidak ada notifikasi</p>
+                            <p class="text-sm font-bold text-[#6F5E64]">Tidak ada notifikasi</p>
                         </div>
 
                     <?php endif; ?>
                 </div>
 
                 <!-- Tombol semua notifikasi -->
-                <div class="grid grid-cols-2 border-t border-pink-50">
-                    <a href="data-booking.php?tampil=semua&status=Waiting" class="py-3 bg-pink-50 text-pink-600 text-xs font-bold hover:bg-pink-100 text-center">Cek Booking</a>
+                <div class="grid grid-cols-2 border-t border-[#F7D6E4]">
+                    <a href="data-booking.php?tampil=semua&status=Waiting" class="py-3 bg-[#FDEAF1] text-[#C75C7A] text-xs font-bold hover:bg-[#FAD7E5] text-center">Cek Booking</a>
                     <a href="data-stok.php" class="py-3 bg-red-50 text-red-600 text-xs font-bold hover:bg-red-100 text-center">Cek Stok</a>
                 </div>
             </div>
@@ -229,36 +229,36 @@ $query_notif_stok = mysqli_query(
         <div class="relative navbar-dropdown">
 
             <!-- Tombol profile -->
-            <button onclick="toggleDropdown('profile-dropdown')" class="flex items-center space-x-2 md:space-x-3 cursor-pointer group hover:bg-pink-50 p-1 rounded-xl transition-all" type="button">
+            <button onclick="toggleDropdown('profile-dropdown')" class="flex items-center space-x-2 md:space-x-3 cursor-pointer group hover:bg-[#FDEAF1] p-1 rounded-xl transition-all" type="button">
                 <div class="text-right hidden sm:block">
-                    <p class="text-sm font-bold text-gray-700 group-hover:text-pink-600 transition-colors"><?= htmlspecialchars($admin_nama); ?></p>
-                    <p class="text-[10px] text-gray-400 font-medium uppercase"><?= htmlspecialchars($admin_role); ?></p>
+                    <p class="text-sm font-bold text-[#2B2424] group-hover:text-[#C75C7A] transition-colors"><?= htmlspecialchars($admin_nama); ?></p>
+                    <p class="text-[10px] text-[#B77B8E] font-medium uppercase"><?= htmlspecialchars($admin_role); ?></p>
                 </div>
 
-                <div class="w-10 h-10 rounded-full bg-pink-600 border-2 border-pink-200 flex items-center justify-center text-white font-bold shadow-md">
+                <div class="w-10 h-10 rounded-full bg-[#C75C7A] border-2 border-[#EFA9BF] flex items-center justify-center text-white font-bold shadow-md shadow-[#EFA9BF]/40">
                     <?= htmlspecialchars($admin_inisial); ?>
                 </div>
 
-                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-pink-600"></i>
+                <i class="fa-solid fa-chevron-down text-[10px] text-[#B77B8E] group-hover:text-[#C75C7A]"></i>
             </button>
 
             <!-- Isi dropdown profile -->
-            <div id="profile-dropdown" class="hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-pink-50 overflow-hidden z-50">
+            <div id="profile-dropdown" class="hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-[#F7D6E4] overflow-hidden z-50">
 
                 <!-- Info profile mobile -->
-                <div class="p-4 bg-pink-50/50 border-b border-pink-50 sm:hidden">
-                    <p class="text-sm font-bold text-gray-700"><?= htmlspecialchars($admin_nama); ?></p>
-                    <p class="text-[10px] text-gray-400 uppercase"><?= htmlspecialchars($admin_role); ?></p>
+                <div class="p-4 bg-[#FDEAF1]/50 border-b border-[#F7D6E4] sm:hidden">
+                    <p class="text-sm font-bold text-[#2B2424]"><?= htmlspecialchars($admin_nama); ?></p>
+                    <p class="text-[10px] text-[#B77B8E] uppercase"><?= htmlspecialchars($admin_role); ?></p>
                 </div>
 
                 <!-- Menu profile -->
                 <div class="py-2">
-                    <a href="pengaturan-profil.php" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors">
+                    <a href="pengaturan-profil.php" class="flex items-center space-x-3 px-4 py-3 text-sm text-[#6F5E64] hover:bg-[#FDEAF1] hover:text-[#C75C7A] transition-colors">
                         <i class="fa-solid fa-user-gear w-5"></i>
                         <span>Pengaturan Profil</span>
                     </a>
 
-                    <div class="border-t border-pink-50 mt-2">
+                    <div class="border-t border-[#F7D6E4] mt-2">
                         <a href="../logout.php" class="flex items-center space-x-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors font-semibold">
                             <i class="fa-solid fa-right-from-bracket w-5"></i>
                             <span>Logout</span>
@@ -273,7 +273,7 @@ $query_notif_stok = mysqli_query(
 <!-- Toast notifikasi -->
 <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-[100]">
     <div class="bg-gray-900/90 backdrop-blur-md text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center space-x-4 border border-gray-700 min-w-[280px]">
-        <div class="p-2 bg-pink-600 rounded-lg">
+        <div class="p-2 bg-[#C75C7A] rounded-lg">
             <i class="fa-solid fa-circle-check"></i>
         </div>
 

@@ -344,7 +344,7 @@ function badge_status_booking($status)
         return 'bg-red-50 text-red-700';
     }
 
-    return 'bg-gray-50 text-gray-700';
+    return 'bg-[#F8F4F2] text-[#3D3134]';
 }
 
 // Mengambil stok barang untuk tambahan bahan
@@ -429,7 +429,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
 
 ?>
 
-<body class="text-gray-800 overflow-x-hidden">
+<body class="text-[#2B2424] overflow-x-hidden bg-[#FFF7FA]">
 
     <!-- Wrapper utama halaman admin -->
     <div class="flex h-screen overflow-hidden">
@@ -438,58 +438,59 @@ $jadwal_admin_json = json_encode($jadwal_admin);
         <?php include "../layout/sidebar.php"; ?>
 
         <!-- Konten utama -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-pink-50/30">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-[#FFF7FA]">
 
             <!-- Memanggil navbar -->
             <?php include "../layout/navbar.php"; ?>
 
             <!-- Isi halaman -->
-            <div class="p-4 md:p-8 flex-1">
+            <div class="p-4 sm:p-5 md:p-8 flex-1">
 
                 <!-- Section detail booking -->
                 <section class="space-y-6">
 
-                    <!-- Header halaman -->
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <!-- Header halaman minimalis -->
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-                        <!-- Judul halaman -->
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">
-                                <?= htmlspecialchars($sub_title); ?>
-                            </h3>
+                            <!-- Judul halaman -->
+                            <div>
+                                <h3 class="text-xl font-bold text-[#2B2424]">
+                                    <?= htmlspecialchars($sub_title); ?>
+                                </h3>
 
-                            <p class="text-xs text-gray-400">
-                                Konfirmasi booking pelanggan atau beri saran jadwal lain.
-                            </p>
+                                <p class="text-xs text-[#B77B8E] mt-1">
+                                    Booking #<?= htmlspecialchars($booking['id_booking']); ?> ·
+                                    <span class="font-bold text-[#C75C7A]"><?= htmlspecialchars($booking['status_booking']); ?></span>
+                                </p>
+                            </div>
+
+                            <!-- Tombol kembali -->
+                            <a 
+                                href="data-booking.php" 
+                                class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-[#C75C7A] bg-[#FDEAF1] rounded-xl hover:bg-[#FAD7E5] transition-colors w-fit"
+                            >
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Kembali</span>
+                            </a>
                         </div>
 
-                        <!-- Tombol kembali -->
-                        <a 
-                            href="data-booking.php" 
-                            class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-gray-400 bg-white border border-pink-100 rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-colors"
-                        >
-                            <i class="fa-solid fa-arrow-left"></i>
-                            <span>Kembali</span>
-                        </a>
-                    </div>
-
                     <!-- Grid detail booking -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6 items-start">
 
                         <!-- Detail pelanggan dan booking -->
-                        <div class="lg:col-span-2 space-y-6">
+                        <div class="space-y-6">
 
                             <!-- Card informasi booking -->
-                            <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                            <div class="bg-white rounded-2xl shadow-sm border border-[#F7D6E4] overflow-hidden">
 
                                 <!-- Header card -->
-                                <div class="p-6 border-b border-pink-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                <div class="p-5 border-b border-[#F7D6E4] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                                     <div>
-                                        <h4 class="font-bold text-gray-800">
+                                        <h4 class="font-bold text-[#2B2424]">
                                             Informasi Booking
                                         </h4>
 
-                                        <p class="text-xs text-gray-400">
+                                        <p class="text-xs text-[#B77B8E]">
                                             Booking #<?= htmlspecialchars($booking['id_booking']); ?>
                                         </p>
                                     </div>
@@ -500,81 +501,81 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                 </div>
 
                                 <!-- Isi informasi booking -->
-                                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
 
                                     <!-- Nama pelanggan -->
                                     <div>
-                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                             Nama Pelanggan
                                         </p>
 
-                                        <p class="text-sm font-bold text-gray-800 mt-1">
+                                        <p class="text-sm font-bold text-[#2B2424] mt-1">
                                             <?= htmlspecialchars($booking['nama']); ?>
                                         </p>
                                     </div>
 
                                     <!-- Nomor hp -->
                                     <div>
-                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                             No HP
                                         </p>
 
-                                        <p class="text-sm font-bold text-gray-800 mt-1">
+                                        <p class="text-sm font-bold text-[#2B2424] mt-1">
                                             <?= htmlspecialchars($booking['no_hp']); ?>
                                         </p>
                                     </div>
 
                                     <!-- Email -->
                                     <div>
-                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                             Email
                                         </p>
 
-                                        <p class="text-sm font-bold text-gray-800 mt-1">
+                                        <p class="text-sm font-bold text-[#2B2424] mt-1">
                                             <?= htmlspecialchars($booking['email']); ?>
                                         </p>
                                     </div>
 
                                     <!-- Tanggal booking -->
                                     <div>
-                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                             Tanggal Booking
                                         </p>
 
-                                        <p class="text-sm font-bold text-gray-800 mt-1">
+                                        <p class="text-sm font-bold text-[#2B2424] mt-1">
                                             <?= date('d M Y', strtotime($booking['tanggal_booking'])); ?>
                                         </p>
                                     </div>
 
                                     <!-- Jam booking -->
                                     <div>
-                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                             Jam Booking
                                         </p>
 
-                                        <p class="text-sm font-bold text-gray-800 mt-1">
+                                        <p class="text-sm font-bold text-[#2B2424] mt-1">
                                             <?= substr($booking['jam_mulai'], 0, 5); ?> - <?= substr($booking['jam_selesai'], 0, 5); ?>
                                         </p>
                                     </div>
 
                                     <!-- Alamat -->
                                     <div>
-                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                             Alamat
                                         </p>
 
-                                        <p class="text-sm font-bold text-gray-800 mt-1">
+                                        <p class="text-sm font-bold text-[#2B2424] mt-1">
                                             <?= htmlspecialchars($booking['alamat']); ?>
                                         </p>
                                     </div>
 
                                     <!-- Bukti pembayarab -->
                                     <div>
-                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                             Bukti Pembayaran
                                         </p>
                                         <!-- JIKA ADA BUKTI PEMBAYARAN -->
-                                        <p class="text-sm font-bold text-gray-800 mt-1">
+                                        <p class="text-sm font-bold text-[#2B2424] mt-1">
                                             <?php if ($booking['bukti_pembayaran']) : ?>
                                                 <a 
                                                     
@@ -586,7 +587,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                                     Lihat Bukti
                                                 </a>
                                             <?php else : ?>
-                                                <p class="text-sm text-gray-500">
+                                                <p class="text-sm text-[#7A6F6F]">
                                                     Tidak ada bukti pembayaran
                                                 </p>
                                             <?php endif; ?>
@@ -596,60 +597,60 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                             </div>
 
                             <!-- Card layanan booking -->
-                            <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                            <div class="bg-white rounded-2xl shadow-sm border border-[#F7D6E4] overflow-hidden">
 
                                 <!-- Header card layanan -->
-                                <div class="p-6 border-b border-pink-100">
-                                    <h4 class="font-bold text-gray-800">
+                                <div class="p-5 border-b border-[#F7D6E4]">
+                                    <h4 class="font-bold text-[#2B2424]">
                                         Layanan Dipilih
                                     </h4>
                                 </div>
 
                                 <!-- List layanan -->
-                                <div class="p-6 space-y-3">
+                                <div class="p-5 space-y-3">
                                     <?php if (!empty($layanan_booking)) : ?>
                                         <?php foreach ($layanan_booking as $layanan) : ?>
-                                            <div class="flex items-center justify-between gap-4 p-4 bg-pink-50/40 border border-pink-100 rounded-2xl">
+                                            <div class="flex items-center justify-between gap-4 p-4 bg-[#FFF7FA] border border-[#F7D6E4] rounded-2xl">
                                                 <div>
-                                                    <h5 class="text-sm font-bold text-gray-800">
+                                                    <h5 class="text-sm font-bold text-[#2B2424]">
                                                         <?= htmlspecialchars($layanan['nama_layanan']); ?>
                                                     </h5>
 
-                                                    <p class="text-xs text-gray-400 mt-1">
+                                                    <p class="text-xs text-[#B77B8E] mt-1">
                                                         <?= htmlspecialchars($layanan['durasi_layanan']); ?> menit
                                                     </p>
                                                 </div>
 
-                                                <p class="text-sm font-bold text-pink-600">
+                                                <p class="text-sm font-bold text-[#C75C7A]">
                                                     Rp <?= number_format($layanan['harga_layanan'], 0, ',', '.'); ?>
                                                 </p>
                                             </div>
                                         <?php endforeach; ?>
                                     <?php else : ?>
-                                        <p class="text-sm text-gray-400 text-center py-4">
+                                        <p class="text-sm text-[#B77B8E] text-center py-4">
                                             Layanan tidak ditemukan.
                                         </p>
                                     <?php endif; ?>
                                 </div>
 
                                 <!-- Total layanan -->
-                                <div class="p-6 border-t border-pink-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="p-5 border-t border-[#F7D6E4] grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                             Total Harga
                                         </p>
 
-                                        <p class="text-xl font-bold text-pink-600 mt-1">
+                                        <p class="text-xl font-bold text-[#C75C7A] mt-1">
                                             Rp <?= number_format($total_harga, 0, ',', '.'); ?>
                                         </p>
                                     </div>
 
                                     <div>
-                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                             Estimasi Waktu
                                         </p>
 
-                                        <p class="text-xl font-bold text-gray-800 mt-1">
+                                        <p class="text-xl font-bold text-[#2B2424] mt-1">
                                             <?= $total_durasi; ?> Menit
                                         </p>
                                     </div>
@@ -658,45 +659,45 @@ $jadwal_admin_json = json_encode($jadwal_admin);
 
 
                             <!-- Card stok paket layanan -->
-                            <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                            <div class="bg-white rounded-2xl shadow-sm border border-[#F7D6E4] overflow-hidden">
 
                                 <!-- Header stok paket -->
-                                <div class="p-6 border-b border-pink-100">
-                                    <h4 class="font-bold text-gray-800">
+                                <div class="p-5 border-b border-[#F7D6E4]">
+                                    <h4 class="font-bold text-[#2B2424]">
                                         Stok Barang yang Dipakai
                                     </h4>
 
-                                    <p class="text-xs text-gray-400 mt-1">
+                                    <p class="text-xs text-[#B77B8E] mt-1">
                                         Paket stok otomatis berdasarkan layanan yang dibooking customer.
                                     </p>
                                 </div>
 
                                 <!-- Isi stok paket -->
-                                <div class="p-6 space-y-3">
+                                <div class="p-5 space-y-3">
                                     <?php if (!empty($stok_paket_booking)) : ?>
                                         <?php foreach ($stok_paket_booking as $stok_paket) : ?>
-                                            <div class="p-4 bg-gray-50 border border-gray-100 rounded-2xl">
+                                            <div class="p-4 bg-[#FFF7FA] border border-[#F7D6E4] rounded-2xl">
                                                 <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                                                     <div>
-                                                        <p class="text-xs font-bold text-pink-600">
+                                                        <p class="text-xs font-bold text-[#C75C7A]">
                                                             <?= htmlspecialchars($stok_paket['nama_layanan']); ?>
                                                         </p>
 
-                                                        <h5 class="text-sm font-bold text-gray-800 mt-1">
+                                                        <h5 class="text-sm font-bold text-[#2B2424] mt-1">
                                                             <?= htmlspecialchars($stok_paket['nama_barang']); ?>
                                                         </h5>
 
-                                                        <p class="text-xs text-gray-400 mt-1">
+                                                        <p class="text-xs text-[#B77B8E] mt-1">
                                                             Jenis: <?= htmlspecialchars($stok_paket['jenis_barang']); ?>
                                                         </p>
                                                     </div>
 
                                                     <div class="text-left sm:text-right">
-                                                        <p class="text-sm font-bold text-gray-800">
+                                                        <p class="text-sm font-bold text-[#2B2424]">
                                                             Pakai: <?= (int) $stok_paket['jumlah_stok']; ?> <?= htmlspecialchars($stok_paket['satuan_barang']); ?>
                                                         </p>
 
-                                                        <p class="text-xs text-gray-400 mt-1">
+                                                        <p class="text-xs text-[#B77B8E] mt-1">
                                                             Stok saat ini: <?= (int) $stok_paket['jumlah_barang']; ?> <?= htmlspecialchars($stok_paket['satuan_barang']); ?>
                                                         </p>
 
@@ -710,7 +711,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                             </div>
                                         <?php endforeach; ?>
                                     <?php else : ?>
-                                        <p class="text-sm text-gray-400 text-center py-4">
+                                        <p class="text-sm text-[#B77B8E] text-center py-4">
                                             Belum ada paket stok untuk layanan ini.
                                         </p>
                                     <?php endif; ?>
@@ -721,24 +722,24 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                         </div>
 
                         <!-- Panel aksi admin -->
-                        <div class="space-y-6">
+                        <div class="space-y-6 xl:sticky xl:top-6">
 
                             <!-- Card aksi booking -->
-                            <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                            <div class="bg-white rounded-2xl shadow-sm border border-[#F7D6E4] overflow-hidden">
 
                                 <!-- Header aksi -->
-                                <div class="p-6 border-b border-pink-100">
-                                    <h4 class="font-bold text-gray-800">
+                                <div class="p-5 border-b border-[#F7D6E4]">
+                                    <h4 class="font-bold text-[#2B2424]">
                                         Aksi Admin
                                     </h4>
 
-                                    <p class="text-xs text-gray-400 mt-1">
+                                    <p class="text-xs text-[#B77B8E] mt-1">
                                         Atur status booking pelanggan.
                                     </p>
                                 </div>
 
                                 <!-- Isi aksi -->
-                                <div class="p-6 space-y-3">
+                                <div class="p-5 space-y-3">
 
                                     <?php if ($booking['status_booking'] == 'Waiting' || $booking['status_booking'] == 'Pending') : ?>
 
@@ -748,7 +749,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                                 type="submit" 
                                                 name="konfirmasi_booking"
                                                 onclick="return confirm('Konfirmasi booking pelanggan ini?')"
-                                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 text-white text-sm font-bold rounded-xl hover:bg-blue-600 transition-colors"
+                                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#C75C7A] text-white text-sm font-bold rounded-xl hover:bg-[#B14F6C] transition-colors"
                                             >
                                                 <i class="fa-solid fa-circle-check"></i>
                                                 <span>Konfirmasi Booking</span>
@@ -787,7 +788,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
 
                                             <!-- Tambahan harga opsional -->
                                             <div>
-                                                <label for="tambahan_harga" class="block text-sm font-medium text-gray-700 mb-1">
+                                                <label for="tambahan_harga" class="block text-sm font-bold text-[#3D3134] mb-2">
                                                     Tambahan Harga Opsional
                                                 </label>
 
@@ -798,17 +799,17 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                                     min="0"
                                                     value="0"
                                                     placeholder="Contoh: 50000"
-                                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                                                    class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                                                 >
 
-                                                <p class="text-[11px] text-gray-400 mt-1">
+                                                <p class="text-[11px] text-[#B77B8E] mt-1">
                                                     Isi jika ada tambahan biaya, misalnya rambut panjang.
                                                 </p>
                                             </div>
 
                                             <!-- Catatan tambahan opsional -->
                                             <div>
-                                                <label for="catatan_tambahan" class="block text-sm font-medium text-gray-700 mb-1">
+                                                <label for="catatan_tambahan" class="block text-sm font-bold text-[#3D3134] mb-2">
                                                     Catatan Tambahan Opsional
                                                 </label>
 
@@ -817,21 +818,21 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                                     id="catatan_tambahan"
                                                     rows="3"
                                                     placeholder="Contoh: tambahan cat rambut karena rambut panjang"
-                                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200 resize-none"
+                                                    class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A] resize-none"
                                                 ></textarea>
                                             </div>
 
                                             <!-- Tambahan bahan opsional -->
                                             <div>
                                                 <div class="flex items-center justify-between mb-2">
-                                                    <label class="block text-sm font-medium text-gray-700">
+                                                    <label class="block text-sm font-medium text-[#3D3134]">
                                                         Tambahan Bahan Opsional
                                                     </label>
 
                                                     <button 
                                                         type="button"
                                                         onclick="tambahBahan()"
-                                                        class="px-3 py-1.5 bg-pink-50 text-pink-600 text-xs font-bold rounded-lg hover:bg-pink-100 transition"
+                                                        class="px-3 py-1.5 bg-[#FDEAF1] text-[#C75C7A] text-xs font-bold rounded-lg hover:bg-[#FAD7E5] transition"
                                                     >
                                                         + Tambah Bahan
                                                     </button>
@@ -839,7 +840,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
 
                                                 <div id="tambahan-bahan-wrapper" class="space-y-2"></div>
 
-                                                <p class="text-[11px] text-gray-400 mt-2">
+                                                <p class="text-[11px] text-[#B77B8E] mt-2">
                                                     Kosongkan jika tidak ada tambahan bahan.
                                                 </p>
                                             </div>
@@ -861,8 +862,8 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                     <?php if ($booking['status_booking'] == 'Cancel' || $booking['status_booking'] == 'Done') : ?>
 
                                         <!-- Info status final -->
-                                        <div class="p-4 bg-gray-50 rounded-xl text-center">
-                                            <p class="text-sm font-semibold text-gray-500">
+                                        <div class="p-4 bg-[#F8F4F2] rounded-xl text-center">
+                                            <p class="text-sm font-semibold text-[#7A6F6F]">
                                                 Booking sudah berstatus <?= htmlspecialchars($booking['status_booking']); ?>.
                                             </p>
                                         </div>
@@ -873,16 +874,16 @@ $jadwal_admin_json = json_encode($jadwal_admin);
 
 
                             <!-- Card kalender admin compact -->
-                            <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                            <div class="bg-white rounded-2xl shadow-sm border border-[#F7D6E4] overflow-hidden">
 
                                 <!-- Header kalender admin -->
-                                <div class="p-4 border-b border-pink-100 flex items-center justify-between gap-3">
+                                <div class="p-4 border-b border-[#F7D6E4] flex items-center justify-between gap-3">
                                     <div>
-                                        <h4 class="text-sm font-bold text-gray-800">
+                                        <h4 class="text-sm font-bold text-[#2B2424]">
                                             Kalender Booking
                                         </h4>
 
-                                        <p class="text-[11px] text-gray-400 mt-1">
+                                        <p class="text-[11px] text-[#B77B8E] mt-1">
                                             Cek tanggal booking aktif.
                                         </p>
                                     </div>
@@ -891,7 +892,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                         <button 
                                             type="button"
                                             onclick="adminPrevMonth()"
-                                            class="w-8 h-8 rounded-lg bg-pink-50 text-pink-600 hover:bg-pink-100 transition"
+                                            class="w-8 h-8 rounded-lg bg-[#FDEAF1] text-[#C75C7A] hover:bg-[#FAD7E5] transition"
                                         >
                                             <i class="fa-solid fa-chevron-left text-xs"></i>
                                         </button>
@@ -899,7 +900,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                         <button 
                                             type="button"
                                             onclick="adminNextMonth()"
-                                            class="w-8 h-8 rounded-lg bg-pink-50 text-pink-600 hover:bg-pink-100 transition"
+                                            class="w-8 h-8 rounded-lg bg-[#FDEAF1] text-[#C75C7A] hover:bg-[#FAD7E5] transition"
                                         >
                                             <i class="fa-solid fa-chevron-right text-xs"></i>
                                         </button>
@@ -909,14 +910,14 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                 <!-- Isi kalender admin -->
                                 <div class="p-4">
                                     <div class="flex items-center justify-between gap-3 mb-4">
-                                        <h5 id="admin-calendar-title" class="text-xs font-bold text-gray-800"></h5>
+                                        <h5 id="admin-calendar-title" class="text-xs font-bold text-[#2B2424]"></h5>
 
-                                        <p class="text-[10px] text-gray-400">
+                                        <p class="text-[10px] text-[#B77B8E]">
                                             Pink: booking
                                         </p>
                                     </div>
 
-                                    <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] font-bold text-gray-400 mb-2">
+                                    <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] font-bold text-[#B77B8E] mb-2">
                                         <div>Min</div>
                                         <div>Sen</div>
                                         <div>Sel</div>
@@ -936,43 +937,43 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                             <!-- Card saran jadwal tersimpan -->
                             <?php if ($kolom_saran_ada && !empty($booking['tanggal_saran']) && !empty($booking['jam_saran'])) : ?>
 
-                                <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden">
+                                <div class="bg-white rounded-2xl shadow-sm border border-[#F7D6E4] overflow-hidden">
 
                                     <!-- Header saran tersimpan -->
-                                    <div class="p-6 border-b border-pink-100">
-                                        <h4 class="font-bold text-gray-800">
+                                    <div class="p-5 border-b border-[#F7D6E4]">
+                                        <h4 class="font-bold text-[#2B2424]">
                                             Saran Jadwal Tersimpan
                                         </h4>
                                     </div>
 
                                     <!-- Isi saran -->
-                                    <div class="p-6 space-y-4">
+                                    <div class="p-5 space-y-4">
                                         <div>
-                                            <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                            <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                                 Tanggal Saran
                                             </p>
 
-                                            <p class="text-sm font-bold text-gray-800 mt-1">
+                                            <p class="text-sm font-bold text-[#2B2424] mt-1">
                                                 <?= date('d M Y', strtotime($booking['tanggal_saran'])); ?>
                                             </p>
                                         </div>
 
                                         <div>
-                                            <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                            <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                                 Jam Saran
                                             </p>
 
-                                            <p class="text-sm font-bold text-gray-800 mt-1">
+                                            <p class="text-sm font-bold text-[#2B2424] mt-1">
                                                 <?= substr($booking['jam_saran'], 0, 5); ?>
                                             </p>
                                         </div>
 
                                         <div>
-                                            <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                            <p class="text-[11px] font-bold text-[#B77B8E] uppercase tracking-widest">
                                                 Catatan Admin
                                             </p>
 
-                                            <p class="text-sm text-gray-600 mt-1 leading-relaxed">
+                                            <p class="text-sm text-[#6F5E64] mt-1 leading-relaxed">
                                                 <?= htmlspecialchars($booking['catatan_admin']); ?>
                                             </p>
                                         </div>
@@ -1004,16 +1005,16 @@ $jadwal_admin_json = json_encode($jadwal_admin);
         <div id="pending-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/50 px-4">
 
             <!-- Card modal pending -->
-            <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
+            <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-[#F7D6E4] overflow-hidden">
 
                 <!-- Header modal -->
-                <div class="p-5 border-b border-orange-100 flex items-start justify-between gap-4">
+                <div class="p-5 border-b border-[#F7D6E4] bg-[#FDEAF1]/60 flex items-start justify-between gap-4">
                     <div>
-                        <h4 class="text-lg font-bold text-gray-800">
+                        <h4 class="text-lg font-bold text-[#2B2424]">
                             Pending & Saran Jadwal
                         </h4>
 
-                        <p class="text-xs text-gray-400 mt-1">
+                        <p class="text-xs text-[#B77B8E] mt-1">
                             Isi tanggal, jam, dan catatan saran untuk customer.
                         </p>
                     </div>
@@ -1022,7 +1023,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                     <button 
                         type="button"
                         onclick="closePendingModal()"
-                        class="w-9 h-9 rounded-xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition"
+                        class="w-9 h-9 rounded-xl bg-[#F8F4F2] text-[#B77B8E] hover:bg-red-50 hover:text-red-500 transition"
                     >
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -1033,7 +1034,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
 
                     <!-- Input tanggal saran -->
                     <div>
-                        <label for="tanggal_saran" class="block text-sm font-medium text-gray-700 mb-1">
+                        <label for="tanggal_saran" class="block text-sm font-bold text-[#3D3134] mb-2">
                             Tanggal Saran
                         </label>
 
@@ -1042,17 +1043,17 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                             name="tanggal_saran" 
                             id="tanggal_saran"
                             required
-                            class="w-full px-3 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-200"
+                            class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                         >
 
-                        <p class="text-[11px] text-gray-400 mt-1">
+                        <p class="text-[11px] text-[#B77B8E] mt-1">
                             Jangan pilih hari Rabu karena salon libur.
                         </p>
                     </div>
 
                     <!-- Input jam saran -->
                     <div>
-                        <label for="jam_saran" class="block text-sm font-medium text-gray-700 mb-1">
+                        <label for="jam_saran" class="block text-sm font-bold text-[#3D3134] mb-2">
                             Jam Saran
                         </label>
 
@@ -1063,13 +1064,13 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                             required
                             min="10:00"
                             max="21:00"
-                            class="w-full px-3 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-200"
+                            class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
                         >
                     </div>
 
                     <!-- Input catatan admin -->
                     <div>
-                        <label for="catatan_admin" class="block text-sm font-medium text-gray-700 mb-1">
+                        <label for="catatan_admin" class="block text-sm font-bold text-[#3D3134] mb-2">
                             Catatan Admin
                         </label>
 
@@ -1079,7 +1080,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                             rows="4"
                             required
                             placeholder="Contoh: Mohon datang jam 15:00 karena jadwal sebelumnya penuh."
-                            class="w-full px-3 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-200 resize-none"
+                            class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A] resize-none"
                         ></textarea>
                     </div>
 
@@ -1088,7 +1089,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                         <button 
                             type="button"
                             onclick="closePendingModal()"
-                            class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-gray-50 text-gray-500 text-sm font-bold rounded-xl hover:bg-gray-100 transition-colors"
+                            class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#F8F4F2] text-[#7A6F6F] text-sm font-bold rounded-xl hover:bg-[#EFE7E4] transition-colors"
                         >
                             Batal
                         </button>

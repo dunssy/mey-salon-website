@@ -1,5 +1,5 @@
 <!-- Footer user -->
-<footer class="bg-white border-t border-pink-100 mt-10">
+<footer class="bg-[#FFF7FA]/90 border-t border-pink-100 mt-10">
 
     <!-- Kontainer footer -->
     <div class="max-w-6xl mx-auto px-4 py-5">

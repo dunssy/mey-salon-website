@@ -50,7 +50,7 @@ if (isset($_POST['login'])) {
             // Mengarahkan customer ke landing page dengan status login
             echo "<script>
                     alert('Login berhasil!');
-                    window.location.href = 'index.php';
+                    window.location.href = 'user/booking.php';
                   </script>";
             exit;
         }

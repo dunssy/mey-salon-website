@@ -89,25 +89,33 @@ $data_restok = [];
 $data_pengeluaran = [];
 $total_pendapatan = 0;
 $total_pengeluaran = 0;
+$total_transaksi = 0;
+$total_data_pengeluaran = 0;
 
+// Mengolah data pendapatan
 if ($query_pendapatan) {
     while ($row = mysqli_fetch_assoc($query_pendapatan)) {
         $data_pendapatan[] = $row;
         $total_pendapatan += (int) $row['total_bayar'];
+        $total_transaksi++;
     }
 }
 
+// Mengolah data restok
 if ($query_restok) {
     while ($row = mysqli_fetch_assoc($query_restok)) {
         $data_restok[] = $row;
         $total_pengeluaran += (int) $row['total_harga_restok'];
+        $total_data_pengeluaran++;
     }
 }
 
+// Mengolah data pengeluaran manual
 if ($query_pengeluaran) {
     while ($row = mysqli_fetch_assoc($query_pengeluaran)) {
         $data_pengeluaran[] = $row;
         $total_pengeluaran += (int) $row['jumlah_pengeluaran'];
+        $total_data_pengeluaran++;
     }
 }
 
@@ -129,174 +137,477 @@ if ($format === 'excel') {
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <!-- Mengatur karakter halaman -->
     <meta charset="UTF-8">
-    <title>Laporan Mey Salon</title>
 
+    <!-- Judul dokumen -->
+    <title>Laporan Keuangan Mey Salon</title>
+
+    <!-- Style laporan resmi -->
     <style>
         body {
-            font-family: Arial, sans-serif;
-            color: #222;
-            margin: 24px;
-        }
-
-        h2, h3 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #2B2424;
             margin: 0;
+            padding: 28px;
+            background: #ffffff;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
+        .page {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .print-action {
+            margin-bottom: 18px;
+            text-align: right;
         }
 
         .button-print {
-            padding: 8px 14px;
-            margin-bottom: 16px;
-            background: #db2777;
-            color: white;
+            padding: 10px 16px;
+            background: #C75C7A;
+            color: #ffffff;
             border: 0;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-        }
-
-        .summary {
-            margin-bottom: 24px;
-            font-size: 14px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 24px;
             font-size: 12px;
         }
 
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-            vertical-align: top;
+        .letterhead {
+            width: 100%;
+            border-bottom: 3px solid #C75C7A;
+            padding-bottom: 14px;
+            margin-bottom: 18px;
         }
 
-        th {
-            background: #fce7f3;
+        .letterhead-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .letterhead-table td {
+            border: none;
+            padding: 0;
+            vertical-align: middle;
+        }
+
+        .logo-box {
+            width: 78px;
+            height: 78px;
+            border-radius: 14px;
+            background: #FDEAF1;
+            color: #C75C7A;
+            font-size: 34px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 78px;
+            border: 1px solid #F7D6E4;
+        }
+
+        .company-name {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 800;
+            color: #C75C7A;
+            letter-spacing: 0.3px;
+        }
+
+        .company-subtitle {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: #7A6F6F;
+        }
+
+        .company-address {
+            margin: 5px 0 0 0;
+            font-size: 12px;
+            color: #7A6F6F;
+            line-height: 1.5;
+        }
+
+        .document-title {
+            text-align: center;
+            margin: 22px 0 18px 0;
+        }
+
+        .document-title h2 {
+            margin: 0;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #2B2424;
+        }
+
+        .document-title p {
+            margin: 6px 0 0 0;
+            font-size: 13px;
+            color: #7A6F6F;
+        }
+
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            font-size: 12px;
+        }
+
+        .meta-table td {
+            border: none;
+            padding: 3px 0;
+        }
+
+        .meta-label {
+            width: 150px;
+            color: #7A6F6F;
+            font-weight: bold;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 22px;
+            font-size: 12px;
+        }
+
+        .summary-table th {
+            background: #C75C7A;
+            color: #ffffff;
+            border: 1px solid #C75C7A;
+            padding: 10px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .summary-table td {
+            border: 1px solid #F7D6E4;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            background: #FFF7FA;
+        }
+
+        .section-title {
+            margin: 22px 0 8px 0;
+            font-size: 14px;
+            font-weight: bold;
+            color: #2B2424;
+            text-transform: uppercase;
+            border-left: 5px solid #C75C7A;
+            padding-left: 10px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+            font-size: 11px;
+        }
+
+        .data-table th {
+            background: #EFA9BF;
+            color: #ffffff;
+            border: 1px solid #D98AA4;
+            padding: 8px;
+            text-align: left;
+            text-transform: uppercase;
+            font-size: 10px;
+        }
+
+        .data-table td {
+            border: 1px solid #EAD8D0;
+            padding: 8px;
+            vertical-align: top;
+            line-height: 1.45;
+        }
+
+        .data-table tr:nth-child(even) td {
+            background: #FFF7FA;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .income {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .expense {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .profit {
+            color: #C75C7A;
+            font-weight: bold;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #7A6F6F;
+            font-style: italic;
+        }
+
+        .signature-wrapper {
+            width: 100%;
+            margin-top: 34px;
+            border-collapse: collapse;
+        }
+
+        .signature-wrapper td {
+            border: none;
+            vertical-align: top;
+            width: 50%;
+            padding-top: 12px;
+            font-size: 12px;
+        }
+
+        .signature-box {
+            text-align: center;
+            min-height: 120px;
+        }
+
+        .signature-space {
+            height: 70px;
+        }
+
+        .footer-note {
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #EAD8D0;
+            font-size: 10px;
+            color: #7A6F6F;
+            text-align: center;
         }
 
         @media print {
-            .button-print {
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            .page {
+                max-width: 100%;
+            }
+
+            .print-action {
                 display: none;
             }
 
-            body {
-                margin: 0;
+            .data-table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="page">
 
-    <?php if ($format === 'pdf') : ?>
-        <button class="button-print" onclick="window.print()">
-            Cetak / Simpan PDF
-        </button>
+        <?php if ($format === 'pdf') : ?>
+            <!-- Tombol cetak PDF -->
+            <div class="print-action">
+                <button class="button-print" onclick="window.print()">
+                    Cetak / Simpan PDF
+                </button>
+            </div>
 
-        <script>
-            window.onload = function () {
-                window.print();
-            };
-        </script>
-    <?php endif; ?>
+            <!-- Otomatis membuka print -->
+            <script>
+                window.onload = function () {
+                    window.print();
+                };
+            </script>
+        <?php endif; ?>
 
-    <div class="header">
-        <h2>Laporan Keuangan Mey Salon</h2>
-        <p>Periode: <?= htmlspecialchars($label_periode); ?></p>
-    </div>
+        <!-- Kop surat laporan -->
+        <div class="letterhead">
+            <table class="letterhead-table">
+                <tr>
+                    <td style="width: 90px;">
+                        <div class="logo-box">M</div>
+                    </td>
 
-    <div class="summary">
-        <p><strong>Total Pendapatan:</strong> Rp <?= number_format($total_pendapatan, 0, ',', '.'); ?></p>
-        <p><strong>Total Pengeluaran:</strong> Rp <?= number_format($total_pengeluaran, 0, ',', '.'); ?></p>
-        <p><strong>Laba Bersih:</strong> Rp <?= number_format($laba_bersih, 0, ',', '.'); ?></p>
-    </div>
+                    <td>
+                        <h1 class="company-name">Mey Salon</h1>
+                        <p class="company-subtitle">Laporan Keuangan Salon</p>
+                        <p class="company-address">
+                            Jl. D. Kartawigenda Gg. Palabuan No.27, Karanganyar, Kec. Subang, Kabupaten Subang, Jawa Barat 41211
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-    <h3>Pendapatan Transaksi</h3>
+        <!-- Judul laporan -->
+        <div class="document-title">
+            <h2>Laporan Keuangan Mey Salon</h2>
+            <p>Periode: <?= htmlspecialchars($label_periode); ?></p>
+        </div>
 
-    <table>
-        <thead>
+        <!-- Informasi laporan -->
+        <table class="meta-table">
             <tr>
-                <th>Invoice</th>
-                <th>Pelanggan</th>
-                <th>Jenis</th>
-                <th>Layanan</th>
-                <th>Tanggal</th>
-                <th>Total Bayar</th>
+                <td class="meta-label">Jenis Laporan</td>
+                <td>: <?= ucfirst(htmlspecialchars($jenis_laporan)); ?></td>
             </tr>
-        </thead>
 
-        <tbody>
-            <?php if (!empty($data_pendapatan)) : ?>
-                <?php foreach ($data_pendapatan as $pendapatan) : ?>
+            <tr>
+                <td class="meta-label">Periode</td>
+                <td>: <?= htmlspecialchars($label_periode); ?></td>
+            </tr>
+
+            <tr>
+                <td class="meta-label">Tanggal Cetak</td>
+                <td>: <?= date('d F Y H:i'); ?></td>
+            </tr>
+        </table>
+
+        <!-- Ringkasan laporan -->
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Total Pendapatan</th>
+                    <th>Total Pengeluaran</th>
+                    <th>Laba Bersih</th>
+                    <th>Total Transaksi</th>
+                    <th>Data Pengeluaran</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td class="income">Rp <?= number_format($total_pendapatan, 0, ',', '.'); ?></td>
+                    <td class="expense">Rp <?= number_format($total_pengeluaran, 0, ',', '.'); ?></td>
+                    <td class="profit">Rp <?= number_format($laba_bersih, 0, ',', '.'); ?></td>
+                    <td><?= (int) $total_transaksi; ?></td>
+                    <td><?= (int) $total_data_pengeluaran; ?></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Tabel pendapatan -->
+        <h3 class="section-title">Pendapatan Transaksi</h3>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 90px;">Invoice</th>
+                    <th>Pelanggan</th>
+                    <th style="width: 90px;">Jenis</th>
+                    <th>Layanan</th>
+                    <th style="width: 120px;">Tanggal</th>
+                    <th style="width: 120px;" class="text-right">Total Bayar</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php if (!empty($data_pendapatan)) : ?>
+                    <?php foreach ($data_pendapatan as $pendapatan) : ?>
+                        <tr>
+                            <td>#TRX-<?= str_pad($pendapatan['id_transaksi'], 4, '0', STR_PAD_LEFT); ?></td>
+                            <td><?= htmlspecialchars($pendapatan['nama_pelanggan']); ?></td>
+                            <td><?= htmlspecialchars($pendapatan['jenis_pelanggan']); ?></td>
+                            <td><?= htmlspecialchars($pendapatan['nama_layanan']); ?></td>
+                            <td><?= date('d M Y H:i', strtotime($pendapatan['tanggal_transaksi'])); ?></td>
+                            <td class="text-right income">Rp <?= number_format($pendapatan['total_bayar'], 0, ',', '.'); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else : ?>
                     <tr>
-                        <td>#TRX-<?= str_pad($pendapatan['id_transaksi'], 4, '0', STR_PAD_LEFT); ?></td>
-                        <td><?= htmlspecialchars($pendapatan['nama_pelanggan']); ?></td>
-                        <td><?= htmlspecialchars($pendapatan['jenis_pelanggan']); ?></td>
-                        <td><?= htmlspecialchars($pendapatan['nama_layanan']); ?></td>
-                        <td><?= date('d M Y H:i', strtotime($pendapatan['tanggal_transaksi'])); ?></td>
-                        <td>Rp <?= number_format($pendapatan['total_bayar'], 0, ',', '.'); ?></td>
+                        <td colspan="6" class="empty-row">
+                            Belum ada pendapatan pada periode ini.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+
+        <!-- Tabel pengeluaran -->
+        <h3 class="section-title">Pengeluaran</h3>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 90px;">Jenis</th>
+                    <th>Keterangan</th>
+                    <th style="width: 120px;">Tanggal</th>
+                    <th style="width: 120px;" class="text-right">Total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php foreach ($data_restok as $restok) : ?>
+                    <tr>
+                        <td class="expense">Restok</td>
+                        <td>
+                            <strong><?= htmlspecialchars($restok['nama_barang']); ?></strong><br>
+                            Jumlah tambah: <?= (int) $restok['jumlah_tambah']; ?>
+                        </td>
+                        <td><?= date('d M Y H:i', strtotime($restok['tanggal_restok'])); ?></td>
+                        <td class="text-right expense">Rp <?= number_format($restok['total_harga_restok'], 0, ',', '.'); ?></td>
                     </tr>
                 <?php endforeach; ?>
-            <?php else : ?>
-                <tr>
-                    <td colspan="6">Belum ada pendapatan pada periode ini.</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
 
-    <h3>Pengeluaran</h3>
+                <?php foreach ($data_pengeluaran as $pengeluaran) : ?>
+                    <tr>
+                        <td class="expense">Manual</td>
+                        <td>
+                            <strong><?= htmlspecialchars($pengeluaran['jenis_pengeluaran']); ?></strong>
 
-    <table>
-        <thead>
+                            <?php if (!empty($pengeluaran['keterangan_pengeluaran'])) : ?>
+                                <br>
+                                <?= htmlspecialchars($pengeluaran['keterangan_pengeluaran']); ?>
+                            <?php endif; ?>
+                        </td>
+                        <td><?= date('d M Y H:i', strtotime($pengeluaran['tanggal_pengeluaran'])); ?></td>
+                        <td class="text-right expense">Rp <?= number_format($pengeluaran['jumlah_pengeluaran'], 0, ',', '.'); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+
+                <?php if (empty($data_restok) && empty($data_pengeluaran)) : ?>
+                    <tr>
+                        <td colspan="4" class="empty-row">
+                            Belum ada pengeluaran pada periode ini.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+
+        <!-- Tanda tangan laporan -->
+        <table class="signature-wrapper">
             <tr>
-                <th>Jenis</th>
-                <th>Keterangan</th>
-                <th>Tanggal</th>
-                <th>Total</th>
+                <td></td>
+
+                <td>
+                    <div class="signature-box">
+                        <p>Subang, <?= date('d F Y'); ?></p>
+                        <p><strong>Admin Mey Salon</strong></p>
+                        <div class="signature-space"></div>
+                        <p>(________________________)</p>
+                    </div>
+                </td>
             </tr>
-        </thead>
+        </table>
 
-        <tbody>
-            <?php foreach ($data_restok as $restok) : ?>
-                <tr>
-                    <td>Restok</td>
-                    <td>
-                        <?= htmlspecialchars($restok['nama_barang']); ?><br>
-                        Jumlah tambah: <?= (int) $restok['jumlah_tambah']; ?>
-                    </td>
-                    <td><?= date('d M Y H:i', strtotime($restok['tanggal_restok'])); ?></td>
-                    <td>Rp <?= number_format($restok['total_harga_restok'], 0, ',', '.'); ?></td>
-                </tr>
-            <?php endforeach; ?>
-
-            <?php foreach ($data_pengeluaran as $pengeluaran) : ?>
-                <tr>
-                    <td>Manual</td>
-                    <td>
-                        <?= htmlspecialchars($pengeluaran['jenis_pengeluaran']); ?><br>
-                        <?= htmlspecialchars($pengeluaran['keterangan_pengeluaran']); ?>
-                    </td>
-                    <td><?= date('d M Y H:i', strtotime($pengeluaran['tanggal_pengeluaran'])); ?></td>
-                    <td>Rp <?= number_format($pengeluaran['jumlah_pengeluaran'], 0, ',', '.'); ?></td>
-                </tr>
-            <?php endforeach; ?>
-
-            <?php if (empty($data_restok) && empty($data_pengeluaran)) : ?>
-                <tr>
-                    <td colspan="4">Belum ada pengeluaran pada periode ini.</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-
+        <!-- Catatan footer -->
+        <div class="footer-note">
+            Dokumen ini dicetak otomatis melalui Sistem Informasi Mey Salon.
+        </div>
+    </div>
 </body>
 </html>
