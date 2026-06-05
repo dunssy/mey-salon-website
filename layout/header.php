@@ -1,5 +1,9 @@
 <?php 
-session_start();
+// Cek apakah session sudah aktif sebelum memanggil session_start()
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // jika role bukan admin 
 if ($_SESSION['role'] !== 'Administrator') {
     // redirect ke halaman login

@@ -247,7 +247,6 @@ function hitung_total_halaman_user($jumlah_per_halaman)
 // ======================================================
 // CRUD STOK BARANG
 // ======================================================
-
 // Menambah data barang
 function tambah_barang($post)
 {
@@ -262,6 +261,7 @@ function tambah_barang($post)
     $minimal_stok_awal = clean_number($post['minimal_stok_awal']);
     $minimal_stok = $minimal_stok_awal * $jumlah_barang_perbotol;
     $harga_beli = clean_number($post['harga_beli']);
+    $total_harga_restok = $jumlah_barang * $harga_beli;
 
     $query = "INSERT INTO stok_barang 
                 (nama_barang, jenis_barang, jumlah_barang, satuan_barang, jumlah_satuan, minimal_stok, harga_beli) 
@@ -269,9 +269,19 @@ function tambah_barang($post)
                 ('$nama_barang', '$jenis_barang', '$jumlah_barang', '$satuan_barang', '$jumlah_barang_perbotol', '$minimal_stok', '$harga_beli')";
 
     mysqli_query($koneksi, $query);
+    $id_barang = mysqli_insert_id($koneksi);
+
+    // Menyimpan data ke tabel restok untuk laporan pengeluaran
+    $query_restok = "INSERT INTO restok
+                (id_barang, jumlah_tambah, harga_restok, total_harga_restok)
+              VALUES 
+                ('$id_barang', '$jumlah_barang', '$harga_beli', '$total_harga_restok')";
+    
+    mysqli_query($koneksi, $query_restok);
 
     return mysqli_affected_rows($koneksi);
 }
+
 
 // Mengubah data barang
 function edit_barang($post)

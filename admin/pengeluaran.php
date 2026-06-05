@@ -230,7 +230,7 @@ if (isset($_POST['submit'])) {
                                     <b>Restok Barang + Pengeluaran Manual</b>
                                 </p>
                             </div>
-
+                         
                             <a 
                                 href="data-laporan.php" 
                                 class="mt-5 inline-flex w-full items-center justify-center gap-2 px-4 py-3 text-sm font-bold text-pink-600 bg-pink-50 rounded-xl hover:bg-pink-100 transition-colors"
