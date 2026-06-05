@@ -76,7 +76,7 @@ function getServiceImage($layanan)
     <link rel="icon" type="image/png" sizes="32x32" href="layout/images/favicon_io/favicon-32x32.png">
     <link rel="icon" href="layout/images/favicon_io/favicon.ico" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
-    <link href="src/output.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="layout/css/style.css" />
 
    <style>

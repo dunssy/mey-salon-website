@@ -1,7 +1,7 @@
 <?php 
 session_start();
 // jika role bukan admin 
-if ($_SESSION['role'] !== 'Admin') {
+if ($_SESSION['role'] !== 'Administrator') {
     // redirect ke halaman login
     header("Location: ../login.php");    
     exit();
@@ -14,7 +14,7 @@ if ($_SESSION['role'] !== 'Admin') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $page_title; ?> ADMIN - Mey Salon</title>
-    <link href="../src/output.css" rel="stylesheet">
+     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
