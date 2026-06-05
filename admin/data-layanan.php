@@ -26,12 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['hapus'])) {
     }
 }
 
-// METODE PENCARIAN LAYANAN 
-if(isset($_GET['cari'])){
-    $keyword = $_GET['cari'];
-    $layanan = cari_layanan($keyword);
-}
-
 // Mengatur jumlah data per halaman
 $jumlah_per_halaman = 5;
 
@@ -43,11 +37,25 @@ if ($halaman_aktif < 1) {
     $halaman_aktif = 1;
 }
 
-// Mengambil data layanan sesuai halaman
-$layanan = tampil_layanan_per_halaman($halaman_aktif, $jumlah_per_halaman);
+// METODE PENCARIAN LAYANAN 
+if(isset($_GET['cari']) && !empty($_GET['cari'])){
+    $keyword = clean_input($_GET['cari']);
+    $all_layanan = cari_layanan($keyword);
+    $total_layanan = count($all_layanan);
+} else {
+    // Jika tidak ada pencarian, ambil semua data layanan
+    $all_layanan = select("SELECT * FROM layanan ORDER BY id_layanan DESC");
+    $total_layanan = count($all_layanan);
+}
 
 // Menghitung total halaman layanan
-$total_halaman = hitung_total_halaman_layanan($jumlah_per_halaman);
+$total_halaman = ceil($total_layanan / $jumlah_per_halaman);
+
+// Menghitung offset untuk pagination
+$offset = ($halaman_aktif - 1) * $jumlah_per_halaman;
+
+// Mengambil data layanan sesuai halaman (dari array yang sudah diambil)
+$layanan = array_slice($all_layanan, $offset, $jumlah_per_halaman);
 
 // Menghitung nomor awal tabel
 $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
@@ -70,6 +78,8 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 
             // Hapus parameter status dari URL
             window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    </script>
         }
     </script>
 
@@ -240,11 +250,15 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
 
                                             <!-- Navigasi pagination -->
                                             <div class="flex justify-end gap-2">
+                                                <?php 
+                                                    // Build pagination URL dengan search parameter jika ada
+                                                    $cari_param = isset($_GET['cari']) ? '&cari=' . urlencode($_GET['cari']) : '';
+                                                ?>
 
                                                 <!-- Tombol sebelumnya -->
                                                 <?php if ($halaman_aktif > 1) : ?>
                                                     <a 
-                                                        href="?halaman=<?= $halaman_aktif - 1; ?>" 
+                                                        href="?halaman=<?= $halaman_aktif - 1; ?><?= $cari_param; ?>" 
                                                         class="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors"
                                                     >
                                                         &laquo; Prev
@@ -258,7 +272,7 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                 <!-- Nomor halaman -->
                                                 <?php for ($i = 1; $i <= $total_halaman; $i++) : ?>
                                                     <a 
-                                                        href="?halaman=<?= $i; ?>" 
+                                                        href="?halaman=<?= $i; ?><?= $cari_param; ?>" 
                                                         class="px-3 py-1.5 text-xs font-medium border rounded-lg transition-colors <?= $i === $halaman_aktif ? 'bg-pink-600 border-pink-600 text-white' : 'bg-white border-gray-200 text-gray-600 hover:bg-pink-50 hover:text-pink-600'; ?>"
                                                     >
                                                         <?= $i; ?>
@@ -266,9 +280,9 @@ $no = (($halaman_aktif - 1) * $jumlah_per_halaman) + 1;
                                                 <?php endfor; ?>
 
                                                 <!-- Tombol berikutnya -->
-                                                <?php if ($halaman_aktif < $total_halaman) : ?>
+                                                <?php if ($halaman_aktif < $total_halaman) : ?> 
                                                     <a 
-                                                        href="?halaman=<?= $halaman_aktif + 1; ?>" 
+                                                        href="?halaman=<?= $halaman_aktif + 1; ?><?= $cari_param; ?>" 
                                                         class="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition-colors"
                                                     >
                                                         Next &raquo;
