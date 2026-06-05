@@ -70,7 +70,6 @@ function getServiceImage($layanan)
     <title>Mey Salon</title>
     <!-- ico mey salon -->
      <!-- untuk android -->
-      
     <link rel="apple-touch-icon" sizes="180x180" href="layout/images/favicon_io/apple-touch-icon.png">
     <!-- untuk desktop -->
     <link rel="icon" type="image/png" sizes="32x32" href="layout/images/favicon_io/favicon-32x32.png">
