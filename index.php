@@ -828,70 +828,83 @@ function getServiceImage($layanan)
         </div>
     </section>
 
-    <!-- Section kontak -->
-    <section id="contact" class="section-compact py-14 md:py-20 px-4 md:px-6 theme-section-soft">
-        <!-- Container kontak -->
-        <div class="max-w-7xl mx-auto">
-            <!-- Judul kontak -->
-            <h2 class="text-3xl md:text-4xl font-serif text-center theme-title mb-10 md:mb-14 uppercase tracking-widest">
-                Kontak Kami
-            </h2>
+<!-- Section kontak -->
+<section id="contact" class="section-compact py-14 md:py-20 px-4 md:px-6 theme-section-soft">
 
-            <!-- Grid kontak -->
-            <div class="grid lg:grid-cols-2 gap-8 md:gap-12 items-stretch">
-                <div class="map-responsive shadow-2xl rounded-[30px] md:rounded-[36px] overflow-hidden border-4 md:border-8 border-white min-h-[310px]">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.6546680698507!2d107.759136477936!3d-6.565198595110477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e693c9ced4b58e5%3A0x7f8a07a95c8b627f!2sMey%20Salon!5e0!3m2!1sid!2sid!4v1779330835533!5m2!1sid!2sid" width="600" height="450" style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="w-full h-full min-h-[320px]"></iframe>
+    <!-- Container kontak -->
+    <div class="max-w-7xl mx-auto">
 
-                <!-- Google map -->
-                <div class="map-responsive shadow-2xl rounded-[30px] md:rounded-[36px] overflow-hidden border-4 md:border-8 theme-video-border min-h-[320px]">
-                    <!-- Iframe Google Maps -->
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.6546680698507!2d107.759136477936!3d-6.565198595110477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e693c9ced4b58e5%3A0x7f8a07a95c8b627f!2sMey%20Salon!5e0!3m2!1sid!2sid!4v1779330835533!5m2!1sid!2sid"
-                        width="600"
-                        height="450"
-                        style="border: 0"
-                        allowfullscreen=""
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        class="w-full h-full min-h-[320px]"
-                    ></iframe>
+        <!-- Judul kontak -->
+        <h2 class="text-3xl md:text-4xl font-serif text-center theme-title mb-10 md:mb-14 uppercase tracking-widest">
+            Kontak Kami
+        </h2>
+
+        <!-- Grid kontak kiri kanan -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-stretch">
+
+            <!-- Google map -->
+            <div class="map-responsive shadow-xl rounded-[24px] md:rounded-[30px] overflow-hidden border-4 theme-video-border h-[280px] md:h-[340px] lg:h-[380px]">
+                <!-- Iframe Google Maps -->
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.6546680698507!2d107.759136477936!3d-6.565198595110477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e693c9ced4b58e5%3A0x7f8a07a95c8b627f!2sMey%20Salon!5e0!3m2!1sid!2sid!4v1779330835533!5m2!1sid!2sid"
+                    width="600"
+                    height="450"
+                    style="border: 0"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="w-full h-full"
+                ></iframe>
+            </div>
+
+            <!-- Card kontak -->
+            <div class="theme-card p-6 md:p-8 rounded-[24px] md:rounded-[30px] shadow-xl flex flex-col justify-center border min-h-[280px] md:min-h-[340px] lg:min-h-[380px]">
+
+                <!-- Nama salon -->
+                <h3 class="text-2xl md:text-3xl font-serif theme-title mb-4">
+                    Mey Salon
+                </h3>
+
+                <!-- Deskripsi kontak -->
+                <p class="theme-text leading-relaxed mb-6">
+                    Siap membantu Anda tampil lebih percaya diri dengan berbagai layanan perawatan rambut dan kecantikan terbaik.
+                </p>
+
+                <!-- Detail kontak -->
+                <div class="space-y-4 text-sm md:text-base theme-text">
+
+                    <!-- Alamat salon -->
+                    <div>
+                        <strong class="theme-title">Alamat:</strong>
+                        Jl. D. Kartawigenda Gg. Palabuan No.27, Karanganyar, Kec. Subang, Kabupaten Subang, Jawa Barat 41211
+                    </div>
+
+                    <!-- Jam operasional -->
+                    <div>
+                        <strong class="theme-title">Jam Operasional:</strong>
+                        Setiap hari (Rabu Libur), 09.00 - 21.00
+                    </div>
+
+                    <!-- Info reservasi -->
+                    <div>
+                        <strong class="theme-title">Reservasi:</strong>
+                        Silakan login untuk melakukan booking layanan
+                    </div>
                 </div>
 
-                <!-- Card kontak -->
-                <div class="theme-card p-8 md:p-10 rounded-[30px] md:rounded-[36px] shadow-2xl flex flex-col justify-center border">
-                    <!-- Nama salon -->
-                    <h3 class="text-2xl md:text-3xl font-serif theme-title mb-4">
-                        Mey Salon
-                    </h3>
-
-                    <!-- Deskripsi kontak -->
-                    <p class="theme-text leading-relaxed mb-6">
-                        Siap membantu Anda tampil lebih percaya diri dengan berbagai layanan perawatan rambut dan kecantikan terbaik.
-                    </p>
-
-                    <!-- Detail kontak -->
-                    <div class="space-y-4 text-sm md:text-base theme-text">
-                        <!-- Alamat salon -->
-                        <div><strong class="theme-title">Alamat:</strong> Jl. D. Kartawigenda Gg. Palabuan No.27, Karanganyar, Kec. Subang, Kabupaten Subang, Jawa Barat 41211</div>
-
-                        <!-- Jam operasional -->
-                        <div><strong class="theme-title">Jam Operasional:</strong> Setiap hari (Rabu Libur), 09.00 - 21.00</div>
-
-                        <!-- Info reservasi -->
-                        <div><strong class="theme-title">Reservasi:</strong> Silakan login untuk melakukan booking layanan</div>
-                    </div>
-
-                    <!-- Tombol kontak -->
-                    <div class="pt-8">
-                        <!-- Link booking kontak -->
-                        <a href="<?= $is_login ? 'user/booking.php' : 'login.php'; ?>" class="btn-pink inline-block px-8 py-4 rounded-full font-bold tracking-widest text-xs md:text-sm shadow-lg uppercase">
-                            Booking Sekarang
-                        </a>
-                    </div>
+                <!-- Tombol kontak -->
+                <div class="pt-8">
+                    <a 
+                        href="<?= $is_login ? 'user/booking.php' : 'login.php'; ?>" 
+                        class="btn-pink inline-block px-8 py-4 rounded-full font-bold tracking-widest text-xs md:text-sm shadow-lg uppercase"
+                    >
+                        Booking Sekarang
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Footer utama -->
     <footer class="bg-[#1A120B] text-white py-10 md:py-14 px-6">

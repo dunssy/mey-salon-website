@@ -404,7 +404,7 @@ if (isset($_POST['konfirmasi_booking'])) {
         // Mengambil total durasi
         $total_durasi = (int) ($data_total['total_durasi'] ?? 0);
 
-        // Mengambil total DP dari harga minimum
+        // Mengambil total pembayaran dari harga minimum
         $total_dp = (int) ($data_total['total_harga'] ?? 0);
 
         // Mengecek total valid

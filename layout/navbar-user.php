@@ -2,32 +2,41 @@
 // Mengambil data user jika tersedia
 global $user;
 
-$nama_user = $user['nama'] ?? 'User';
-$role_user = $user['role'] ?? 'Customer';
-$inisial_user = strtoupper(substr($nama_user, 0, 1));
+// Menyiapkan nama user
+$nama_user = $user['nama'] ?? ($_SESSION['nama'] ?? 'User');
+
+// Menyiapkan role user
+$role_user = $user['role'] ?? ($_SESSION['role'] ?? 'Customer');
+
+// Membuat inisial user
+$inisial_user = strtoupper(substr(trim($nama_user), 0, 1));
 ?>
 
 <!-- Navbar user -->
 <nav class="fixed w-full z-50 glass-nav border-b border-pink-100">
-    <div class="max-w-6xl mx-auto px-4">
+
+    <!-- Container navbar -->
+    <div class="max-w-6xl mx-auto px-3 sm:px-4">
+
+        <!-- Isi navbar -->
         <div class="flex justify-between items-center h-16">
 
             <!-- Kiri navbar -->
-            <div class="flex items-center gap-8">
+            <div class="flex items-center gap-4 md:gap-8 min-w-0">
 
                 <!-- Logo dan brand -->
                 <button 
                     type="button"
-                    onclick="showSection('layanan')" 
-                    class="flex items-center gap-3"
+                    onclick="showSectionAndCloseMenu('layanan')" 
+                    class="flex items-center gap-3 min-w-0"
                 >
                     <img
                         src="../layout/images/mey-salon.png"
                         alt="Mey Salon Logo"
-                        class="w-10 h-10 rounded-xl object-cover"
-                    />
+                        class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover shrink-0"
+                    >
 
-                    <span class="text-xl font-bold text-pink-600 italic tracking-tighter">
+                    <span class="text-lg sm:text-xl font-bold text-pink-600 italic tracking-tighter truncate">
                         Mey Salon
                     </span>
                 </button>
@@ -43,7 +52,7 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
 
                     <button 
                         type="button"
-                        onclick="showSection('layanan')" 
+                        onclick="showSectionAndCloseMenu('layanan')" 
                         class="text-sm font-semibold hover:text-pink-600 transition-colors"
                     >
                         Layanan
@@ -51,7 +60,7 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
 
                     <button 
                         type="button"
-                        onclick="showSection('booking')" 
+                        onclick="showSectionAndCloseMenu('booking')" 
                         class="text-sm font-semibold hover:text-pink-600 transition-colors"
                     >
                         Booking Saya
@@ -76,7 +85,7 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
                         </div>
 
                         <div class="text-left leading-tight">
-                            <p class="text-sm font-bold">
+                            <p class="text-sm font-bold max-w-[130px] truncate">
                                 <?= htmlspecialchars($nama_user); ?>
                             </p>
 
@@ -95,7 +104,7 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
                     >
                         <!-- Info profile -->
                         <div class="p-4 bg-pink-50/50 border-b border-pink-100">
-                            <p class="text-sm font-bold text-gray-700">
+                            <p class="text-sm font-bold text-gray-700 truncate">
                                 <?= htmlspecialchars($nama_user); ?>
                             </p>
 
@@ -104,10 +113,10 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
                             </p>
                         </div>
 
-                        <!-- Menu pengaturan profil -->
+                        <!-- Menu pengaturan profile -->
                         <button
                             type="button"
-                            onclick="showSection('profil'); closeUserProfileDropdown();"
+                            onclick="showSectionAndCloseMenu('profil'); closeUserProfileDropdown();"
                             class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition text-left"
                         >
                             <i class="fa-solid fa-user-gear w-5"></i>
@@ -129,25 +138,27 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
                 </div>
             </div>
 
-            <!-- Mobile navbar -->
+            <!-- Kanan navbar mobile -->
             <div class="md:hidden flex items-center gap-3">
 
                 <!-- Tombol profile mobile -->
                 <button 
                     type="button"
                     onclick="toggleUserProfileDropdownMobile()" 
-                    class="text-pink-600"
+                    class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center"
+                    aria-label="Buka profil"
                 >
-                    <i class="fa-solid fa-circle-user text-2xl"></i>
+                    <i class="fa-solid fa-circle-user text-xl"></i>
                 </button>
 
                 <!-- Tombol menu mobile -->
                 <button 
                     type="button"
                     onclick="toggleMobileMenu()" 
-                    class="text-gray-600"
+                    class="w-10 h-10 rounded-xl bg-gray-50 text-gray-600 flex items-center justify-center"
+                    aria-label="Buka menu"
                 >
-                    <i id="menu-icon" class="fa-solid fa-bars-staggered text-2xl"></i>
+                    <i id="menu-icon" class="fa-solid fa-bars-staggered text-xl"></i>
                 </button>
             </div>
         </div>
@@ -159,7 +170,7 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
         >
             <!-- Info profile mobile -->
             <div class="p-4 bg-pink-50/50 border-b border-pink-100">
-                <p class="text-sm font-bold text-gray-700">
+                <p class="text-sm font-bold text-gray-700 truncate">
                     <?= htmlspecialchars($nama_user); ?>
                 </p>
 
@@ -171,7 +182,7 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
             <!-- Menu pengaturan profile mobile -->
             <button
                 type="button"
-                onclick="showSection('profil'); closeUserProfileDropdownMobile();"
+                onclick="showSectionAndCloseMenu('profil'); closeUserProfileDropdownMobile();"
                 class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition text-left"
             >
                 <i class="fa-solid fa-user-gear w-5"></i>
@@ -202,7 +213,7 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
 
             <button 
                 type="button"
-                onclick="showSection('layanan')" 
+                onclick="showSectionAndCloseMenu('layanan')" 
                 class="block w-full text-left px-4 py-3 rounded-xl text-sm font-semibold hover:bg-pink-50"
             >
                 Layanan
@@ -210,7 +221,7 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
 
             <button 
                 type="button"
-                onclick="showSection('booking')" 
+                onclick="showSectionAndCloseMenu('booking')" 
                 class="block w-full text-left px-4 py-3 rounded-xl text-sm font-semibold hover:bg-pink-50"
             >
                 Booking Saya
@@ -219,8 +230,18 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
     </div>
 </nav>
 
-<!-- Script dropdown profile user -->
+<!-- Script navbar user -->
 <script>
+    // Membuka section dan menutup menu mobile
+    function showSectionAndCloseMenu(sectionName) {
+        if (typeof showSection === 'function') {
+            showSection(sectionName);
+        }
+
+        closeMobileMenu();
+        closeUserProfileDropdownMobile();
+    }
+
     // Membuka dan menutup dropdown profile desktop
     function toggleUserProfileDropdown() {
         const menu = document.getElementById('user-profile-menu');
@@ -242,14 +263,11 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
     // Membuka dan menutup dropdown profile mobile
     function toggleUserProfileDropdownMobile() {
         const menu = document.getElementById('user-profile-menu-mobile');
-        const mobileMenu = document.getElementById('mobile-menu');
+
+        closeMobileMenu();
 
         if (menu) {
             menu.classList.toggle('hidden');
-        }
-
-        if (mobileMenu) {
-            mobileMenu.classList.add('hidden');
         }
     }
 
@@ -262,8 +280,50 @@ $inisial_user = strtoupper(substr($nama_user, 0, 1));
         }
     }
 
-    // Menutup dropdown saat klik di luar area profile
-    window.addEventListener('click', function(event) {
+    // Membuka dan menutup menu mobile
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const icon = document.getElementById('menu-icon');
+
+        closeUserProfileDropdownMobile();
+
+        if (!menu) return;
+
+        menu.classList.toggle('hidden');
+
+        if (icon) {
+            icon.classList.toggle('fa-bars-staggered');
+            icon.classList.toggle('fa-xmark');
+        }
+    }
+
+    // Menutup menu mobile
+    function closeMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const icon = document.getElementById('menu-icon');
+
+        if (menu) {
+            menu.classList.add('hidden');
+        }
+
+        if (icon) {
+            icon.classList.add('fa-bars-staggered');
+            icon.classList.remove('fa-xmark');
+        }
+    }
+
+    // Membuka section dari parameter URL
+    document.addEventListener('DOMContentLoaded', function () {
+        const params = new URLSearchParams(window.location.search);
+        const section = params.get('section') || window.location.hash.replace('#', '');
+
+        if (section && typeof showSection === 'function') {
+            showSection(section);
+        }
+    });
+
+    // Menutup dropdown desktop saat klik luar
+    window.addEventListener('click', function (event) {
         const desktopDropdown = document.querySelector('.user-profile-dropdown');
         const desktopMenu = document.getElementById('user-profile-menu');
 

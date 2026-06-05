@@ -1,46 +1,50 @@
-<?php global $user; ?>
+<?php
+// Mengambil data user dari booking-controller.php
+global $user;
+?>
 
-<!-- Modal konfirmasi booking dengan DP QRIS dan upload bukti pembayaran -->
+<!-- Modal konfirmasi booking dengan QRIS dan upload bukti pembayaran -->
 <div id="booking-modal" class="fixed inset-0 z-[100] hidden">
 
     <!-- Overlay modal -->
     <div onclick="closeBookingModal()" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
     <!-- Box modal -->
-    <div class="relative max-w-4xl mx-auto mt-6 mb-6 bg-white rounded-[2rem] shadow-2xl border border-pink-100 overflow-hidden max-h-[92vh] flex flex-col">
+    <div class="relative w-[94%] max-w-4xl mx-auto mt-4 sm:mt-6 mb-4 sm:mb-6 bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl border border-pink-100 overflow-hidden max-h-[92vh] flex flex-col">
 
         <!-- Header modal -->
-        <div class="p-5 md:p-6 border-b border-pink-50 flex justify-between items-center">
+        <div class="p-4 sm:p-5 md:p-6 border-b border-pink-50 flex justify-between items-start gap-4">
             <div>
                 <h3 class="text-xl font-bold text-gray-800">
                     Konfirmasi Booking
                 </h3>
 
                 <p class="text-xs text-gray-400 mt-1">
-                    Customer melakukan DP terlebih dahulu menggunakan QRIS. Nominal DP diambil dari total harga layanan.
+                    Customer melakukan pembayaran menggunakan QRIS. Nominal pembayaran diambil dari total harga layanan.
                 </p>
             </div>
 
+            <!-- Tombol tutup modal -->
             <button 
                 type="button"
                 onclick="closeBookingModal()" 
-                class="w-10 h-10 bg-pink-50 text-pink-600 rounded-full hover:bg-pink-100 transition"
+                class="w-10 h-10 bg-pink-50 text-pink-600 rounded-full hover:bg-pink-100 transition shrink-0"
             >
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
 
-        <!-- Form wajib multipart agar file bukti pembayaran terkirim -->
-        <form action="" method="POST" enctype="multipart/form-data" class="overflow-y-auto p-5 md:p-6">
+        <!-- Form booking -->
+        <form action="" method="POST" enctype="multipart/form-data" class="overflow-y-auto p-4 sm:p-5 md:p-6">
 
-            <!-- Input tersembunyi -->
+            <!-- Input hidden untuk controller -->
             <input type="hidden" name="tanggal_booking" id="form-tanggal-booking">
             <input type="hidden" name="jam_mulai" id="form-jam-mulai">
             <input type="hidden" name="layanan_terpilih" id="form-layanan-terpilih">
             <input type="hidden" name="total_dp" id="form-total-dp">
 
             <!-- Layout modal -->
-            <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
+            <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5 lg:gap-6 items-start">
 
                 <!-- Kolom kiri detail booking -->
                 <div class="space-y-5">
@@ -48,23 +52,25 @@
                     <!-- Data pelanggan -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
+                        <!-- Nama pelanggan -->
                         <div class="p-4 bg-pink-50/50 rounded-2xl border border-pink-100">
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                 Nama
                             </p>
 
                             <p class="text-sm font-bold text-gray-800">
-                                <?= htmlspecialchars($user['nama']); ?>
+                                <?= htmlspecialchars($user['nama'] ?? '-'); ?>
                             </p>
                         </div>
 
+                        <!-- Nomor HP pelanggan -->
                         <div class="p-4 bg-pink-50/50 rounded-2xl border border-pink-100">
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                 No HP
                             </p>
 
                             <p class="text-sm font-bold text-gray-800">
-                                <?= htmlspecialchars($user['no_hp']); ?>
+                                <?= htmlspecialchars($user['no_hp'] ?? '-'); ?>
                             </p>
                         </div>
                     </div>
@@ -72,6 +78,7 @@
                     <!-- Data jadwal -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
+                        <!-- Tanggal booking -->
                         <div class="p-4 bg-white rounded-2xl border border-pink-100">
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                 Tanggal Booking
@@ -82,6 +89,7 @@
                             </p>
                         </div>
 
+                        <!-- Jam booking -->
                         <div class="p-4 bg-white rounded-2xl border border-pink-100">
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                 Jam Booking
@@ -103,11 +111,12 @@
                     </div>
 
                     <!-- Ringkasan pembayaran -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
+                        <!-- Total pembayaran -->
                         <div class="p-4 bg-pink-50/60 rounded-2xl border border-pink-100">
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                Total DP QRIS
+                                Total QRIS
                             </p>
 
                             <p id="modal-total-price" class="text-lg font-bold text-pink-600">
@@ -115,10 +124,11 @@
                             </p>
 
                             <p class="text-[10px] text-gray-400 mt-1">
-                                Dari total harga layanan.
+                                Sesuai total harga layanan.
                             </p>
                         </div>
 
+                        <!-- Estimasi durasi -->
                         <div class="p-4 bg-pink-50/60 rounded-2xl border border-pink-100">
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                 Estimasi
@@ -129,6 +139,7 @@
                             </p>
                         </div>
 
+                        <!-- Metode pembayaran -->
                         <div class="p-4 bg-pink-50/60 rounded-2xl border border-pink-100">
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                 Pembayaran
@@ -143,7 +154,7 @@
                     <!-- Upload bukti pembayaran -->
                     <div class="p-4 bg-white rounded-2xl border border-pink-100">
                         <label for="bukti_pembayaran" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                            Upload Bukti Pembayaran DP
+                            Upload Bukti Pembayaran
                         </label>
 
                         <input 
@@ -160,6 +171,7 @@
                             Format JPG, JPEG, PNG, WEBP, atau PDF. Maksimal 2MB.
                         </p>
 
+                        <!-- Preview bukti pembayaran -->
                         <div id="preview-bukti-wrapper" class="hidden mt-4">
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
                                 Preview Bukti
@@ -193,22 +205,24 @@
                 </div>
 
                 <!-- Kolom kanan QRIS -->
-                <aside class="bg-pink-50/50 border border-pink-100 rounded-[1.8rem] p-5 lg:sticky lg:top-0">
+                <aside class="bg-pink-50/50 border border-pink-100 rounded-[1.5rem] sm:rounded-[1.8rem] p-4 sm:p-5 lg:sticky lg:top-0">
 
+                    <!-- Header QRIS -->
                     <div class="text-center mb-4">
                         <div class="w-12 h-12 mx-auto bg-white text-pink-600 rounded-2xl flex items-center justify-center border border-pink-100">
                             <i class="fa-solid fa-qrcode text-xl"></i>
                         </div>
 
                         <h4 class="text-lg font-bold text-gray-800 mt-3">
-                            Bayar DP via QRIS
+                            Bayar via QRIS
                         </h4>
 
                         <p class="text-xs text-gray-500 mt-1 leading-relaxed">
-                            Scan QRIS Mey Salon lalu bayar sesuai total DP.
+                            Scan QRIS Mey Salon lalu bayar sesuai total harga layanan.
                         </p>
                     </div>
 
+                    <!-- Gambar QRIS -->
                     <div class="bg-white rounded-2xl p-3 border border-pink-100">
                         <img 
                             src="../layout/images/qris.jpeg" 
@@ -217,9 +231,10 @@
                         >
                     </div>
 
+                    <!-- Nominal total -->
                     <div class="mt-4 p-4 bg-white rounded-2xl border border-pink-100 text-center">
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                            Nominal DP
+                            Nominal Total
                         </p>
 
                         <p id="modal-total-dp-qris" class="text-2xl font-bold text-pink-600 mt-1">
@@ -227,10 +242,12 @@
                         </p>
                     </div>
 
+                    <!-- Catatan admin -->
                     <div class="mt-4 p-4 bg-yellow-50 border border-yellow-100 text-yellow-700 rounded-2xl text-xs leading-relaxed">
                         <b>Catatan:</b> Booking akan masuk sebagai <b>Waiting</b>. Admin akan mengecek bukti pembayaran QRIS terlebih dahulu sebelum mengonfirmasi jadwal.
                     </div>
 
+                    <!-- Checklist konfirmasi -->
                     <label class="mt-4 flex items-start gap-3 text-xs text-gray-500 cursor-pointer">
                         <input 
                             type="checkbox" 
@@ -240,12 +257,13 @@
                         >
 
                         <span>
-                            Saya sudah membayar DP sesuai nominal QRIS dan mengupload bukti pembayaran yang benar.
+                            Saya sudah membayar sesuai nominal QRIS dan mengupload bukti pembayaran yang benar.
                         </span>
                     </label>
                 </aside>
             </div>
 
+            <!-- Tombol submit booking -->
             <button 
                 id="btn-submit-booking-qris"
                 type="submit" 
@@ -253,17 +271,20 @@
                 disabled
                 class="mt-6 w-full py-4 bg-pink-600 text-white font-bold rounded-2xl hover:bg-pink-700 transition-all shadow-lg shadow-pink-100 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-                Konfirmasi Booking & Kirim Bukti DP
+                Konfirmasi Booking & Kirim Bukti Pembayaran
             </button>
         </form>
     </div>
 </div>
 
+<!-- Script modal booking -->
 <script>
+    // Format angka ke rupiah
     function formatRupiahModalQris(number) {
         return 'Rp ' + new Intl.NumberFormat('id-ID').format(Number(number || 0));
     }
 
+    // Format tanggal Indonesia
     function formatTanggalModalQris(dateKey) {
         if (!dateKey) return '-';
 
@@ -283,6 +304,7 @@
         });
     }
 
+    // Preview bukti pembayaran
     function previewBuktiPembayaran(input) {
         const wrapper = document.getElementById('preview-bukti-wrapper');
         const image = document.getElementById('preview-bukti-image');
@@ -328,8 +350,10 @@
         }
     }
 
+    // Mengambil layanan terpilih dari script booking
     function getSelectedServicesQris() {
         if (typeof cart !== 'undefined' && Array.isArray(cart)) return cart;
+        if (Array.isArray(window.cart)) return window.cart;
         if (Array.isArray(window.selectedServices)) return window.selectedServices;
         if (Array.isArray(window.cartItems)) return window.cartItems;
         if (Array.isArray(window.selectedLayanan)) return window.selectedLayanan;
@@ -337,6 +361,7 @@
         return [];
     }
 
+    // Mengambil tanggal booking
     function getSelectedDateQris() {
         if (typeof selectedBookingDate !== 'undefined' && selectedBookingDate) return selectedBookingDate;
 
@@ -344,6 +369,7 @@
         return formDate || '';
     }
 
+    // Mengambil jam booking
     function getSelectedTimeQris() {
         if (typeof selectedBookingTime !== 'undefined' && selectedBookingTime) return selectedBookingTime;
 
@@ -351,7 +377,8 @@
         return formTime || '';
     }
 
-    function getTotalDpQris(services) {
+    // Menghitung total pembayaran
+    function getTotalPaymentQris(services) {
         if (typeof getTotalPrice === 'function') {
             return Number(getTotalPrice() || 0);
         }
@@ -361,6 +388,7 @@
         }, 0);
     }
 
+    // Menghitung total durasi
     function getTotalDurationQris(services) {
         if (typeof getTotalDuration === 'function') {
             return Number(getTotalDuration() || 0);
@@ -371,6 +399,7 @@
         }, 0);
     }
 
+    // Mengaktifkan tombol submit jika bukti dan checkbox lengkap
     function toggleBookingSubmitQris() {
         const check = document.getElementById('qris-confirm-check');
         const btn = document.getElementById('btn-submit-booking-qris');
@@ -381,11 +410,14 @@
         btn.disabled = !(check.checked && bukti.files.length > 0);
     }
 
+    // Membuka modal booking
     function openBookingModal() {
         const modal = document.getElementById('booking-modal');
         const services = getSelectedServicesQris();
         const tanggalBooking = getSelectedDateQris();
         const jamMulai = getSelectedTimeQris();
+
+        if (!modal) return;
 
         if (!services || services.length === 0) {
             if (typeof showToast === 'function') showToast('Pilih layanan terlebih dahulu');
@@ -405,7 +437,7 @@
             return;
         }
 
-        const totalDp = getTotalDpQris(services);
+        const totalPayment = getTotalPaymentQris(services);
         const totalDurasi = getTotalDurationQris(services);
         const layananIds = services.map(item => Number(item.id || item.id_layanan || item.service_id)).filter(Boolean);
         const jamForm = String(jamMulai).length === 5 ? jamMulai + ':00' : jamMulai;
@@ -413,34 +445,36 @@
         document.getElementById('form-tanggal-booking').value = tanggalBooking;
         document.getElementById('form-jam-mulai').value = jamForm;
         document.getElementById('form-layanan-terpilih').value = JSON.stringify(layananIds);
-        document.getElementById('form-total-dp').value = totalDp;
+        document.getElementById('form-total-dp').value = totalPayment;
 
         document.getElementById('modal-date').innerText = formatTanggalModalQris(tanggalBooking);
         document.getElementById('modal-time').innerText = jamMulai;
 
         const serviceList = document.getElementById('modal-service-list');
 
-        serviceList.innerHTML = services.map(item => {
-            const nama = item.name || item.nama || item.nama_layanan || 'Layanan';
-            const harga = Number(item.price || item.harga || item.harga_min || item.harga_layanan || 0);
-            const durasi = Number(item.duration || item.durasi || item.durasi_layanan || 0);
+        if (serviceList) {
+            serviceList.innerHTML = services.map(item => {
+                const nama = item.name || item.nama || item.nama_layanan || 'Layanan';
+                const harga = Number(item.price || item.harga || item.harga_min || item.harga_layanan || 0);
+                const durasi = Number(item.duration || item.durasi || item.durasi_layanan || 0);
 
-            return `
-                <div class="flex justify-between gap-4 p-4 bg-white border border-pink-100 rounded-2xl">
-                    <div>
-                        <p class="text-sm font-bold text-gray-800">${nama}</p>
-                        <p class="text-xs text-gray-400 mt-1">Estimasi ${durasi} menit</p>
+                return `
+                    <div class="flex justify-between gap-4 p-4 bg-white border border-pink-100 rounded-2xl">
+                        <div>
+                            <p class="text-sm font-bold text-gray-800">${nama}</p>
+                            <p class="text-xs text-gray-400 mt-1">Estimasi ${durasi} menit</p>
+                        </div>
+
+                        <p class="text-sm font-bold text-pink-600 whitespace-nowrap">
+                            ${formatRupiahModalQris(harga)}
+                        </p>
                     </div>
+                `;
+            }).join('');
+        }
 
-                    <p class="text-sm font-bold text-pink-600 whitespace-nowrap">
-                        ${formatRupiahModalQris(harga)}
-                    </p>
-                </div>
-            `;
-        }).join('');
-
-        document.getElementById('modal-total-price').innerText = formatRupiahModalQris(totalDp);
-        document.getElementById('modal-total-dp-qris').innerText = formatRupiahModalQris(totalDp);
+        document.getElementById('modal-total-price').innerText = formatRupiahModalQris(totalPayment);
+        document.getElementById('modal-total-dp-qris').innerText = formatRupiahModalQris(totalPayment);
         document.getElementById('modal-total-duration').innerText = totalDurasi + ' Menit';
 
         const check = document.getElementById('qris-confirm-check');
@@ -466,6 +500,7 @@
         modal.classList.remove('hidden');
     }
 
+    // Menutup modal booking
     function closeBookingModal() {
         const modal = document.getElementById('booking-modal');
 

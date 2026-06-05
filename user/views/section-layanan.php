@@ -1,12 +1,14 @@
 <!-- Section layanan -->
-<section id="section-layanan" class="content-section pb-24">
+<section id="section-layanan" class="content-section pb-32 md:pb-28">
 
-    <!-- Style layanan 2 baris horizontal -->
+    <!-- Style layanan responsif -->
     <style>
+        /* Area layanan tidak membuat layout melebar */
         #section-layanan .services-area {
             min-width: 0;
         }
 
+        /* Wrapper scroll layanan */
         #section-layanan .services-scroll-wrapper {
             width: 100%;
             max-width: 100%;
@@ -14,44 +16,83 @@
             overflow-y: hidden;
             scroll-behavior: smooth;
             padding-bottom: 14px;
+            -webkit-overflow-scrolling: touch;
         }
 
+        /* Scrollbar layanan */
         #section-layanan .services-scroll-wrapper::-webkit-scrollbar {
-            height: 9px;
+            height: 8px;
         }
 
+        /* Track scrollbar */
         #section-layanan .services-scroll-wrapper::-webkit-scrollbar-track {
             background: #fdf2f8;
             border-radius: 999px;
         }
 
+        /* Thumb scrollbar */
         #section-layanan .services-scroll-wrapper::-webkit-scrollbar-thumb {
             background: #f472b6;
             border-radius: 999px;
         }
 
+        /* Grid layanan 2 baris */
         #section-layanan .services-slider-grid {
             display: grid;
             grid-auto-flow: column;
             grid-template-rows: repeat(2, 1fr);
-            grid-auto-columns: 280px;
-            gap: 18px;
+            grid-auto-columns: 245px;
+            gap: 14px;
             width: max-content;
             min-width: max-content;
         }
 
-        @media (min-width: 768px) {
+        /* Ukuran tablet */
+        @media (min-width: 640px) {
             #section-layanan .services-slider-grid {
-                grid-auto-columns: 310px;
+                grid-auto-columns: 270px;
+                gap: 16px;
+            }
+        }
+
+        /* Ukuran desktop */
+        @media (min-width: 1024px) {
+            #section-layanan .services-slider-grid {
+                grid-auto-columns: 300px;
+                gap: 18px;
+            }
+        }
+
+        /* Card layanan mobile */
+        #section-layanan .service-card {
+            min-height: 100%;
+        }
+
+        /* Gambar layanan mobile */
+        #section-layanan .service-image {
+            height: 120px;
+        }
+
+        /* Gambar layanan tablet */
+        @media (min-width: 640px) {
+            #section-layanan .service-image {
+                height: 135px;
+            }
+        }
+
+        /* Gambar layanan desktop */
+        @media (min-width: 1024px) {
+            #section-layanan .service-image {
+                height: 145px;
             }
         }
     </style>
 
     <!-- Layout booking -->
-    <div class="grid grid-cols-1 lg:grid-cols-[340px_minmax(0,1fr)] gap-6 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-5 lg:gap-6 items-start">
 
         <!-- Kalender dan jam booking -->
-        <aside class="bg-white rounded-3xl p-6 shadow-sm border border-pink-100 lg:sticky lg:top-24">
+        <aside class="bg-white rounded-3xl p-4 sm:p-5 lg:p-6 shadow-sm border border-pink-100 lg:sticky lg:top-24">
 
             <!-- Header kalender -->
             <div class="flex items-center justify-between mb-5">
@@ -93,7 +134,7 @@
 
             <!-- Keterangan kalender -->
             <div class="mt-5 grid grid-cols-1 gap-2 text-xs text-gray-500">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 self-end sm:self-auto">
                     <span class="w-3 h-3 rounded-full bg-white border border-pink-200"></span>
                     <span>Tersedia</span>
                 </div>
@@ -128,7 +169,7 @@
         <div class="services-area space-y-4">
 
             <!-- Header kecil layanan -->
-            <div class="flex items-center justify-between gap-3">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
                     <h3 class="text-lg font-bold text-gray-800">
                         Pilih Layanan
@@ -143,6 +184,7 @@
                     <button 
                         type="button"
                         onclick="scrollServiceLanding(-1)"
+                        aria-label="Geser layanan ke kiri"
                         class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 hover:bg-pink-100 transition"
                     >
                         <i class="fa-solid fa-chevron-left"></i>
@@ -151,6 +193,7 @@
                     <button 
                         type="button"
                         onclick="scrollServiceLanding(1)"
+                        aria-label="Geser layanan ke kanan"
                         class="w-10 h-10 rounded-xl bg-pink-600 text-white hover:bg-pink-700 transition"
                     >
                         <i class="fa-solid fa-chevron-right"></i>
@@ -186,7 +229,7 @@
                             <!-- Card layanan -->
                             <label 
                                 id="service-card-<?= (int) $layanan['id_layanan']; ?>"
-                                class="service-card cursor-pointer bg-white rounded-[1.8rem] p-4 shadow-sm border border-pink-100 hover:border-pink-300 hover:shadow-md transition-all"
+                                class="service-card cursor-pointer bg-white rounded-[1.5rem] sm:rounded-[1.8rem] p-3 sm:p-4 shadow-sm border border-pink-100 hover:border-pink-300 hover:shadow-md transition-all"
                             >
 
                                 <!-- Foto layanan -->
@@ -194,7 +237,7 @@
                                     <img
                                         src="<?= htmlspecialchars($gambar_layanan); ?>"
                                         alt="<?= htmlspecialchars($layanan['nama_layanan']); ?>"
-                                        class="w-full h-36 object-cover rounded-2xl border border-pink-100 bg-pink-50"
+                                        class="service-image w-full object-cover rounded-2xl border border-pink-100 bg-pink-50"
                                     >
 
                                     <!-- Input checkbox yang langsung memakai addToCart/removeFromCart dari booking-script.js -->
@@ -209,13 +252,13 @@
                                     >
 
                                     <!-- Kotak checklist -->
-                                    <div class="absolute top-3 right-3 w-10 h-10 rounded-xl bg-white border-2 border-pink-200 flex items-center justify-center text-transparent shadow-sm peer-checked:bg-pink-600 peer-checked:border-pink-600 peer-checked:text-white transition-all">
+                                    <div class="absolute top-2.5 right-2.5 w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white border-2 border-pink-200 flex items-center justify-center text-transparent shadow-sm peer-checked:bg-pink-600 peer-checked:border-pink-600 peer-checked:text-white transition-all">
                                         <i class="fa-solid fa-check text-sm"></i>
                                     </div>
 
                                     <!-- Label range harga -->
                                     <?php if (!empty($harga_max)) : ?>
-                                        <div class="absolute left-3 top-3 px-3 py-1 rounded-full bg-white/90 backdrop-blur text-[10px] font-bold text-pink-600">
+                                        <div class="absolute left-2.5 top-2.5 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur text-[10px] font-bold text-pink-600">
                                             Mulai Rp <?= number_format($harga_min, 0, ',', '.'); ?>
                                         </div>
                                     <?php endif; ?>
@@ -223,7 +266,7 @@
 
                                 <!-- Isi card -->
                                 <div class="mt-4">
-                                    <h4 class="font-bold text-base text-gray-800 leading-snug line-clamp-2 min-h-[44px]">
+                                    <h4 class="font-bold text-sm sm:text-base text-gray-800 leading-snug line-clamp-2 min-h-[40px] sm:min-h-[44px]">
                                         <?= htmlspecialchars($layanan['nama_layanan']); ?>
                                     </h4>
 
@@ -233,7 +276,7 @@
                                 </div>
 
                                 <!-- Harga dan status -->
-                                <div class="mt-4 flex items-end justify-between gap-3">
+                                <div class="mt-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 sm:gap-3">
                                     <div>
                                         <p class="text-pink-600 font-bold leading-tight">
                                             <?php if (!empty($harga_max)) : ?>
@@ -285,7 +328,7 @@
         if (!wrapper) return;
 
         wrapper.scrollBy({
-            left: direction * 650,
+            left: direction * (window.innerWidth < 640 ? 260 : 650),
             behavior: 'smooth'
         });
     }
