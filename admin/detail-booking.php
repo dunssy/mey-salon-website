@@ -348,7 +348,26 @@ function badge_status_booking($status)
 }
 
 // Mengambil stok barang untuk tambahan bahan
-$data_stok_barang = select("\n    SELECT * FROM $tabel_stok\n    ORDER BY nama_barang ASC\n");
+$data_stok_barang = [];
+
+// Menjalankan query stok barang langsung dari database
+$query_data_stok_barang = mysqli_query(
+    $koneksi,
+    "SELECT 
+        id_barang,
+        nama_barang,
+        jumlah_barang,
+        satuan_barang
+     FROM $tabel_stok
+     ORDER BY nama_barang ASC"
+);
+
+// Menyimpan data stok barang ke array untuk JavaScript
+if ($query_data_stok_barang) {
+    while ($barang = mysqli_fetch_assoc($query_data_stok_barang)) {
+        $data_stok_barang[] = $barang;
+    }
+}
 
 // Mengambil kalender booking aktif untuk admin
 $query_kalender_admin = mysqli_query(
@@ -825,23 +844,27 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                             <!-- Tambahan bahan opsional -->
                                             <div>
                                                 <div class="flex items-center justify-between mb-2">
-                                                    <label class="block text-sm font-medium text-[#3D3134]">
+                                                    <label class="block text-sm font-bold text-[#3D3134]">
                                                         Tambahan Bahan Opsional
                                                     </label>
 
                                                     <button 
                                                         type="button"
-                                                        onclick="tambahBahan()"
+                                                        onclick="openBarangTambahanModal()"
                                                         class="px-3 py-1.5 bg-[#FDEAF1] text-[#C75C7A] text-xs font-bold rounded-lg hover:bg-[#FAD7E5] transition"
                                                     >
-                                                        + Tambah Bahan
+                                                        + Pilih Barang
                                                     </button>
                                                 </div>
 
+                                                <!-- Daftar bahan yang sudah dipilih -->
                                                 <div id="tambahan-bahan-wrapper" class="space-y-2"></div>
 
                                                 <p class="text-[11px] text-[#B77B8E] mt-2">
-                                                    Kosongkan jika tidak ada tambahan bahan.
+                                                    Klik tombol pilih barang untuk menambahkan bahan tambahan.
+                                                    <?php if (empty($data_stok_barang)) : ?>
+                                                        <br><span class="text-red-500 font-bold">Data barang belum terbaca dari database.</span>
+                                                    <?php endif; ?>
                                                 </p>
                                             </div>
 
@@ -1107,9 +1130,263 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                 </form>
             </div>
         </div>
-<!-- MENJADIKAN FILE JS DI LAYOUT SEBAGAI MODULAR -->
-<script src="../layout/js/booking-detail.js">
+
+
+<!-- Modal pilih barang tambahan -->
+<div id="barang-tambahan-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+
+    <!-- Card modal pilih barang -->
+    <div class="w-full max-w-3xl bg-white rounded-3xl shadow-2xl border border-[#F7D6E4] overflow-hidden max-h-[90vh] flex flex-col">
+
+        <!-- Header modal -->
+        <div class="p-5 border-b border-[#F7D6E4] bg-[#FDEAF1]/70 flex items-start justify-between gap-4">
+            <div>
+                <h4 class="text-lg font-bold text-[#2B2424]">
+                    Pilih Barang Tambahan
+                </h4>
+
+                <p class="text-xs text-[#B77B8E] mt-1">
+                    Pilih barang dari database, lalu isi jumlah pemakaian.
+                </p>
+            </div>
+
+            <!-- Tombol tutup modal -->
+            <button 
+                type="button"
+                onclick="closeBarangTambahanModal()"
+                class="w-9 h-9 rounded-xl bg-white text-[#C75C7A] border border-[#F7D6E4] hover:bg-red-50 hover:text-red-500 transition"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Pencarian barang -->
+        <div class="p-4 border-b border-[#F7D6E4] bg-white">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[#B77B8E] text-sm"></i>
+
+                <input 
+                    type="text"
+                    id="search-barang-tambahan"
+                    oninput="filterBarangTambahan()"
+                    placeholder="Cari nama barang..."
+                    class="w-full pl-11 pr-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
+                >
+            </div>
+        </div>
+
+        <!-- List barang -->
+        <div class="p-4 sm:p-5 overflow-y-auto">
+            <div id="list-barang-tambahan" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <?php if (!empty($data_stok_barang)) : ?>
+                    <?php foreach ($data_stok_barang as $barang) : ?>
+                        <div 
+                            class="barang-tambahan-card p-4 rounded-2xl border border-[#F7D6E4] bg-white hover:bg-[#FDEAF1]/60 transition"
+                            data-nama="<?= strtolower(htmlspecialchars($barang['nama_barang'])); ?>"
+                        >
+                            <div class="flex items-start justify-between gap-3">
+
+                                <!-- Informasi barang -->
+                                <div class="min-w-0">
+                                    <h5 class="text-sm font-bold text-[#2B2424]">
+                                        <?= htmlspecialchars($barang['nama_barang']); ?>
+                                    </h5>
+
+                                    <p class="text-xs text-[#7A6F6F] mt-1">
+                                        Stok:
+                                        <b><?= htmlspecialchars($barang['jumlah_barang']); ?> <?= htmlspecialchars($barang['satuan_barang'] ?? ''); ?></b>
+                                    </p>
+
+                                    <p class="text-[11px] text-[#B77B8E] mt-1">
+                                        ID Barang: <?= (int) $barang['id_barang']; ?>
+                                    </p>
+                                </div>
+
+                                <!-- Tombol pilih -->
+                                <button
+                                    type="button"
+                                    onclick="pilihBarangTambahan(
+                                        <?= (int) $barang['id_barang']; ?>,
+                                        '<?= htmlspecialchars(addslashes($barang['nama_barang'])); ?>',
+                                        '<?= htmlspecialchars(addslashes($barang['jumlah_barang'])); ?>',
+                                        '<?= htmlspecialchars(addslashes($barang['satuan_barang'] ?? '')); ?>'
+                                    )"
+                                    class="shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-[#FDEAF1] text-[#C75C7A] hover:bg-[#C75C7A] hover:text-white transition"
+                                >
+                                    Pilih
+                                </button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <div class="md:col-span-2 p-8 text-center text-[#B77B8E] text-sm">
+                        Data barang tidak tersedia.
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Pesan pencarian kosong -->
+            <div id="barang-tambahan-empty" class="hidden p-8 text-center text-[#B77B8E] text-sm">
+                Barang tidak ditemukan.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script popup pilih barang tambahan -->
+<script>
+    // Membuka modal pilih barang tambahan
+    function openBarangTambahanModal() {
+        const modal = document.getElementById('barang-tambahan-modal');
+
+        if (!modal) return;
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        const search = document.getElementById('search-barang-tambahan');
+
+        if (search) {
+            search.value = '';
+            filterBarangTambahan();
+            setTimeout(function () {
+                search.focus();
+            }, 100);
+        }
+    }
+
+    // Menutup modal pilih barang tambahan
+    function closeBarangTambahanModal() {
+        const modal = document.getElementById('barang-tambahan-modal');
+
+        if (!modal) return;
+
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // Mencari barang di modal
+    function filterBarangTambahan() {
+        const search = document.getElementById('search-barang-tambahan');
+        const cards = document.querySelectorAll('.barang-tambahan-card');
+        const empty = document.getElementById('barang-tambahan-empty');
+
+        const keyword = search ? search.value.toLowerCase().trim() : '';
+        let visibleCount = 0;
+
+        cards.forEach(function (card) {
+            const nama = card.dataset.nama || '';
+            const isVisible = nama.includes(keyword);
+
+            card.style.display = isVisible ? 'block' : 'none';
+
+            if (isVisible) {
+                visibleCount++;
+            }
+        });
+
+        if (empty) {
+            empty.classList.toggle('hidden', visibleCount !== 0);
+        }
+    }
+
+    // Memilih barang tambahan lalu menambahkan ke form
+    function pilihBarangTambahan(idBarang, namaBarang, jumlahBarang, satuanBarang) {
+        const wrapper = document.getElementById('tambahan-bahan-wrapper');
+
+        if (!wrapper) return;
+
+        const existing = wrapper.querySelector('[data-id-barang="' + idBarang + '"]');
+
+        if (existing) {
+            alert('Barang ini sudah dipilih. Ubah jumlah pada daftar bahan tambahan.');
+            closeBarangTambahanModal();
+            return;
+        }
+
+        const item = document.createElement('div');
+        item.className = 'p-3 bg-[#FFF7FA] border border-[#F7D6E4] rounded-2xl space-y-3';
+        item.setAttribute('data-id-barang', idBarang);
+
+        item.innerHTML = `
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <p class="text-xs font-bold text-[#C75C7A]">
+                        ${namaBarang}
+                    </p>
+
+                    <p class="text-[11px] text-[#B77B8E] mt-1">
+                        Stok tersedia: ${jumlahBarang} ${satuanBarang}
+                    </p>
+                </div>
+
+                <button 
+                    type="button"
+                    onclick="hapusBarangTambahan(this)"
+                    class="w-8 h-8 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition"
+                    title="Hapus"
+                >
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-[1fr_120px] gap-2">
+                <input 
+                    type="hidden"
+                    name="id_barang_tambahan[]"
+                    value="${idBarang}"
+                >
+
+                <input 
+                    type="text"
+                    value="${namaBarang}"
+                    readonly
+                    class="w-full px-3 py-2 border border-[#EAD8D0] bg-[#F8F4F2] rounded-xl text-xs text-[#7A6F6F] cursor-not-allowed"
+                >
+
+                <input 
+                    type="number" 
+                    name="jumlah_tambahan[]" 
+                    min="1" 
+                    required
+                    placeholder="Jumlah"
+                    class="w-full px-3 py-2 border border-[#EAD8D0] bg-white rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
+                >
+            </div>
+        `;
+
+        wrapper.appendChild(item);
+        closeBarangTambahanModal();
+    }
+
+    // Menghapus barang tambahan dari form
+    function hapusBarangTambahan(button) {
+        const item = button.closest('[data-id-barang]');
+
+        if (item) {
+            item.remove();
+        }
+    }
+
+    // Menutup modal saat klik area luar
+    document.addEventListener('click', function (event) {
+        const modal = document.getElementById('barang-tambahan-modal');
+
+        if (modal && !modal.classList.contains('hidden') && event.target === modal) {
+            closeBarangTambahanModal();
+        }
+    });
+
+    // Menutup modal saat tombol escape ditekan
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeBarangTambahanModal();
+        }
+    });
 </script>
+
+<!-- MENJADIKAN FILE JS DI LAYOUT SEBAGAI MODULAR -->
+<script src="../layout/js/booking-detail.js"></script>
 
 
 

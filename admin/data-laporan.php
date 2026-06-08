@@ -257,26 +257,28 @@ if (!$layanan_favorit) {
                                     class="px-4 py-2 text-sm font-bold text-[#C75C7A] bg-[#FDEAF1] hover:bg-[#FAD7E5] rounded-xl transition-colors flex items-center justify-center gap-2"
                                 >
                                     <i class="fa-solid fa-plus"></i>
-                                    <span class="hidden sm:inline">Pengeluaran</span>
+                                    <span>Pengeluaran</span>
                                 </a>
 
                                 <!-- Tombol export PDF -->
                                 <a 
                                     href="export-laporan.php?jenis=<?= urlencode($jenis_laporan); ?>&tanggal=<?= urlencode($tanggal); ?>&bulan=<?= urlencode($bulan); ?>&format=pdf"
                                     target="_blank"
-                                    class="px-3 py-2 text-sm font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors flex items-center justify-center"
+                                    class="px-3 py-2 text-sm font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors flex items-center justify-center gap-2"
                                     title="Export PDF"
                                 >
                                     <i class="fa-solid fa-file-pdf"></i>
+                                    <span>PDF</span>
                                 </a>
 
                                 <!-- Tombol export Excel -->
                                 <a 
                                     href="export-laporan.php?jenis=<?= urlencode($jenis_laporan); ?>&tanggal=<?= urlencode($tanggal); ?>&bulan=<?= urlencode($bulan); ?>&format=excel"
-                                    class="px-3 py-2 text-sm font-bold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-colors flex items-center justify-center"
+                                    class="px-3 py-2 text-sm font-bold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-colors flex items-center justify-center gap-2"
                                     title="Export Excel"
                                 >
                                     <i class="fa-solid fa-file-excel"></i>
+                                    <span>Excel</span>
                                 </a>
                             </form>
                         </div>

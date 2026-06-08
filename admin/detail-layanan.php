@@ -417,31 +417,44 @@ $query_semua_stok = mysqli_query(
                     <form method="POST" class="p-5 space-y-4">
                         <input type="hidden" name="action" value="tambah_paket">
 
-                        <!-- Pilih barang -->
+                        <!-- Pilih barang dengan popup -->
                         <div>
-                            <label for="id_barang_tambah" class="block text-sm font-bold text-[#3D3134] mb-2">
+                            <label class="block text-sm font-bold text-[#3D3134] mb-2">
                                 Pilih Barang
                             </label>
 
-                            <select 
+                            <!-- Input id barang yang dikirim ke database -->
+                            <input 
+                                type="hidden" 
                                 id="id_barang_tambah" 
                                 name="id_barang" 
-                                required 
-                                class="w-full px-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
+                                required
                             >
-                                <option value="">-- Pilih Barang --</option>
 
-                                <?php 
-                                mysqli_data_seek($query_semua_stok, 0);
-                                while ($stok = mysqli_fetch_assoc($query_semua_stok)) : 
-                                ?>
-                                    <option value="<?= (int) $stok['id_barang']; ?>">
-                                        <?= htmlspecialchars($stok['nama_barang']); ?>
-                                        (<?= htmlspecialchars($stok['satuan_barang']); ?>)
-                                        - Stok: <?= htmlspecialchars($stok['jumlah_barang']); ?>
-                                    </option>
-                                <?php endwhile; ?>
-                            </select>
+                            <!-- Box barang terpilih -->
+                            <div id="barang-paket-terpilih-box" class="p-4 rounded-2xl border border-[#F7D6E4] bg-[#FFF7FA] mb-3">
+                                <p class="text-[10px] font-bold text-[#B77B8E] uppercase tracking-wider">
+                                    Barang Terpilih
+                                </p>
+
+                                <p id="barang-paket-terpilih-nama" class="text-sm font-bold text-[#C75C7A] mt-1">
+                                    Belum ada barang dipilih
+                                </p>
+
+                                <p id="barang-paket-terpilih-detail" class="text-xs text-[#7A6F6F] mt-1">
+                                    Klik tombol pilih barang untuk melihat semua data barang.
+                                </p>
+                            </div>
+
+                            <!-- Tombol buka popup barang -->
+                            <button 
+                                type="button"
+                                onclick="openPilihBarangPaketModal()"
+                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#FDEAF1] text-[#C75C7A] text-sm font-bold rounded-xl hover:bg-[#FAD7E5] transition"
+                            >
+                                <i class="fa-solid fa-box-open"></i>
+                                <span>Pilih Barang</span>
+                            </button>
                         </div>
 
                         <!-- Jumlah stok -->
@@ -482,6 +495,121 @@ $query_semua_stok = mysqli_query(
                     </form>
                 </div>
             </div>
+
+
+            <!-- Modal pilih barang paket stok -->
+            <div id="pilih-barang-paket-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+
+                <!-- Card modal pilih barang -->
+                <div class="w-full max-w-3xl bg-white rounded-3xl shadow-2xl border border-[#F7D6E4] overflow-hidden max-h-[90vh] flex flex-col">
+
+                    <!-- Header modal pilih barang -->
+                    <div class="p-5 border-b border-[#F7D6E4] bg-[#FDEAF1]/70 flex items-start justify-between gap-4">
+                        <div>
+                            <h4 class="text-lg font-bold text-[#2B2424]">
+                                Pilih Barang
+                            </h4>
+
+                            <p class="text-xs text-[#B77B8E] mt-1">
+                                Cari dan pilih barang yang akan digunakan untuk paket stok layanan.
+                            </p>
+                        </div>
+
+                        <!-- Tombol tutup modal -->
+                        <button 
+                            type="button"
+                            onclick="closePilihBarangPaketModal()"
+                            class="w-9 h-9 rounded-xl bg-white text-[#C75C7A] border border-[#F7D6E4] hover:bg-red-50 hover:text-red-500 transition"
+                        >
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Input pencarian barang -->
+                    <div class="p-4 border-b border-[#F7D6E4] bg-white">
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[#B77B8E] text-sm"></i>
+
+                            <input 
+                                type="text"
+                                id="search-barang-paket"
+                                oninput="filterBarangPaket()"
+                                placeholder="Cari nama barang..."
+                                class="w-full pl-11 pr-4 py-3 border border-[#EAD8D0] bg-[#FFF7FA] rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FAD7E5] focus:border-[#C75C7A]"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Daftar barang -->
+                    <div class="p-4 sm:p-5 overflow-y-auto">
+                        <div id="list-barang-paket" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <?php 
+                            mysqli_data_seek($query_semua_stok, 0);
+                            if (mysqli_num_rows($query_semua_stok) > 0) :
+                                while ($stok = mysqli_fetch_assoc($query_semua_stok)) : 
+                            ?>
+                                <!-- Card barang -->
+                                <div 
+                                    class="barang-paket-card p-4 rounded-2xl border border-[#F7D6E4] bg-white hover:bg-[#FDEAF1]/60 transition"
+                                    data-nama="<?= strtolower(htmlspecialchars($stok['nama_barang'])); ?>"
+                                >
+                                    <div class="flex items-start justify-between gap-3">
+
+                                        <!-- Detail barang -->
+                                        <div class="min-w-0">
+                                            <h5 class="text-sm font-bold text-[#2B2424]">
+                                                <?= htmlspecialchars($stok['nama_barang']); ?>
+                                            </h5>
+
+                                            <p class="text-xs text-[#7A6F6F] mt-1">
+                                                Jenis:
+                                                <b><?= htmlspecialchars($stok['jenis_barang']); ?></b>
+                                            </p>
+
+                                            <p class="text-xs text-[#7A6F6F] mt-1">
+                                                Stok:
+                                                <b><?= htmlspecialchars($stok['jumlah_barang']); ?> <?= htmlspecialchars($stok['satuan_barang']); ?></b>
+                                            </p>
+
+                                            <p class="text-[11px] text-[#B77B8E] mt-1">
+                                                Minimal stok: <?= htmlspecialchars($stok['minimal_stok']); ?> <?= htmlspecialchars($stok['satuan_barang']); ?>
+                                            </p>
+                                        </div>
+
+                                        <!-- Tombol pilih barang -->
+                                        <button
+                                            type="button"
+                                            onclick="pilihBarangPaket(
+                                                <?= (int) $stok['id_barang']; ?>,
+                                                '<?= htmlspecialchars(addslashes($stok['nama_barang'])); ?>',
+                                                '<?= htmlspecialchars(addslashes($stok['jenis_barang'])); ?>',
+                                                '<?= htmlspecialchars(addslashes($stok['jumlah_barang'])); ?>',
+                                                '<?= htmlspecialchars(addslashes($stok['satuan_barang'])); ?>'
+                                            )"
+                                            class="btn-pilih-barang-paket shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-[#FDEAF1] text-[#C75C7A] hover:bg-[#C75C7A] hover:text-white transition"
+                                        >
+                                            Pilih
+                                        </button>
+                                    </div>
+                                </div>
+                            <?php 
+                                endwhile;
+                            else :
+                            ?>
+                                <div class="md:col-span-2 p-8 text-center text-[#B77B8E] text-sm">
+                                    Data barang tidak tersedia.
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Pesan barang tidak ditemukan -->
+                        <div id="barang-paket-empty" class="hidden p-8 text-center text-[#B77B8E] text-sm">
+                            Barang tidak ditemukan.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- Modal edit paket stok -->
             <div id="edit-paket-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/50 px-4">
@@ -564,6 +692,103 @@ $query_semua_stok = mysqli_query(
                     </form>
                 </div>
             </div>
+
+
+            <!-- Script popup pilih barang paket stok -->
+            <script>
+                // Membuka modal pilih barang paket
+                function openPilihBarangPaketModal() {
+                    const modal = document.getElementById('pilih-barang-paket-modal');
+
+                    if (!modal) return;
+
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+
+                    const search = document.getElementById('search-barang-paket');
+
+                    if (search) {
+                        search.value = '';
+                        filterBarangPaket();
+
+                        setTimeout(function () {
+                            search.focus();
+                        }, 100);
+                    }
+                }
+
+                // Menutup modal pilih barang paket
+                function closePilihBarangPaketModal() {
+                    const modal = document.getElementById('pilih-barang-paket-modal');
+
+                    if (!modal) return;
+
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+
+                // Mencari barang di popup paket
+                function filterBarangPaket() {
+                    const search = document.getElementById('search-barang-paket');
+                    const cards = document.querySelectorAll('.barang-paket-card');
+                    const empty = document.getElementById('barang-paket-empty');
+
+                    const keyword = search ? search.value.toLowerCase().trim() : '';
+                    let visibleCount = 0;
+
+                    cards.forEach(function (card) {
+                        const nama = card.dataset.nama || '';
+                        const isVisible = nama.includes(keyword);
+
+                        card.style.display = isVisible ? 'block' : 'none';
+
+                        if (isVisible) {
+                            visibleCount++;
+                        }
+                    });
+
+                    if (empty) {
+                        empty.classList.toggle('hidden', visibleCount !== 0);
+                    }
+                }
+
+                // Memilih barang untuk paket stok
+                function pilihBarangPaket(idBarang, namaBarang, jenisBarang, jumlahBarang, satuanBarang) {
+                    const inputIdBarang = document.getElementById('id_barang_tambah');
+                    const namaBox = document.getElementById('barang-paket-terpilih-nama');
+                    const detailBox = document.getElementById('barang-paket-terpilih-detail');
+
+                    if (inputIdBarang) {
+                        inputIdBarang.value = idBarang;
+                    }
+
+                    if (namaBox) {
+                        namaBox.textContent = namaBarang;
+                    }
+
+                    if (detailBox) {
+                        detailBox.textContent = 'Jenis: ' + jenisBarang + ' | Stok: ' + jumlahBarang + ' ' + satuanBarang;
+                    }
+
+                    closePilihBarangPaketModal();
+                }
+
+                // Menutup modal jika klik area luar
+                document.addEventListener('click', function (event) {
+                    const modal = document.getElementById('pilih-barang-paket-modal');
+
+                    if (modal && !modal.classList.contains('hidden') && event.target === modal) {
+                        closePilihBarangPaketModal();
+                    }
+                });
+
+                // Menutup modal jika tekan escape
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') {
+                        closePilihBarangPaketModal();
+                    }
+                });
+            </script>
 
             <!-- Memanggil file JS detail layanan -->
             <script src="../layout/js/detail-layanan.js"></script>
