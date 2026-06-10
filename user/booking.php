@@ -16,7 +16,25 @@ include "../layout/header-user.php";
 
     <!-- Konten utama -->
     <main class="max-w-6xl mx-auto px-4 pt-24 pb-10">
+         <!-- alert success -->
+        <?php if (isset($_SESSION['success'])) : ?>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Selamat Datang 👋',
+                        html: '<b><?= htmlspecialchars($_SESSION["nama"]); ?>.',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true
+                    });
+                });
+            </script>
+
+            <?php unset($_SESSION['success']); ?>
+        <?php endif; ?>
         <!-- Section layanan -->
         <?php include "views/section-layanan.php"; ?>
 

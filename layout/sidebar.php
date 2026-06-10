@@ -88,7 +88,8 @@
 
         <!-- Tombol keluar sistem -->
         <a 
-            href="../logout.php" 
+            href="../logout.php"
+            onclick="confirmLogout(event)"
             class="sidebar-link w-full flex items-center gap-3 p-3 text-sm text-red-500 font-semibold hover:bg-red-50 rounded-xl transition-all"
         >
             <i class="fa-solid fa-right-from-bracket w-6 text-lg text-center"></i>
@@ -104,6 +105,7 @@
     class="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 hidden md:hidden"
 ></div>
 
+<script src="../layout/js/sweetalert.js" languange="javascript"></script>
 <script>
     // Membuka dan menutup sidebar di mobile
     function toggleSidebarMobile() {
@@ -139,7 +141,7 @@
             link.classList.toggle('md:justify-center');
             link.classList.toggle('md:px-2');
         });
-
+        
         if (navbarIcon) {
             navbarIcon.classList.toggle('fa-bars-staggered');
             navbarIcon.classList.toggle('fa-bars');

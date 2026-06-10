@@ -40,26 +40,21 @@ if (isset($_POST['login'])) {
 
             // Mengarahkan admin ke dashboard
             if ($user['role'] == 'Administrator' || $user['role'] == 'Admin') {
-                echo "<script>
-                        alert('Login berhasil sebagai Administrator!');
-                        window.location.href = 'admin/dashboard-admin.php';
-                      </script>";
-                exit;
+                $_SESSION['success'] = "Selamat Datang, " . $user['nama'] . "!";
+                header('location: admin/dashboard-admin.php');
+            exit;
             }
-
             // Mengarahkan customer ke landing page dengan status login
-            echo "<script>
-                    alert('Login berhasil!');
-                    window.location.href = 'user/booking.php';
-                  </script>";
+            $_SESSION['success'] = "Selamat Datang, " . $user['nama'] . "!";
+            header('location: user/booking.php');
             exit;
         }
 
         // Pesan password salah
-        echo "<script>alert('Password salah!');</script>";
+        $_SESSION['error'] = "Password salah!";
     } else {
         // Pesan email tidak ditemukan
-        echo "<script>alert('Email tidak ditemukan!');</script>";
+        $_SESSION['error'] = "Email tidak ditemukan!";
     }
 }
 ?>
@@ -75,16 +70,17 @@ if (isset($_POST['login'])) {
 
     <!-- Judul halaman -->
     <title>Login - Mey Salon</title>
-
+    <!-- fav icon -->
+    <link rel="icon" href="layout/images/favicon_io/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="layout/images/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="layout/images/favicon_io/favicon-32x32.png">
+    <!-- Font Google -->
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <!-- Font Google -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
-
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <!-- Style tambahan -->
     <style>
         /* Font utama halaman */
@@ -151,6 +147,14 @@ if (isset($_POST['login'])) {
                         Selamat datang kembali, silakan masuk ke akun Anda.
                     </p>
                 </div>
+                <!-- ALERT ERROR -->
+                 <?php if(isset($_SESSION['error'])): ?>
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <strong class="font-bold">Error! </strong>
+                        <span class="block sm:inline"><?php echo $_SESSION['error']; ?></span>
+                    </div>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
 
                 <!-- Form login -->
                 <form action="" method="POST" class="space-y-4">

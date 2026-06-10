@@ -24,9 +24,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // Mengarahkan user ke halaman utama
-echo "<script>
-        alert('Anda berhasil logout!');
-        window.location.href = 'index.php';
-      </script>";
+header('location: login.php');
 exit;
 ?>

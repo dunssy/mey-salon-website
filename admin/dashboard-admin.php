@@ -127,7 +127,25 @@ function statusBadgeClass($status)
 
             <!-- Memanggil navbar admin -->
             <?php include "../layout/navbar.php"; ?>
+        <!-- ALERT SUCCESS LOGIN -->
+        <?php if (isset($_SESSION['success'])) : ?>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Selamat Datang 👋',
+                        html: '<b><?= htmlspecialchars($_SESSION["nama"]); ?>.',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true
+                    });
+                });
+            </script>
+
+            <?php unset($_SESSION['success']); ?>
+        <?php endif; ?>
             <!-- Isi halaman dashboard -->
             <div class="p-4 sm:p-5 md:p-8 flex-1">
 
@@ -367,7 +385,6 @@ function statusBadgeClass($status)
             <?php include "../layout/footer-component.php"; ?>
         </main>
     </div>
-
 <?php
 // Memanggil footer utama
 include "../layout/footer.php";

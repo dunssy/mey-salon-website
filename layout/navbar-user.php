@@ -125,11 +125,7 @@ $inisial_user = strtoupper(substr(trim($nama_user), 0, 1));
 
                         <!-- Menu logout -->
                         <div class="border-t border-pink-50">
-                            <a 
-                                href="../logout.php"
-                                onclick="return confirm('Apakah Anda yakin ingin logout?')"
-                                class="flex items-center gap-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition font-semibold"
-                            >
+                            <a href="../logout.php" onclick="confirmLogout(event)" class="flex items-center space-x-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors font-semibold">
                                 <i class="fa-solid fa-right-from-bracket w-5"></i>
                                 <span>Logout</span>
                             </a>
@@ -229,7 +225,8 @@ $inisial_user = strtoupper(substr(trim($nama_user), 0, 1));
         </div>
     </div>
 </nav>
-
+<!-- SWEET ALERT LOGOUT -->
+<script src="../layout/js/sweetalert.js" languange="javascript"></script>
 <!-- Script navbar user -->
 <script>
     // Membuka section dan menutup menu mobile

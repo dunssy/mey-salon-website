@@ -768,7 +768,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
                                                 type="submit" 
                                                 name="konfirmasi_booking"
                                                 onclick="return confirm('Konfirmasi booking pelanggan ini?')"
-                                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#C75C7A] text-white text-sm font-bold rounded-xl hover:bg-[#B14F6C] transition-colors"
+                                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#0028B3] text-white text-sm font-bold rounded-xl hover:bg-[#001178] transition-colors"
                                             >
                                                 <i class="fa-solid fa-circle-check"></i>
                                                 <span>Konfirmasi Booking</span>

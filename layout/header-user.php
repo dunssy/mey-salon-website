@@ -20,18 +20,20 @@ if ($_SESSION['role'] !== 'Customer') {
     <!-- Tampilan responsive -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <!-- ico mey salon -->
+        <!-- untuk android -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../layout/images/favicon_io/apple-touch-icon.png">
+    <!-- untuk desktop -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../layout/images/favicon_io/favicon-32x32.png">
+    <link rel="icon" href="../layout/images/favicon_io/favicon.ico" type="image/x-icon" />
     <!-- Judul halaman -->
     <title><?= isset($page_title) ? htmlspecialchars($page_title) : 'Mey Salon'; ?></title>
-
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <!-- Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <!-- Style halaman user -->
     <style>
         /* Font utama */

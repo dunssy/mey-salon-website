@@ -98,18 +98,17 @@ function getServiceImage($layanan)
     <!-- Judul halaman -->
     <title>Mey Salon</title>
 
+    <!-- fav ico -->
+    <link rel="icon" href="layout/images/favicon_io/favicon.ico" type="image/x-icon" />
+    
     <!-- Font Google -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
-
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <!-- CSS utama project -->
     <link rel="stylesheet" href="layout/css/style.css" />
-
     <!-- CSS tambahan landing page -->
     <style>
         /* Scroll halaman halus */

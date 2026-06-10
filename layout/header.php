@@ -17,7 +17,8 @@ if ($_SESSION['role'] !== 'Administrator') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $page_title; ?> ADMIN - Mey Salon</title>
+    <title><?php echo $page_title; ?>,<?php echo $_SESSION['role']; ?> - Mey Salon</title>
+    <link href="../src/output.css" rel="stylesheet">
      <!-- ico mey salon -->
      <!-- untuk android -->
     <link rel="apple-touch-icon" sizes="180x180" href="layout/images/favicon_io/apple-touch-icon.png">

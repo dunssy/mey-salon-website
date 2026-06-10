@@ -259,7 +259,7 @@ $query_notif_stok = mysqli_query(
                     </a>
 
                     <div class="border-t border-[#F7D6E4] mt-2">
-                        <a href="../logout.php" class="flex items-center space-x-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors font-semibold">
+                        <a href="../logout.php" onclick="confirmLogout(event)" class="flex items-center space-x-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors font-semibold">
                             <i class="fa-solid fa-right-from-bracket w-5"></i>
                             <span>Logout</span>
                         </a>
@@ -282,6 +282,7 @@ $query_notif_stok = mysqli_query(
 </div>
 
 <!-- Script navbar -->
+<script src="../layout/js/sweetalert.js" languange="javascript"></script>
 <script>
     // Membuka dan menutup dropdown navbar
     function toggleDropdown(id) {
