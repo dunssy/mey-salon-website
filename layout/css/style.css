@@ -1,0 +1,132 @@
+/* ======================================================
+   STYLE USER / LANDING - MEY SALON
+   CSS dipisah agar tampilan user dan admin tidak saling bentrok.
+   ====================================================== */
+
+        :root {
+            --cream: #FFFDFB;
+            --pastel-pink: #F3D9D9;
+            --accent-pink: #FF8E9E;
+            --button-pink: #E91E63;
+            --dark-brown: #5D4037;
+            --soft-brown: #8D6E63;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Dark Mode Colors */
+        .dark {
+            --cream: #121212;
+            --pastel-pink: #2D1B1B;
+            --dark-brown: #F3D9D9;
+            --soft-brown: #BDBDBD;
+            --card-bg: #1E1E1E;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--cream);
+            color: var(--dark-brown);
+            transition: var(--transition);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Utility Classes */
+        .text-accent-pink { color: var(--accent-pink); }
+        .bg-button-pink { background-color: var(--button-pink); }
+        
+        /* Navigation Styles */
+        .glass-nav {
+            background: rgba(255, 253, 251, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(233, 30, 99, 0.1);
+        }
+        .dark .glass-nav {
+            background: rgba(18, 18, 18, 0.95);
+            border-bottom: 1px solid rgba(255, 142, 158, 0.1);
+        }
+
+        /* Buttons */
+        .btn-pink {
+            background-color: var(--button-pink);
+            color: white;
+            transition: var(--transition);
+        }
+        .btn-pink:hover {
+            background-color: #C2185B;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(233, 30, 99, 0.3);
+        }
+
+        /* Cards */
+        .service-card {
+            background-color: white;
+            transition: var(--transition);
+        }
+        .dark .service-card {
+            background-color: var(--card-bg);
+            border-color: #333;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(233, 30, 99, 0.1);
+        }
+
+        /* Floating Theme Toggle - Optimized for Thumb Reach */
+        #theme-toggle-floating {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 100;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 9999px;
+            background-color: var(--button-pink);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.4);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid white;
+        }
+        
+        .dark #theme-toggle-floating {
+            background-color: #333;
+            border-color: var(--accent-pink);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        #theme-toggle-floating:active {
+            transform: scale(0.9);
+        }
+
+        /* Input Styles Dark Mode */
+        .dark input, .dark textarea {
+            background-color: #2D2D2D !important;
+            color: white;
+            border: 1px solid #444;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade {
+            animation: fadeIn 1s ease forwards;
+        }
+
+        /* Responsive Fix for Map */
+        .map-responsive {
+            height: 350px;
+        }
+        @media (min-width: 1024px) {
+            .map-responsive {
+                height: 550px;
+            }
+        }
