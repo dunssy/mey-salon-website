@@ -46,13 +46,10 @@ if (isset($_POST['konfirmasi_booking'])) {
         $koneksi,"UPDATE booking SET status_booking = 'On-going' WHERE id_booking = $id_booking"
     );
 // Menampilkan pesan konfirmasi berhasil
-        $_SESSION['success'] = [
-            'icon' => 'success',
-            'title' => 'Berhasil',
-            'text' => 'Booking berhasil dikonfirmasi'
-        ];
-
-         header("Location: detail-booking.php?id_booking=$id_booking");
+    echo "<script>
+            alert('Booking berhasil dikonfirmasi!');
+            window.location.href = 'detail-booking.php?id_booking=$id_booking';
+          </script>";
     exit;
 }
 
@@ -65,25 +62,19 @@ if (isset($_POST['pending_booking'])) {
 
     // Mengecek input saran wajib diisi
     if (empty($tanggal_saran) || empty($jam_saran) || empty($catatan_admin)) {
-       $_SESSION['alert'] = [
-            'icon' => 'warning',
-            'title' => 'informasi',
-            'text' => 'Tanggal saran, jam saran, dan catatan admin wajib diisi!'
-        ];
-
-         header("Location: detail-booking.php?id_booking=$id_booking");    
+        echo "<script>
+                alert('Tanggal saran, jam saran, dan catatan admin wajib diisi!');
+                window.location.href = 'detail-booking.php?id_booking=$id_booking';
+              </script>";
         exit;
     }
 
     // Mengecek salon libur hari Rabu
     if (date('w', strtotime($tanggal_saran)) == 3) {
-        $_SESSION['alert'] = [
-            'icon' => 'warning',
-            'title' => 'informasi',
-            'text' => 'Salon libur setiap hari Rabu. Pilih tanggal saran lain!'
-        ];
-
-        header("Location: detail-booking.php?id_booking=$id_booking");
+        echo "<script>
+                alert('Salon libur setiap hari Rabu. Pilih tanggal saran lain!');
+                window.location.href = 'detail-booking.php?id_booking=$id_booking';
+              </script>";
         exit;
     }
 
@@ -104,13 +95,10 @@ if (isset($_POST['pending_booking'])) {
         );
     }
 // Menampilkan pesan pending berhasil
-    $_SESSION['success'] = [
-        'icon' => 'success',
-        'title' => 'Berhasil',
-        'text' => 'Booking dibuat pending dan saran jadwal berhasil disimpan!'
-    ];
-
-    header("Location: detail-booking.php?id_booking=$id_booking");
+    echo "<script>
+            alert('Booking dibuat pending dan saran jadwal berhasil disimpan!');
+            window.location.href = 'detail-booking.php?id_booking=$id_booking';
+          </script>";
     exit;
 }
 
@@ -123,13 +111,10 @@ mysqli_query(
      WHERE id_booking = $id_booking"
 );
 
-$_SESSION['success'] = [
-    'icon' => 'success',
-    'title' => 'Berhasil',
-    'text' => 'Booking berhasil dibatalkan!'
-];
-
-header("Location: detail-booking.php?id_booking=$id_booking");
+echo "<script>
+        alert('Booking berhasil dibatalkan!');
+        window.location.href='detail-booking.php?id_booking=$id_booking';
+      </script>";
 exit;
 
 }
@@ -150,13 +135,10 @@ if (isset($_POST['done_booking'])) {
     );
 // Mengecek transaksi agar tidak double
     if (mysqli_num_rows($cek_transaksi) > 0) {
-        $_SESSION['alert'] = [
-            'icon' => 'warning',
-            'title' => 'informasi',
-            'text' => 'Booking ini sudah pernah masuk transaksi!'
-        ];
-
-        header("Location: detail-booking.php?id_booking=$id_booking");
+        echo "<script>
+                alert('Booking ini sudah pernah masuk transaksi!');
+                window.location.href = 'detail-booking.php?id_booking=$id_booking';
+              </script>";
         exit;
     }
 
@@ -184,22 +166,18 @@ if (isset($_POST['done_booking'])) {
 
     // Validasi total bayar admin
     if ($total_bayar_admin <= 0) {
-        $_SESSION['alert'] = [
-            'icon' => 'warning',
-            'title' => 'informasi',
-            'text' => 'Total bayar final wajib diisi admin!'
-        ];
-        header("Location: detail-booking.php?id_booking=$id_booking");
+        echo "<script>
+                alert('Total bayar final wajib diisi admin!');
+                window.location.href = 'detail-booking.php?id_booking=$id_booking';
+              </script>";
         exit;
     }
 
     if ($total_bayar_admin < $dp) {
-        $_SESSION['alert'] = [
-            'icon' => 'warning',
-            'title' => 'informasi',
-            'text' => 'Total bayar final tidak boleh lebih kecil dari DP customer!'
-        ];
-        header("Location: detail-booking.php?id_booking=$id_booking");
+        echo "<script>
+                alert('Total bayar final tidak boleh lebih kecil dari DP customer!');
+                window.location.href = 'detail-booking.php?id_booking=$id_booking';
+              </script>";
         exit;
     }
 
@@ -298,24 +276,18 @@ if (isset($_POST['done_booking'])) {
 
         mysqli_commit($koneksi);
 
-        $_SESSION['success'] = [
-            'icon' => 'success',
-            'title' => 'Berhasil',
-            'text' => 'Booking selesai, transaksi berhasil dibuat, dan stok berhasil dikurangi!'
-        ];
-
-        header("Location: detail-booking.php?id_booking=$id_booking");
+        echo "<script>
+                alert('Booking selesai, transaksi berhasil dibuat, dan stok berhasil dikurangi!');
+                window.location.href = 'detail-booking.php?id_booking=$id_booking';
+              </script>";
         exit;
     } catch (Exception $e) {
         mysqli_rollback($koneksi);
 
-        $_SESSION['alert'] = [
-            'icon' => 'error',
-            'title' => 'Gagal',
-            'text' => 'Gagal menyelesaikan booking!'
-        ];
-
-        header("Location: detail-booking.php?id_booking=$id_booking");
+        echo "<script>
+                alert('Gagal menyelesaikan booking!');
+                window.location.href = 'detail-booking.php?id_booking=$id_booking';
+              </script>";
         exit;
     }
 }
@@ -339,12 +311,10 @@ $booking = mysqli_fetch_assoc($query_booking);
 
 // Mengecek data booking ditemukan
 if (!$booking) {
-    $_SESSION['alert'] = [
-        'icon' => 'error',
-        'title' => 'Gagal',
-        'text' => 'Data booking tidak ditemukan!'
-    ];
-    header("Location: data-booking.php");
+    echo "<script>
+            alert('Data booking tidak ditemukan!');
+            window.location.href = 'data-booking.php';
+          </script>";
     exit;
 }
 
@@ -511,6 +481,7 @@ $jadwal_admin_json = json_encode($jadwal_admin);
 ?>
 
 <body class="text-[#2B2424] overflow-x-hidden bg-[#FFF7FA]">
+
     <!-- Wrapper utama halaman admin -->
     <div class="flex h-screen overflow-hidden">
 

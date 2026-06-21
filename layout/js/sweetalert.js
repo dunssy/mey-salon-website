@@ -19,26 +19,6 @@
     }
 
  
-    function konfirmasiBooking(event) {
-        event.preventDefault(); 
-
-        swal.fire({
-            title: 'konfirmasi booking pelanggan ini?',
-            icon: 'question',
-            buttons: true,
-            showCancelButton: true,
-            confirmButtonColor: '#104cff',
-            cancelButtonColor: '#c8c7c7',
-
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Proceed with booking confirmation
-                swal.fire("Booking berhasil dikonfirmasi!", {
-                    icon: "success",
-                });
-            }
-        });
-    }
 
     function userBooking(event){
         event.preventDefault();
